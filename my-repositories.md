@@ -38,7 +38,7 @@ A simple web app to solve worlde puzzle, [deployed here](https://worlde-solver.v
 
 - Create [a sum type](https://github.com/golergka/worlde-solver/blob/d5af6a7917f6db669bddebfa076d4e59e0b824dc/src/components/App.tsx#L8-L15) to represent different variations of current state, and then [choose one of the components](https://github.com/golergka/worlde-solver/blob/d5af6a7917f6db669bddebfa076d4e59e0b824dc/src/components/App.tsx#L35-L42) that map to these states.
 
-## [rs-lox](https://github.com/golergka/touchbar-vscode) (2022)
+## [rs-lox](https://github.com/golergka/rs-lox) (2022)
 
 **Rust**, **Virtual machines**, **Parsing**, **Programming languages**
 
