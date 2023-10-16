@@ -1,5 +1,5 @@
 - 👋 Hi, I’m Max Yankov aka **golergka**.
-- 🫣 **Open for new opportunities**! Here's [my CV](Max%20Yankov%20-%20CV.pdf).
+- 🫣 Here's [my CV](Max%20Yankov%20-%20CV.pdf).
 - 🏡 [Digital nomad](https://nomadlist.com/@golergka).
 - 👨🏻‍💻I’m a full-stack developer. Game development, client-side web, server-side web, native app development, you name it — I've probably worked with it.
 - 🌱 [Full list of my toy projects and repositories](my-repositories.md).
