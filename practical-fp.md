@@ -1,4 +1,4 @@
-# Practical functional programming
+# Why I adopted functional programming
 
 Not a fan of long intros. The thesis of this article is that practical FP is great and you should adopt it. Here's how it looks like:
 
@@ -496,3 +496,48 @@ if (id === undefined) {
 ```
 
 The logic of "if the id is invalid, return an error" is not encapsulated in helper functions — I still have the exact same structure of code and number of lines.
+
+
+# Another example
+
+mkEndpoint(
+  Schema.chatAccess,
+  TE.tryCatchK(
+    ({ id }, { access }) =>
+      prisma.chats.update({
+        where: { id },
+        data: { access },
+        select: { username: true, access: true, id: true },
+      }),
+    (error) => `Couldn't update chat: ${error}`,
+  ),
+);
+
+server.route({
+  method: Schema.chatAccess.method,
+  path: Schema.chatAccess.path,
+  options: {
+    handler: async (request, h) => {
+      const { id } = request.params;
+      const payloadE = Schema.chatAccess.payload.decode(request.payload);
+      if (E.isLeft(payloadE)) {
+        return h.response(payloadE.left).code(400);
+      }
+      const { access } = payloadE.right;
+      const chat = await prisma.chats.update({
+        where: { id },
+        data: { access },
+        select: { username: true, access: true, id: true },
+      });
+      return chat === null ? h.response().code(404) : chat;
+    },
+    validate: {
+      params: Joi.object({
+        id: Joi.string().required().description("chat id"),
+      }),
+      payload: Joi.object({
+        access: Joi.boolean().required().description("access"),
+      }),
+    },
+  },
+});
