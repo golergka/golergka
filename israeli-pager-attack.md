@@ -74,7 +74,8 @@ Israel have signed [a treaty against booby trapped devices](https://en.wikipedia
 
 (j) animals or their carcasses.
 
-The pagers are communication devices used by combatants. They don't fall into any of these categories.
+ * The pagers are communication devices used by combatants. They don't fall into any of these categories.
+ * Some people, like [The Guardian](https://www.theguardian.com/commentisfree/2024/sep/18/the-guardian-view-on-israels-booby-trap-war-and-unacceptable), claim that this attack violates the treaty. This means that these people either cannot bother to read the very short wikipedia article (not even the treaty itself), or are intentionally lying.
 
 ## Conclusion
 
