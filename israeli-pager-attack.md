@@ -48,6 +48,23 @@ Israel have used cell signals to guide missile in assasinations of terrorists. B
 * Terrorism refers to use of violence or acts of violence **targeted at civilians** to achieve a political advantage through intimidation.
 * Intimidation has to be the **primary objective** of an act of war to be considered a terror attack. Almost any act of war, be it a bomb or a single shot fired, terririses and intimidates peaceful population. It does not become an act of terror because of that.
 
+## Protocol on Mines, Booby-Traps and Other Devices
+
+Israel have signed [a treaty against booby trapped devices](https://en.wikipedia.org/wiki/Protocol_on_Mines%2C_Booby-Traps_and_Other_Devices). Some people have claimed that this attack violates this treaty. It prohibits the use of booby traps that are "attached to or associated with" any of the following features:
+
+(a) internationally recognized protective emblems, signs or signals;
+(b) sick, wounded or dead persons;
+(c) burial or cremation sites or graves;
+(d) medical facilities, medical equipment, medical supplies or medical transportation;
+(e) children's toys or other portable objects or products specially designed for the feeding, health, hygiene, clothing or education of children;
+(f) food or drink;
+(g) kitchen utensils or appliances except in military establishments, military locations or military supply depots;
+(h) objects clearly of a religious nature;
+(i) historic monuments, works of art or places of worship which constitute the cultural or spiritual heritage of peoples; and
+(j) animals or their carcasses.
+
+The pagers are communication devices used by combatants. They don't fall into any of these categories.
+
 ## Conclusion
 
 Israeli pager attack does not constitute an act of terror or a war crime in any way or form. It is one of the most targeted attacks in history of warfare, especially given it's scale.
