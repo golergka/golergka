@@ -50,17 +50,28 @@ Israel have used cell signals to guide missile in assasinations of terrorists. B
 
 ## Protocol on Mines, Booby-Traps and Other Devices
 
-Israel have signed [a treaty against booby trapped devices](https://en.wikipedia.org/wiki/Protocol_on_Mines%2C_Booby-Traps_and_Other_Devices). Some people have claimed that this attack violates this treaty. It prohibits the use of booby traps that are "attached to or associated with" any of the following features:
+Israel have signed [a treaty against booby trapped devices](https://en.wikipedia.org/wiki/Protocol_on_Mines%2C_Booby-Traps_and_Other_Devices). Some people have claimed that this attack violates this treaty. I will cite wikipedia article here.
+
+[The treaty] prohibits the use of booby traps that are "attached to or associated with" any of the following features:
 
 (a) internationally recognized protective emblems, signs or signals;
+
 (b) sick, wounded or dead persons;
+
 (c) burial or cremation sites or graves;
+
 (d) medical facilities, medical equipment, medical supplies or medical transportation;
+
 (e) children's toys or other portable objects or products specially designed for the feeding, health, hygiene, clothing or education of children;
+
 (f) food or drink;
+
 (g) kitchen utensils or appliances except in military establishments, military locations or military supply depots;
+
 (h) objects clearly of a religious nature;
+
 (i) historic monuments, works of art or places of worship which constitute the cultural or spiritual heritage of peoples; and
+
 (j) animals or their carcasses.
 
 The pagers are communication devices used by combatants. They don't fall into any of these categories.
