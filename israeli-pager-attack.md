@@ -42,3 +42,5 @@ Israel have used cell signals to guide missile in assasinations of terrorists. B
 ## Conclusion
 
 Israeli pager attack does not constitute an act of terror or a war crime in any way or form. It is one of the most targeted attacks in history of warfare, especially given it's scale.
+
+If you disagree with one of the points above, please free to open an issue or contact me otherwise. I will gladly add prooflinks or expand on points which are contested.
