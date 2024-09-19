@@ -28,7 +28,9 @@ Israel have used cell signals to guide missile in assasinations of terrorists. B
 
 ## Attack objectives
 
-* Such supply chain attack requires very significant resources. Even if you picture Israel as a genocidal and evil, there is no other military objective for which such an attack would have been an effective use of resources. If you think that Israel wanted to cause terror and destruction among general population, they could have just bombed Lebanon or used a hundred other cheaper and more effective ways to do so.
+* Such supply chain attack requires very significant resources.
+* Even if you picture Israel as a genocidal and evil, there is no other military objective for which such an attack would have been an effective use of resources.
+* If you think that Israel wanted to cause terror and destruction among general population, they could have just bombed Lebanon or used a hundred other cheaper and more effective ways to do so.
 * Therefore, if you think that Israel's objective in this attack has been anything other than incapacitating Hezbolla members, an assumption that Israeli military is evil is not sufficient. You also have to assume that **Israeli military is extremely stupid and incompetent**.
 * Israeli military have been called a lot of things, but never stupid and incompetent, even by it's worst enemies.
 * Therefore, the only objective this attack could have had was incapacitating Hezbolla members.
