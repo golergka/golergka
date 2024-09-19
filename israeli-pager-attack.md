@@ -4,7 +4,7 @@ This is a summary document on my views on the Israeli pager attack on Hezbolla i
 
 ## What is Hezbolla
 
-* Hezbolla have started a war in Israel on October 8th, 2024, right after Hamas have massacred and raped 1200 Israeli civilians.
+* Hezbolla have started a war in Israel on October 8th, 2024, right after Hamas have massacred and raped 1200 Israeli civilians. This attack took place before any Israeli military action against Hezbolla or Hamas.
 * Hezbolla have been undiscriminately firing hundreds of rockets at Israeli civilians. There are many casualties, both Jewish and Arab. Widespread fires. Half the country had to be evacuated.
 * Hezbolla have, over many years, performed many terror attacks targeting Isareli, American and other civilians. They have also been involved in drug trafficking, human trafficking, and other criminal activities.
 * Hezbolla is de-facto one of military branches of Iran, and is funded by Iran.
