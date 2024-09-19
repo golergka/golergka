@@ -37,7 +37,8 @@ Israel have used cell signals to guide missile in assasinations of terrorists. B
 * Attack that incapacitates thousand of enemy combatants is a very significant military advantage. It's hard to imagine a more significant one.
 * Attack with a small explosive charge that doesn't harm any civilians is a very small harm to civilians. It's hard to imagine a smaller one.
 * A typical ratio of civilian to combatant casualties in a war is 9:1. This means that the pager attack is **1,000 more targeted** than an average attack in a war.
-* Terrorism refers to use of violence or acts of violence **targeted at civilians** to achieve a political advantage through indimidation.
+* Terrorism refers to use of violence or acts of violence **targeted at civilians** to achieve a political advantage through intimidation.
+* Intimidation has to be the **primary objective** of an act of war to be considered a terror attack. Almost any act of war, be it a bomb or a single shot fired, terririses and intimidates peaceful population. It does not become an act of terror because of that.
 
 ## Conclusion
 
