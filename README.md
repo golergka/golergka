@@ -1,11 +1,12 @@
 - 👋 Hi, I’m Max Yankov aka **golergka**.
-- 🫣 **Open for new opportunities**! Here's [my CV](Max%20Yankov%20-%20CV.pdf).
+- 🫣 Here's [my CV](Max%20Yankov%20-%20CV.pdf).
 - 🏡 [Digital nomad](https://nomadlist.com/@golergka).
 - 👨🏻‍💻I’m a full-stack developer. Game development, client-side web, server-side web, native app development, you name it — I've probably worked with it.
 - 🌱 [Full list of my toy projects and repositories](my-repositories.md).
 - 💞️ Write electronic music and DJ.
 - 🗳 Former political activist in Russia (while public politics was still possible there).
 - 📫 Best way to reach me is on Telegram: [@golergka](http://t.me/golergka)
+- 📧 You can also use [golergka@gmail.com](mailto:golergka@gmail.com)
 - 🇺🇦 [Support Ukraine in its fight against Russian aggression!](https://savelife.in.ua/en/donate-en/)
 
 <!---
