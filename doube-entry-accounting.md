@@ -15,7 +15,9 @@ The chart of accounts is your financial roadmap. Each account has a unique code 
 - **Expenses:** Costs incurred (e.g., customs duties, spoilage, mobile expenses).
 
 ### Account Code Structure
-
+| Date       | Transaction ID | Account Code | Account                  | Debit (Pesos) | Credit (Pesos) | Notes                                |
+|------------|----------------|--------------|--------------------------|---------------|----------------|--------------------------------------|
+| 2025-02-01 | TX001         | 3001         | Partner A Contribution   |               | 2,000          | Record Partner A's injection        |
 Account codes are organized in ranges that reflect their type:
 - 1000-1999: Assets (cash, inventory, receivables)
 - 2000-2999: Liabilities (payables, loans)
@@ -182,9 +184,9 @@ This scenario shows a partner deposit where only the debit side is recorded, bre
 * Issue: The corresponding credit entry to "Partner A Contribution" is missing.
 * Fix: Add the missing credit entry.
 
-| Date       | Transaction ID | Account                  | Debit (Pesos) | Credit (Pesos) | Notes                                |
-|------------|----------------|--------------------------|---------------|----------------|--------------------------------------|
-| 2025-02-01 | TX001          | Partner A Contribution   |               | 2,000          | Record Partner A's injection        |
+| Date       | Transaction ID | Account Code | Account                  | Debit (Pesos) | Credit (Pesos) | Notes                                |
+|------------|----------------|--------------|--------------------------|---------------|----------------|--------------------------------------|
+| 2025-02-01 | TX001         | 3001         | Partner A Contribution   |               | 2,000          | Record Partner A's injection        |
 
 ### 4.2: Duplicate Entry
 This example shows a supplier payment recorded twice, which incorrectly inflates the total cash spent.
