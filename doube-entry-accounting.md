@@ -43,8 +43,6 @@ Each code's first digit indicates the account type, making financial statements 
 | 5002  | Spoilage Expense         | Expense   | Losses from damaged goods           |
 | 5003  | Mobile Expense           | Expense   | Cell service fees                   |
 
----
-
 ## 2. Transaction Log & Invariants
 
 Every transaction consists of multiple entries that must adhere to three key invariants:
@@ -67,7 +65,6 @@ Imagine a simple cash injection by Partner A. This transaction demonstrates all 
 - **Completeness:** All fields are filled with clear notes.  
 - **Single-Source:** Transaction TX001 uniquely ties both entries to the same event.
 
----
 
 ## 3. Specific Transaction Examples
 
@@ -146,7 +143,6 @@ Scenario: The business receives materials on credit (5,000 Pesos) and pays a mon
 | 2025-02-25 | TX201         | 2001         | Accounts Payable   | 5,000         |                | Clear supplier liability           |
 | 2025-02-25 | TX201         | 1001         | Cash               |               | 5,000          | Cash outflow for supplier payment  |
 
----
 
 ### 3.5 Inventory Spoilage
 
@@ -201,7 +197,6 @@ This example shows a supplier payment recorded twice, which incorrectly inflates
 * Issue: The payment was recorded twice.
 * Fix: Remove the duplicate entry to ensure cash outflow matches the actual transaction.
 
----
 
 ## 5. Pivot Tables & Budget Planning
 
@@ -230,7 +225,6 @@ Notes:
 - Actual expenses in the transaction log will be compared against the budget to track variances. 
 - Adjustments can be made monthly based on revenue fluctuations.
 
----
 
 ## 6. Automated Checks in Google Sheets
 
@@ -273,8 +267,6 @@ For cash accounts, maintain running balance:
 ```=SUMIFS(DebitColumn, AccountCodeColumn, "1001") - SUMIFS(CreditColumn, AccountCodeColumn, "1001")```
 
 Add conditional formatting to highlight negative balances.
-
----
 
 # Conclusion
 
