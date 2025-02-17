@@ -28,18 +28,18 @@ Each code's first digit indicates the account type, making financial statements 
 ### Sample Chart:
 
 | Code  | Account                  | Type      | Notes                               |
-|------|--------------------------|-----------|-------------------------------------|
-| 101  | Cash (Domestic)          | Asset     | Local currency funds                |
-| 102  | USD Cash in Safe         | Asset     | Foreign currency funds              |
-| 201  | Partner A Contribution   | Equity    | Funds injected by Partner A         |
-| 301  | Inventory                | Asset     | Raw materials or goods              |
-| 401  | Customs Duties Expense   | Expense   | Fees on imports                     |
-| 402  | Spoilage Expense         | Expense   | Losses from damaged goods           |
-| 501  | Accounts Payable         | Liability | Money owed to suppliers             |
-| 502  | AP - Provider A          | Liability | Payables to Provider A              |
-| 503  | AP - Provider B          | Liability | Payables to Provider B              |
-| 601  | Mobile Expense           | Expense   | Cell service fees                   |
-| 701  | Exchange Gain            | Revenue   | Gains from currency exchange        |
+|-------|--------------------------|-----------|-------------------------------------|
+| 1001  | Cash (Domestic)          | Asset     | Local currency funds                |
+| 1002  | USD Cash in Safe         | Asset     | Foreign currency funds              |
+| 1300  | Inventory                | Asset     | Raw materials or goods              |
+| 2001  | Accounts Payable         | Liability | Money owed to suppliers             |
+| 2002  | AP - Provider A          | Liability | Payables to Provider A              |
+| 2003  | AP - Provider B          | Liability | Payables to Provider B              |
+| 3001  | Partner A Contribution   | Equity    | Funds injected by Partner A         |
+| 4001  | Exchange Gain            | Revenue   | Gains from currency exchange        |
+| 5001  | Customs Duties Expense   | Expense   | Fees on imports                     |
+| 5002  | Spoilage Expense         | Expense   | Losses from damaged goods           |
+| 5003  | Mobile Expense           | Expense   | Cell service fees                   |
 
 ---
 
