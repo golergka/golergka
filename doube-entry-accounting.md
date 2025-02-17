@@ -284,7 +284,7 @@ Formula to flag invalid codes:
 ### 6.2 Account Name Lookup
 
 Automatically display account names based on codes:
-```=VLOOKUP(B2, ChartOfAccounts, 2, FALSE)```
+```=IF(B2="", "", VLOOKUP(B2, ChartOfAccounts, 2, FALSE))```
 Where:
 - B2 is the Account Code cell
 - ChartOfAccounts is a named range including codes and names
