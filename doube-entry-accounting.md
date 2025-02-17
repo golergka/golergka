@@ -273,9 +273,10 @@ These formulas help catch errors early by automatically validating transactions 
 ### 6.1 Account Code Validation
 
 Use Data Validation to ensure only valid account codes are entered:
-1. Create a named range `AccountCodes` from the codes in your Chart of Accounts
-2. In transaction log, select Account Code column
-3. Data → Data Validation → List from range → `=AccountCodes`
+1. If using a formal Google Sheets table: reference the column directly with `=TableName.ColumnName`
+2. If using regular ranges: create a named range `AccountCodes` from the codes in your Chart of Accounts
+3. In transaction log, select Account Code column
+4. Data → Data Validation → List from range → Use either `=AccountCodes` or `=ChartTable.Code`
 
 Formula to flag invalid codes:
 ```=IF(COUNTIF(AccountCodes, B2)=0, "Invalid Code", "")```
