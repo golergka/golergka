@@ -94,11 +94,11 @@ Imagine a simple cash injection by Partner A. This transaction demonstrates all 
 
 #### Journal Entry (2025-03-15):
 
-| Date       | Transaction ID | Account                  | Debit (Pesos) | Credit (Pesos) | Notes                                                      |
-|------------|----------------|--------------------------|---------------|----------------|------------------------------------------------------------|
-| 2025-03-15 | TX600          | Inventory                | 6,000         |                | Record inventory purchase                                  |
-| 2025-03-15 | TX600          | Cash (Domestic)          |               | 4,000          | Partial payment from corporate cash                        |
-| 2025-03-15 | TX600          | Partner A Contribution   |               | 2,000          | Founder covers shortfall by contributing personal funds    |
+| Date       | Transaction ID | Account Code | Account                  | Debit (Pesos) | Credit (Pesos) | Notes                                                      |
+|------------|----------------|--------------|--------------------------|---------------|----------------|------------------------------------------------------------|
+| 2025-03-15 | TX600         | 1300         | Inventory                | 6,000         |                | Record inventory purchase                                  |
+| 2025-03-15 | TX600         | 1001         | Cash (Domestic)          |               | 4,000          | Partial payment from corporate cash                        |
+| 2025-03-15 | TX600         | 3001         | Partner A Contribution   |               | 2,000          | Founder covers shortfall by contributing personal funds    |
 
 **Invariant Checks:**  
 - **Balance:** Total debits (6,000) equal total credits (4,000 + 2,000).  
@@ -110,21 +110,21 @@ Scenario: A business has a contract for mobile service and must pay monthly. Eac
 
 #### Month 1 – Provider A (500 Pesos)
 
-| Date       | Transaction ID | Account                          | Debit (Pesos) | Credit (Pesos) | Vendor      | Notes                                      |
-|------------|----------------|----------------------------------|---------------|----------------|-------------|--------------------------------------------|
-| 2025-03-31 | TX501          | Mobile Expense                   | 500           |                | Provider A  | Accrue fee for Month 1                      |
-| 2025-03-31 | TX501          | Accounts Payable – Provider A    |               | 500            | Provider A  | Record liability to Provider A              |
-| 2025-04-05 | TX502          | Accounts Payable – Provider A    | 500           |                | Provider A  | Clear payable on payment                    |
-| 2025-04-05 | TX502          | Cash                             |               | 500            |             | Cash outflow for Provider A payment         |
+| Date       | Transaction ID | Account Code | Account                          | Debit (Pesos) | Credit (Pesos) | Vendor      | Notes                                      |
+|------------|----------------|--------------|----------------------------------|---------------|----------------|-------------|--------------------------------------------|
+| 2025-03-31 | TX501         | 5003         | Mobile Expense                   | 500           |                | Provider A  | Accrue fee for Month 1                      |
+| 2025-03-31 | TX501         | 2002         | Accounts Payable – Provider A    |               | 500            | Provider A  | Record liability to Provider A              |
+| 2025-04-05 | TX502         | 2002         | Accounts Payable – Provider A    | 500           |                | Provider A  | Clear payable on payment                    |
+| 2025-04-05 | TX502         | 1001         | Cash                             |               | 500            |             | Cash outflow for Provider A payment         |
 
 #### Month 2 – Provider B (600 Pesos)
 
-| Date       | Transaction ID | Account                          | Debit (Pesos) | Credit (Pesos) | Vendor      | Notes                                      |
-|------------|----------------|----------------------------------|---------------|----------------|-------------|--------------------------------------------|
-| 2025-04-30 | TX503          | Mobile Expense                   | 600           |                | Provider B  | Accrue fee for Month 2                      |
-| 2025-04-30 | TX503          | Accounts Payable – Provider B    |               | 600            | Provider B  | Record liability to Provider B              |
-| 2025-05-05 | TX504          | Accounts Payable – Provider B    | 600           |                | Provider B  | Clear payable on payment                    |
-| 2025-05-05 | TX504          | Cash                             |               | 600            |             | Cash outflow for Provider B payment         |
+| Date       | Transaction ID | Account Code | Account                          | Debit (Pesos) | Credit (Pesos) | Vendor      | Notes                                      |
+|------------|----------------|--------------|----------------------------------|---------------|----------------|-------------|--------------------------------------------|
+| 2025-04-30 | TX503         | 5003         | Mobile Expense                   | 600           |                | Provider B  | Accrue fee for Month 2                      |
+| 2025-04-30 | TX503         | 2003         | Accounts Payable – Provider B    |               | 600            | Provider B  | Record liability to Provider B              |
+| 2025-05-05 | TX504         | 2003         | Accounts Payable – Provider B    | 600           |                | Provider B  | Clear payable on payment                    |
+| 2025-05-05 | TX504         | 1001         | Cash                             |               | 600            |             | Cash outflow for Provider B payment         |
 
 ### 3.4 Accounts Payable for Materials
 
@@ -132,17 +132,17 @@ Scenario: The business receives materials on credit (5,000 Pesos) and pays a mon
 
 #### Receipt (2025-02-05)
 
-| Date       | Transaction ID | Account            | Debit (Pesos) | Credit (Pesos) | Notes                              |
-|------------|----------------|--------------------|---------------|----------------|------------------------------------|
-| 2025-02-05 | TX200          | Inventory          | 5,000         |                | Received materials on credit       |
-| 2025-02-05 | TX200          | Accounts Payable   |               | 5,000          | Record supplier obligation         |
+| Date       | Transaction ID | Account Code | Account            | Debit (Pesos) | Credit (Pesos) | Notes                              |
+|------------|----------------|--------------|-------------------|---------------|----------------|------------------------------------|
+| 2025-02-05 | TX200         | 1300         | Inventory          | 5,000         |                | Received materials on credit       |
+| 2025-02-05 | TX200         | 2001         | Accounts Payable   |               | 5,000          | Record supplier obligation         |
 
 #### Payment (2025-02-25)
 
-| Date       | Transaction ID | Account            | Debit (Pesos) | Credit (Pesos) | Notes                              |
-|------------|----------------|--------------------|---------------|----------------|------------------------------------|
-| 2025-02-25 | TX201          | Accounts Payable   | 5,000         |                | Clear supplier liability           |
-| 2025-02-25 | TX201          | Cash               |               | 5,000          | Cash outflow for supplier payment  |
+| Date       | Transaction ID | Account Code | Account            | Debit (Pesos) | Credit (Pesos) | Notes                              |
+|------------|----------------|--------------|-------------------|---------------|----------------|------------------------------------|
+| 2025-02-25 | TX201         | 2001         | Accounts Payable   | 5,000         |                | Clear supplier liability           |
+| 2025-02-25 | TX201         | 1001         | Cash               |               | 5,000          | Cash outflow for supplier payment  |
 
 ---
 
@@ -152,17 +152,17 @@ Scenario: The business purchases inventory worth 10,000 Pesos and later finds th
 
 #### Purchase (2025-02-03)
 
-| Date       | Transaction ID | Account                     | Debit (Pesos) | Credit (Pesos) | Notes                             |
-|------------|----------------|-----------------------------|---------------|----------------|-----------------------------------|
-| 2025-02-03 | TX300          | Inventory                   | 10,000        |                | Record inventory purchase         |
-| 2025-02-03 | TX300          | Accounts Payable / Cash     |               | 10,000         | Record payment or payable entry   |
+| Date       | Transaction ID | Account Code | Account                     | Debit (Pesos) | Credit (Pesos) | Notes                             |
+|------------|----------------|--------------|----------------------------|---------------|----------------|-----------------------------------|
+| 2025-02-03 | TX300         | 1300         | Inventory                   | 10,000        |                | Record inventory purchase         |
+| 2025-02-03 | TX300         | 2001         | Accounts Payable / Cash     |               | 10,000         | Record payment or payable entry   |
 
 #### Spoilage (2025-02-20)
 
-| Date       | Transaction ID | Account            | Debit (Pesos) | Credit (Pesos) | Notes                                  |
-|------------|----------------|--------------------|---------------|----------------|----------------------------------------|
-| 2025-02-20 | TX301          | Spoilage Expense   | 1,500         |                | Record 15% spoilage loss               |
-| 2025-02-20 | TX301          | Inventory          |               | 1,500          | Adjust inventory value accordingly     |
+| Date       | Transaction ID | Account Code | Account            | Debit (Pesos) | Credit (Pesos) | Notes                                  |
+|------------|----------------|--------------|-------------------|---------------|----------------|----------------------------------------|
+| 2025-02-20 | TX301         | 5002         | Spoilage Expense   | 1,500         |                | Record 15% spoilage loss               |
+| 2025-02-20 | TX301         | 1300         | Inventory          |               | 1,500          | Adjust inventory value accordingly     |
 
 Notes:  
 - The spoilage expense reflects a reduction in usable inventory.  
