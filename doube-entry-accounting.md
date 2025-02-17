@@ -2,8 +2,6 @@
 
 This guide outlines a robust yet lean double-entry accounting system that scales with your business. Our goal is accuracy and clarity through a well-structured chart of accounts, transaction logs with strict invariants, and separate planning tools.
 
----
-
 ## 1. Chart of Accounts
 
 The chart of accounts is your financial roadmap. Each account has a unique code and role:
@@ -15,9 +13,7 @@ The chart of accounts is your financial roadmap. Each account has a unique code 
 - **Expenses:** Costs incurred (e.g., customs duties, spoilage, mobile expenses).
 
 ### Account Code Structure
-| Date       | Transaction ID | Account Code | Account                  | Debit (Pesos) | Credit (Pesos) | Notes                                |
-|------------|----------------|--------------|--------------------------|---------------|----------------|--------------------------------------|
-| 2025-02-01 | TX001         | 3001         | Partner A Contribution   |               | 2,000          | Record Partner A's injection        |
+
 Account codes are organized in ranges that reflect their type:
 - 1000-1999: Assets (cash, inventory, receivables)
 - 2000-2999: Liabilities (payables, loans)
