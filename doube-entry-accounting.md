@@ -38,6 +38,7 @@ Each code's first digit indicates the account type, making financial statements 
 | 2002  | AP - Provider A          | Liability | Payables to Provider A              |
 | 2003  | AP - Provider B          | Liability | Payables to Provider B              |
 | 3001  | Partner A Contribution   | Equity    | Funds injected by Partner A         |
+| 3002  | Opening Balance Equity   | Equity    | Initial balances when starting      |
 | 4001  | Exchange Gain            | Revenue   | Gains from currency exchange        |
 | 5001  | Customs Duties Expense   | Expense   | Fees on imports                     |
 | 5002  | Spoilage Expense         | Expense   | Losses from damaged goods           |
@@ -68,7 +69,21 @@ Imagine a simple cash injection by Partner A. This transaction demonstrates all 
 
 ## 3. Specific Transaction Examples
 
-### 3.1 Foreign Currency Safe Deposit
+### 3.1 Recording Initial Balances
+
+**Scenario:** Starting accounting with 15,000 Pesos already in the cash register.
+
+| Date       | Transaction ID | Account Code | Account               | Debit (Pesos) | Credit (Pesos) | Notes                                |
+|------------|---------------|--------------|----------------------|---------------|----------------|--------------------------------------|
+| 2025-01-01 | TX000         | 1001         | Cash (Domestic)      | 15,000        |                | Record existing cash on hand         |
+| 2025-01-01 | TX000         | 3002         | Opening Balance Equity|              | 15,000         | Balance entry for initial assets     |
+
+Notes:
+- Use transaction ID "TX000" to indicate this is the opening entry
+- Opening Balance Equity account tracks pre-existing assets/liabilities
+- Future owner contributions should use Partner Contribution accounts instead
+
+### 3.2 Foreign Currency Safe Deposit
 
 **Scenario:** Deposit $100 into a USD safe at 20 Pesos/USD; later withdraw at 22 Pesos/USD.
 
