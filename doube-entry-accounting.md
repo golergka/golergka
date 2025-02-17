@@ -175,9 +175,9 @@ Lost transactions violate the **single-source invariant**, meaning an entry is e
 ### 4.1. Missing Credit Entry
 This scenario shows a partner deposit where only the debit side is recorded, breaking the balance.
 
-| Date       | Transaction ID | Account          | Debit (Pesos) | Credit (Pesos) | Notes                                |
-|------------|----------------|------------------|---------------|----------------|--------------------------------------|
-| 2025-02-01 | TX001          | Cash (Domestic)  | 2,000         |                | Cash deposit from Partner A         |
+| Date       | Transaction ID | Account Code | Account          | Debit (Pesos) | Credit (Pesos) | Notes                                |
+|------------|----------------|--------------|------------------|---------------|----------------|--------------------------------------|
+| 2025-02-01 | TX001         | 1001         | Cash (Domestic)  | 2,000         |                | Cash deposit from Partner A         |
 
 * Issue: The corresponding credit entry to "Partner A Contribution" is missing.
 * Fix: Add the missing credit entry.
@@ -189,12 +189,12 @@ This scenario shows a partner deposit where only the debit side is recorded, bre
 ### 4.2: Duplicate Entry
 This example shows a supplier payment recorded twice, which incorrectly inflates the total cash spent.
 
-| Date       | Transaction ID | Account          | Debit (Pesos) | Credit (Pesos) | Notes                                  |
-|------------|----------------|------------------|---------------|----------------|----------------------------------------|
-| 2025-02-05 | TX200          | Accounts Payable | 5,000         |                | Recognizing supplier obligation        |
-| 2025-02-25 | TX201          | Accounts Payable | 5,000         |                | Paying supplier                        |
-| 2025-02-25 | TX201          | Cash             |               | 5,000          | Cash outflow for supplier payment      |
-| 2025-02-25 | TX201          | Cash             |               | 5,000          | Duplicate entry - ERROR                |
+| Date       | Transaction ID | Account Code | Account          | Debit (Pesos) | Credit (Pesos) | Notes                                  |
+|------------|----------------|--------------|------------------|---------------|----------------|----------------------------------------|
+| 2025-02-05 | TX200         | 2001         | Accounts Payable | 5,000         |                | Recognizing supplier obligation        |
+| 2025-02-25 | TX201         | 2001         | Accounts Payable | 5,000         |                | Paying supplier                        |
+| 2025-02-25 | TX201         | 1001         | Cash             |               | 5,000          | Cash outflow for supplier payment      |
+| 2025-02-25 | TX201         | 1001         | Cash             |               | 5,000          | Duplicate entry - ERROR                |
 
 * Issue: The payment was recorded twice.
 * Fix: Remove the duplicate entry to ensure cash outflow matches the actual transaction.
