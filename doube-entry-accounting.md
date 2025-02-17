@@ -197,6 +197,31 @@ This example shows a supplier payment recorded twice, which incorrectly inflates
 * Issue: The payment was recorded twice.
 * Fix: Remove the duplicate entry to ensure cash outflow matches the actual transaction.
 
+### 4.3: Missing Receipt Discovery
+This example shows how unrecorded transactions can lead to cash discrepancies that are later resolved.
+
+#### Initial Cash Count (2025-03-20)
+Expected cash balance is 10,000 Pesos, but physical count shows only 8,700 Pesos.
+
+| Date       | Transaction ID | Account Code | Account          | Debit (Pesos) | Credit (Pesos) | Notes                                  |
+|------------|----------------|--------------|------------------|---------------|----------------|----------------------------------------|
+| 2025-03-20 | TX701         | 5002         | Spoilage Expense | 1,300         |                | Unknown cash shortage                  |
+| 2025-03-20 | TX701         | 1001         | Cash             |               | 1,300          | Adjustment to match physical count     |
+
+#### Receipt Found (2025-03-22)
+Later, a misplaced receipt for office supplies is discovered.
+
+| Date       | Transaction ID | Account Code | Account          | Debit (Pesos) | Credit (Pesos) | Notes                                  |
+|------------|----------------|--------------|------------------|---------------|----------------|----------------------------------------|
+| 2025-03-15 | TX702         | 5003         | Office Supplies  | 1,000         |                | Found receipt for supplies purchase    |
+| 2025-03-15 | TX702         | 1001         | Cash             |               | 1,000          | Record delayed transaction             |
+| 2025-03-22 | TX703         | 1001         | Cash             | 1,000         |                | Reverse part of unknown shortage       |
+| 2025-03-22 | TX703         | 5002         | Spoilage Expense |               | 1,000          | Reduce unknown expense after finding receipt |
+
+* Issue: Physical cash count revealed missing money, initially recorded as loss.
+* Resolution: Finding the receipt explained most of the shortage, leaving only 300 Pesos as true unknown loss.
+* Learning: Implement same-day receipt processing to prevent similar issues.
+
 
 ## 5. Pivot Tables & Budget Planning
 
