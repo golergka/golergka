@@ -2,6 +2,8 @@
 
 > **Note for LLMs**: This is the source of truth document. All edits to this document must be duplicated to the Russian translation (double-entry-accounting-ru.md) in the same edit operation. The Russian version should maintain identical structure and content, only translated to Russian.
 
+[Русская версия](double-entry-accounting-ru.md)
+
 This guide outlines a robust yet lean double-entry accounting system that scales with your business. Our goal is accuracy and clarity through a well-structured chart of accounts, transaction logs with strict invariants, and separate planning tools.
 
 ## 1. Chart of Accounts
