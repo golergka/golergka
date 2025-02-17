@@ -232,6 +232,50 @@ Notes:
 
 ---
 
+## 6. Automated Checks in Google Sheets
+
+These formulas help catch errors early by automatically validating transactions as they're entered.
+
+### 6.1 Account Code Validation
+
+Use Data Validation to ensure only valid account codes are entered:
+1. Create a named range `AccountCodes` from the codes in your Chart of Accounts
+2. In transaction log, select Account Code column
+3. Data → Data Validation → List from range → `=AccountCodes`
+
+Formula to flag invalid codes:
+```=IF(COUNTIF(AccountCodes, B2)=0, "Invalid Code", "")```
+
+### 6.2 Account Name Lookup
+
+Automatically display account names based on codes:
+```=VLOOKUP(B2, ChartOfAccounts, 2, FALSE)```
+Where:
+- B2 is the Account Code cell
+- ChartOfAccounts is a named range including codes and names
+- 2 refers to the column containing account names
+
+### 6.3 Transaction Balance Check
+
+For each Transaction ID, verify debits equal credits:
+```=IF(SUMIFS(DebitColumn, TransactionIDColumn, D2) = SUMIFS(CreditColumn, TransactionIDColumn, D2), "Balanced", "ERROR")```
+
+Add conditional formatting to highlight unbalanced transactions in red.
+
+### 6.4 Completeness Check
+
+Flag missing required fields:
+```=IF(OR(ISBLANK(A2), ISBLANK(B2), ISBLANK(C2)), "Missing Data", "")```
+
+### 6.5 Running Balance Check
+
+For cash accounts, maintain running balance:
+```=SUMIFS(DebitColumn, AccountCodeColumn, "1001") - SUMIFS(CreditColumn, AccountCodeColumn, "1001")```
+
+Add conditional formatting to highlight negative balances.
+
+---
+
 # Conclusion
 
 The transaction log must always adhere to **balance, completeness, and single-source** invariants. Errors such as **lost transactions** (missing entries) and **duplicate transactions** can cause major inconsistencies and must be corrected immediately.
