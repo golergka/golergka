@@ -14,9 +14,20 @@ The chart of accounts is your financial roadmap. Each account has a unique code 
 - **Revenue:** Income from sales or services.  
 - **Expenses:** Costs incurred (e.g., customs duties, spoilage, mobile expenses).
 
+### Account Code Structure
+
+Account codes are organized in ranges that reflect their type:
+- 1000-1999: Assets (cash, inventory, receivables)
+- 2000-2999: Liabilities (payables, loans)
+- 3000-3999: Equity (partner contributions, retained earnings)
+- 4000-4999: Revenue (sales, exchange gains)
+- 5000-5999: Expenses (customs duties, spoilage, mobile)
+
+Each code's first digit indicates the account type, making financial statements easier to prepare and analyze.
+
 ### Sample Chart:
 
-| Code | Account                  | Type      | Notes                               |
+| Code  | Account                  | Type      | Notes                               |
 |------|--------------------------|-----------|-------------------------------------|
 | 101  | Cash (Domestic)          | Asset     | Local currency funds                |
 | 102  | USD Cash in Safe         | Asset     | Foreign currency funds              |
@@ -46,8 +57,8 @@ Imagine a simple cash injection by Partner A. This transaction demonstrates all 
 
 | Date       | Transaction ID | Account Code | Account                 | Debit (Pesos) | Credit (Pesos) | Notes                                    |
 |------------|----------------|--------------|-------------------------|---------------|----------------|------------------------------------------|
-| 2025-02-01 | TX001         | 101          | Cash (Domestic)         | 2,000         |                | Cash deposit from Partner A              |
-| 2025-02-01 | TX001         | 201          | Partner A Contribution  |               | 2,000          | Record Partner A's injection             |
+| 2025-02-01 | TX001         | 1001         | Cash (Domestic)         | 2,000         |                | Cash deposit from Partner A              |
+| 2025-02-01 | TX001         | 3001         | Partner A Contribution  |               | 2,000          | Record Partner A's injection             |
 
 **Invariant Checks:**  
 - **Balance:** Total debits (2,000) equal total credits (2,000).  
@@ -66,16 +77,16 @@ Imagine a simple cash injection by Partner A. This transaction demonstrates all 
 
 | Date       | Transaction ID | Account Code | Account                  | Debit (Pesos) | Credit (Pesos) | Foreign Amount | Rate | Notes                           |
 |------------|----------------|--------------|--------------------------|---------------|----------------|----------------|------|---------------------------------|
-| 2025-02-01 | TX100         | 102          | USD Cash in Safe         | 2,000         |                | $100           | 20   | Deposit at initial rate         |
-| 2025-02-01 | TX100         | 201          | Partner A Contribution   |               | 2,000          |                |      | Record partner injection        |
+| 2025-02-01 | TX100         | 1002         | USD Cash in Safe         | 2,000         |                | $100           | 20   | Deposit at initial rate         |
+| 2025-02-01 | TX100         | 3001         | Partner A Contribution   |               | 2,000          |                |      | Record partner injection        |
 
 #### Withdrawal (2025-02-10):
 
 | Date       | Transaction ID | Account Code | Account              | Debit (Pesos) | Credit (Pesos) | Notes                                     |
 |------------|----------------|--------------|----------------------|---------------|----------------|-------------------------------------------|
-| 2025-02-10 | TX101         | 101          | Cash (Pesos)         | 2,200         |                | Withdrawal at new rate (22 Pesos/USD)     |
-| 2025-02-10 | TX101         | 102          | USD Cash in Safe     |               | 2,000          | Remove asset at original value            |
-| 2025-02-10 | TX101         | 701          | Exchange Gain        |               | 200            | Record gain from rate difference          |
+| 2025-02-10 | TX101         | 1001         | Cash (Pesos)         | 2,200         |                | Withdrawal at new rate (22 Pesos/USD)     |
+| 2025-02-10 | TX101         | 1002         | USD Cash in Safe     |               | 2,000          | Remove asset at original value            |
+| 2025-02-10 | TX101         | 4001         | Exchange Gain        |               | 200            | Record gain from rate difference          |
 
 ### 3.2 Three-Way Transaction: Mixed Funding
 
