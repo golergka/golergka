@@ -295,7 +295,18 @@ Where:
 For each Transaction ID, verify debits equal credits:
 ```=IF(SUMIFS(DebitColumn, TransactionIDColumn, D2) = SUMIFS(CreditColumn, TransactionIDColumn, D2), "Balanced", "ERROR")```
 
-Add conditional formatting to highlight unbalanced transactions in red.
+Add conditional formatting to highlight unbalanced transactions:
+1. Select the entire transaction row
+2. Format → Conditional formatting → Add rule
+3. Format rules:
+   - Apply to range: Select all columns in your transaction log
+   - Format cells if... Custom formula is: 
+   ```=SUMIFS($DebitColumn, $TransactionIDColumn, $D2) <> SUMIFS($CreditColumn, $TransactionIDColumn, $D2)```
+   - Formatting style: 
+     - Red background: #F4CCCC
+     - Red text: #990000
+     - Bold text
+4. This will highlight the entire row for any transaction where debits don't equal credits
 
 ### 6.4 Completeness Check
 
