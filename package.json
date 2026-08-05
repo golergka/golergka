@@ -1,0 +1,12 @@
+{
+  "name": "golergka-com",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "node build.mjs && cd dist && python3 -m http.server 8000"
+  },
+  "dependencies": {
+    "marked": "^15.0.6"
+  }
+}

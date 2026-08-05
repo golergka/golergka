@@ -1,0 +1,53 @@
+/* Deliberately minimal: browser default typography, just a readable column.
+   Everything here is layout, not style. Add opinions as we iterate. */
+
+body {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 4rem;
+  line-height: 1.5;
+}
+
+header,
+footer {
+  margin: 1.5rem 0;
+}
+
+footer {
+  margin-top: 3rem;
+}
+
+/* Long content (tables, code, ascii diagrams) scrolls itself
+   instead of pushing the page sideways. */
+pre,
+table {
+  overflow-x: auto;
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Post list on the index. */
+ul.posts {
+  list-style: none;
+  padding: 0;
+}
+
+ul.posts li {
+  margin: 0.75rem 0;
+}
+
+ul.posts time {
+  display: inline-block;
+  min-width: 7rem;
+}
+
+@media (max-width: 34rem) {
+  ul.posts time {
+    display: block;
+  }
+}
