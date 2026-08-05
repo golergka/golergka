@@ -42,20 +42,32 @@ script does not need to change.
 
 ## Deployment (Cloudflare Pages)
 
-Connect the repo in the Cloudflare dashboard: Workers & Pages → Create → Pages →
-Connect to Git.
+The site is a direct upload, not a Git-connected Pages project — the build runs
+here and only `dist/` is shipped. This keeps git history available, which the
+dates depend on.
 
-- Build command: `npm run build`
-- Build output directory: `dist`
-- Production branch: `main`
+    set -a; . ./.env; set +a
+    npm run build
+    npx wrangler pages deploy dist --project-name golergka --branch main
 
-Then Custom domains → `golergka.com` (and `www` if wanted). DNS is already on
-Cloudflare, so the records are created automatically.
+`.env` (gitignored) holds `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
 
-### The one thing that can break
+Live setup, already done:
 
-Dates come from git history. If Cloudflare's checkout is shallow, `git log`
-returns nothing and the build fails on purpose with a message saying so — better
-than silently publishing every post with the same date. If that happens, the
-fallback is to put dates in filenames (`2026-08-05-fighting-opentelemetry.md`)
-and read them from there instead.
+- Pages project `golergka` → `golergka.pages.dev`
+- Custom domains `golergka.com` and `www.golergka.com`
+- Proxied CNAMEs for both, pointing at `golergka.pages.dev`
+
+### Known rough edges
+
+`www` serves the same content instead of redirecting to the apex. Pages
+`_redirects` cannot match on hostname, and the zone-level Redirect Rule that
+would do it needs a token permission the current token lacks (Zone → Dynamic
+Redirect → Edit). Every page carries a `rel="canonical"` pointing at the apex, so
+search engines see one URL; adding that permission (or one dashboard rule) turns
+it into a real 301.
+
+Dates come from git history, so any future move to a Git-connected build or CI
+needs a full-depth checkout (`fetch-depth: 0` in GitHub Actions). If history is
+missing, the build fails on purpose rather than stamping every post with the same
+date; the fallback is date-prefixed filenames.

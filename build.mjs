@@ -70,6 +70,11 @@ function rewriteLinks(html) {
   );
 }
 
+// www.golergka.com serves the same files as the apex; canonical points at one.
+function canonicalTag(pathname) {
+  return `<link rel="canonical" href="${SITE_URL}${pathname}">`;
+}
+
 function render(layout, values) {
   return layout.replace(/\{\{(\w+)\}\}/g, (_, key) => values[key] ?? "");
 }
@@ -166,6 +171,7 @@ for (const page of pages) {
       lang: page.lang,
       title: `${escapeHtml(page.title)} — ${SITE_NAME}`,
       sitename: SITE_NAME,
+      canonical: canonicalTag(`/${page.slug}/`),
       content: body,
       footer: FOOTER,
     })
@@ -195,6 +201,7 @@ writePage(
     lang: "en",
     title: SITE_NAME,
     sitename: SITE_NAME,
+    canonical: canonicalTag("/"),
     content:
       rewriteLinks(marked.parse(readme)) +
       `\n<h2>Writing</h2>\n<ul class="posts">\n${list}\n</ul>`,
@@ -227,6 +234,20 @@ ${items}
 </rss>
 `
 );
+
+// Without this, Cloudflare Pages answers unknown paths with the homepage and a
+// 200, which makes every typo look like a real page.
+writePage(
+  path.join(dist, "404.html"),
+  render(layout, {
+    lang: "en",
+    title: `Not found — ${SITE_NAME}`,
+    sitename: SITE_NAME,
+    content: `<h1>Not found</h1>\n<p>No page at this address. <a href="/">Back to the front page</a>.</p>`,
+    footer: FOOTER,
+  })
+);
+
 
 fs.copyFileSync(path.join(theme, "style.css"), path.join(dist, "style.css"));
 
