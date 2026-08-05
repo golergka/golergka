@@ -18,11 +18,13 @@ const SITE_DESCRIPTION = "Notes by Max Yankov (golergka).";
 const FOOTER = `<a href="https://github.com/golergka">GitHub</a> ·
 <a href="http://t.me/golergka">Telegram</a> ·
 <a href="mailto:golergka@gmail.com">Email</a> ·
-<a href="/Max%20Yankov%20-%20CV.pdf">CV</a> ·
 <a href="/feed.xml">RSS</a>`;
 
 // README is the homepage, not a post.
 const HOMEPAGE = "README.md";
+
+// Files kept in the repo but not served on the site.
+const UNPUBLISHED = ["Max Yankov - CV.pdf"];
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const dist = path.join(root, "dist");
@@ -147,9 +149,9 @@ fs.mkdirSync(dist, { recursive: true });
 
 for (const page of pages) {
   const dated = page.created
-    ? `<p><time datetime="${page.created}">${page.created}</time>${
+    ? `<p class="date"><time datetime="${page.created}">${page.created}</time>${
         page.updated && page.updated !== page.created
-          ? ` (updated <time datetime="${page.updated}">${page.updated}</time>)`
+          ? ` · updated <time datetime="${page.updated}">${page.updated}</time>`
           : ""
       }</p>`
     : "";
@@ -170,15 +172,19 @@ for (const page of pages) {
   );
 }
 
+// Title on its own line, date and language quietly underneath it.
 const list = originals
   .map((page) => {
-    const langs = (translations.get(page.slug) ?? [])
-      .map((t) => ` · <a href="/${t.slug}/" lang="${t.lang}">${LANGUAGES[t.lang]}</a>`)
-      .join("");
-    const date = page.created
-      ? `<time datetime="${page.created}">${page.created}</time> `
-      : "";
-    return `<li>${date}<a href="/${page.slug}/">${escapeHtml(page.title)}</a>${langs}</li>`;
+    const meta = [
+      page.created ? `<time datetime="${page.created}">${page.created}</time>` : null,
+      ...(translations.get(page.slug) ?? []).map(
+        (t) => `<a href="/${t.slug}/" lang="${t.lang}">${LANGUAGES[t.lang]}</a>`
+      ),
+    ].filter(Boolean);
+    return `<li>
+<a href="/${page.slug}/">${escapeHtml(page.title)}</a>
+<div class="date">${meta.join(" · ")}</div>
+</li>`;
   })
   .join("\n");
 
@@ -189,7 +195,9 @@ writePage(
     lang: "en",
     title: SITE_NAME,
     sitename: SITE_NAME,
-    content: rewriteLinks(marked.parse(readme)) + `\n<ul class="posts">\n${list}\n</ul>`,
+    content:
+      rewriteLinks(marked.parse(readme)) +
+      `\n<h2>Writing</h2>\n<ul class="posts">\n${list}\n</ul>`,
     footer: FOOTER,
   })
 );
@@ -227,6 +235,7 @@ for (const name of fs.readdirSync(root)) {
   const full = path.join(root, name);
   if (fs.statSync(full).isDirectory()) continue;
   if (/\.(md|mjs|json|lock|yaml)$/.test(name) || name.startsWith(".")) continue;
+  if (UNPUBLISHED.includes(name)) continue;
   fs.copyFileSync(full, path.join(dist, name));
 }
 

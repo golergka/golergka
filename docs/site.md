@@ -17,6 +17,10 @@ no manifest:
 | Translation | `<name>-ru.md` is the Russian version of `<name>.md` |
 | Homepage | `README.md`, followed by the post list |
 
+Non-markdown files in the root (images, PDFs) are copied to the site as-is,
+unless listed in `UNPUBLISHED` in `build.mjs` — that is where the outdated CV
+sits: still in the repo, not served.
+
 A file without an H1 is skipped with a warning rather than half-published.
 Translations are not listed separately — they appear as a language link next to
 the original. Links between `.md` files are rewritten to site URLs, so the same

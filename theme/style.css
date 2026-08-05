@@ -1,20 +1,50 @@
-/* Deliberately minimal: browser default typography, just a readable column.
-   Everything here is layout, not style. Add opinions as we iterate. */
+/* Still close to browser defaults — a readable column, a cleaner serif than
+   Times, and no link underlines. Colors are left to the browser. */
+
+:root {
+  /* Let the browser flip its default colors in dark mode. */
+  color-scheme: light dark;
+}
 
 body {
-  max-width: 44rem;
+  max-width: 40rem;
   margin: 0 auto;
   padding: 1rem 1.25rem 4rem;
-  line-height: 1.5;
+  /* Charter and its descendants: same shape as the default serif, better fitted
+     for screens. Falls back to the system serif, never to a downloaded font. */
+  font-family: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  font-size: 1.0625rem;
+  line-height: 1.6;
 }
 
-header,
-footer {
-  margin: 1.5rem 0;
+a {
+  text-decoration: none;
 }
 
-footer {
-  margin-top: 3rem;
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  margin-top: 2rem;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid;
+  opacity: 0.15;
+  margin: 2.5rem 0;
+}
+
+blockquote {
+  margin-left: 0;
+  padding-left: 1rem;
+  border-left: 2px solid;
+  opacity: 0.75;
+}
+
+code,
+pre {
+  font-size: 0.9em;
 }
 
 /* Long content (tables, code, ascii diagrams) scrolls itself
@@ -31,23 +61,35 @@ img {
   height: auto;
 }
 
-/* Post list on the index. */
-ul.posts {
+header {
+  margin: 1.5rem 0 2.5rem;
+  font-weight: bold;
+}
+
+footer {
+  margin-top: 4rem;
+  font-size: 0.9em;
+  opacity: 0.7;
+}
+
+/* Dates: present but quiet, in the same color as the text. */
+.date {
+  font-size: 0.9em;
+  opacity: 0.6;
+  margin-top: 0.25rem;
+}
+
+/* Post list: title first, date underneath. No columns, no bullets. */
+.posts {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
-ul.posts li {
-  margin: 0.75rem 0;
+.posts li {
+  margin: 1.5rem 0;
 }
 
-ul.posts time {
-  display: inline-block;
-  min-width: 7rem;
-}
-
-@media (max-width: 34rem) {
-  ul.posts time {
-    display: block;
-  }
+.posts a {
+  font-size: 1.15em;
 }
