@@ -1,12 +1,12 @@
-# Integrating OpenTelemetry into a Node.js app
+# Getting four SDKs to share one OpenTelemetry
 
 > The thoughts here are mine, the text is LLM-assisted.
 
-OpenTelemetry promises a vendor-neutral, unified observability standard: instrument once, export everywhere, no vendor lock-in, with traces, metrics and logs all speaking the same language.
+OpenTelemetry is an observability library. Many SDKs bundle it plug-and-play style, so you don't have to think about how it is set up — but with several of them in one project I ended up untangling them one from another. Here is how I got LiveKit, Braintrust, Sentry and Better Stack all working in the same project.
 
-Getting basic tracing to work in my Node.js application took 10 days and more than 15 commits. Along the way I hit global registration conflicts, pnpm incompatibilities, breaking API changes between versions, silent failures, and a configuration that needed four separate tokens and URLs for what I expected to be one integration.
+Instrumenting my own code was never the hard part. OpenTelemetry keeps its core APIs — the tracer provider, the context manager, the propagator — as global singletons, on the assumption that every library in the process cooperates through them. That assumption holds for one SDK. With four, each arriving with its own opinion about what to register, when to register it, and which SDK version to pin, the work becomes arbitration: figuring out who registered first and attaching yourself to whatever they left behind.
 
-Here is what went wrong, and what I would do differently.
+It took 10 days and more than 15 commits. The first three problems below all come from libraries bringing their own OpenTelemetry along. The last three — vendor configuration, silent failures, and an experimental logs API — would have found me just as easily with a single SDK.
 
 ---
 
@@ -21,7 +21,7 @@ I'm building a voice AI application on top of several observability-adjacent lib
 | **Sentry v9+** | Error tracking | Registers OTel APIs if tracing integrations are enabled |
 | **Better Stack** | Logs + distributed traces | Receives data via OTLP protocol |
 
-The goal was to get traces from all of these into Better Stack. I expected it to take a day or two. It took two weeks.
+Three of them register OpenTelemetry APIs on their own; the fourth is where the traces had to end up. The goal was to get spans from all of them into Better Stack. I expected it to take a day or two.
 
 ---
 
@@ -343,7 +343,7 @@ In short:
 
 OpenTelemetry's goal is a good one: vendor-neutral, unified observability, with one instrumentation library across the stack.
 
-Integrating it into a production Node.js application that already uses several libraries with their own OTel opinions is a different matter. The ecosystem is fragmented across 0.x logs and 2.x traces, the global singleton model creates registration conflicts, pnpm and ESM support feels like an afterthought, and the default behaviour is to fail silently.
+With one SDK it delivers on that, and you never see the machinery. With four, the machinery is the work: the global singleton model turns plug-and-play integrations into registration conflicts, the ecosystem is fragmented across 0.x logs and 2.x traces, pnpm and ESM support feels like an afterthought, and the default behaviour is to fail silently.
 
 Two weeks and 15+ commits later, tracing works, at the cost of a `.pnpmfile.cjs` hack, require polyfills, runtime version detection, and a page of documentation explaining why the initialization code looks the way it does.
 
