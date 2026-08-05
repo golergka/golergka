@@ -47,6 +47,28 @@ pre {
   font-size: 0.9em;
 }
 
+/* Same hairline as tables and <hr>, boxing the block rather than tinting it —
+   the background stays the page background. */
+pre {
+  border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+  padding: 0.9rem 1rem;
+  margin: 1.5rem 0;
+}
+
+/* Shiki highlights at build time and emits both palettes as custom properties.
+   Picking one here means no client-side JavaScript and no theme flash. */
+.shiki,
+.shiki span {
+  color: var(--shiki-light);
+}
+
+@media (prefers-color-scheme: dark) {
+  .shiki,
+  .shiki span {
+    color: var(--shiki-dark);
+  }
+}
+
 /* Long content (code, ascii diagrams) scrolls itself instead of pushing the
    page sideways. Tables get a wrapper for this — `display: block` on a table
    would stop border-collapse from applying. */

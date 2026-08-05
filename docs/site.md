@@ -43,6 +43,16 @@ To publish a post: write a markdown file in the root, commit it, push. Nothing e
 currently browser defaults plus a readable column. Iterate there; the build
 script does not need to change.
 
+The stylesheet is served under a content-hashed name (`/style.<hash>.css`), so a
+design change can never be hidden behind a cached copy.
+
+Code blocks are highlighted by Shiki at build time. Both the light and dark
+palettes are emitted as CSS custom properties on every token, and the stylesheet
+chooses between them — so the site ships no JavaScript and dark mode never
+flashes the wrong colours. Languages have to be listed in `CODE_LANGUAGES` in
+`build.mjs`; an unlisted or missing language renders as plain text instead of
+breaking the build.
+
 ## Deployment (Cloudflare Pages)
 
 The site is a direct upload, not a Git-connected Pages project — the build runs

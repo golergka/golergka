@@ -11,6 +11,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { marked } from "marked";
+import { createHighlighter } from "shiki";
 
 const SITE_NAME = "Max Yankov";
 const SITE_URL = "https://golergka.com";
@@ -35,6 +36,44 @@ const dist = path.join(root, "dist");
 const theme = path.join(root, "theme");
 
 const LANGUAGES = { ru: "Русский" };
+
+// Syntax highlighting happens here, at build time: the colours are baked into
+// the HTML, so the site ships no JavaScript. Both themes are emitted at once
+// (as CSS variables) and the stylesheet picks one, so dark mode needs no flash
+// of the wrong palette. A fence with an unknown or missing language falls back
+// to plain text rather than failing the build.
+const CODE_LANGUAGES = [
+  "typescript",
+  "javascript",
+  "json",
+  "bash",
+  "shell",
+  "python",
+  "sql",
+  "yaml",
+  "html",
+  "css",
+  "markdown",
+  "diff",
+];
+
+const highlighter = await createHighlighter({
+  themes: ["github-light", "github-dark"],
+  langs: CODE_LANGUAGES,
+});
+
+marked.use({
+  renderer: {
+    code({ text, lang }) {
+      const language = CODE_LANGUAGES.includes(lang) ? lang : "text";
+      return highlighter.codeToHtml(text, {
+        lang: language,
+        themes: { light: "github-light", dark: "github-dark" },
+        defaultColor: false,
+      });
+    },
+  },
+});
 
 function gitDate(file, first) {
   const args = first
