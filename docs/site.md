@@ -21,6 +21,9 @@ Non-markdown files in the root (images, PDFs) are copied to the site as-is,
 unless listed in `UNPUBLISHED` in `build.mjs` — that is where the outdated CV
 sits: still in the repo, not served.
 
+Renaming a post changes its URL. Add the old path to `REDIRECTS` in `build.mjs`
+and it is written into `_redirects` as a 301.
+
 A file without an H1 is skipped with a warning rather than half-published.
 Translations are not listed separately — they appear as a language link next to
 the original. Links between `.md` files are rewritten to site URLs, so the same
