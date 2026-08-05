@@ -10,12 +10,19 @@ no manifest:
 
 | Thing | Where it comes from |
 |-------|---------------------|
-| Page | Any `*.md` in the repo root except `README.md` |
+| Post | Any `*.md` in the repo root except `README.md` |
+| Permanent page | Any `*.md` in `pages/` |
 | Title | The first `# H1` in the file |
-| URL | The filename — `fighting-opentelemetry.md` → `/fighting-opentelemetry/` |
+| URL | The filename — `opentelemetry-integration.md` → `/opentelemetry-integration/` |
 | Date | Git: first commit that added the file (updated date: last commit) |
 | Translation | `<name>-ru.md` is the Russian version of `<name>.md` |
 | Homepage | `README.md`, followed by the post list |
+
+Posts and pages render identically and share the same URL shape. The difference
+is that a page is undated and appears in neither the post list nor the feed —
+it gets revised rather than published, so a date on it would be misleading.
+Link to a page from `README.md` or from `FOOTER` in `build.mjs`; nothing lists
+them automatically.
 
 Non-markdown files in the root (images, PDFs) are copied to the site as-is,
 unless listed in `UNPUBLISHED` in `build.mjs` — that is where the outdated CV

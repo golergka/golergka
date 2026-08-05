@@ -1,7 +1,7 @@
 - 👋 Hi, I’m Max Yankov aka **golergka**.
 - 🏡 [Digital nomad](https://nomadlist.com/@golergka).
 - 👨🏻‍💻I’m a full-stack developer. Game development, client-side web, server-side web, native app development, you name it — I've probably worked with it.
-- 🌱 [Full list of my toy projects and repositories](my-repositories.md).
+- 🌱 [Full list of my toy projects and repositories](pages/my-repositories.md).
 - 💞️ Write electronic music and DJ.
 - 🗳 Former political activist in Russia (while public politics was still possible there).
 - 📫 Best way to reach me is on Telegram: [@golergka](http://t.me/golergka)

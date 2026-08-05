@@ -3,7 +3,9 @@
 // The whole idea: the repo is already the source of truth. A post is a markdown
 // file in the root. Its title is the H1, its slug is the filename, its date is
 // when git first saw it, and `<name>-ru.md` is the Russian translation of
-// `<name>.md`. No frontmatter, no manifest, no config beyond the constants below.
+// `<name>.md`. Markdown under pages/ is a permanent page instead: same URL
+// shape, but undated and kept out of the post list and the feed. No frontmatter,
+// no manifest, no config beyond the constants below.
 
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
@@ -17,13 +19,17 @@ const SITE_NAME = "Max Yankov";
 const SITE_URL = "https://golergka.com";
 const SITE_DESCRIPTION = "Notes by Max Yankov (golergka).";
 
-const FOOTER = `<a href="https://github.com/golergka">GitHub</a> ·
+const FOOTER = `<a href="/my-repositories/">Projects</a> ·
+<a href="https://github.com/golergka">GitHub</a> ·
 <a href="http://t.me/golergka">Telegram</a> ·
 <a href="mailto:golergka@gmail.com">Email</a> ·
 <a href="/feed.xml">RSS</a>`;
 
 // README is the homepage, not a post.
 const HOMEPAGE = "README.md";
+
+// Markdown here is a permanent page rather than a dated post.
+const PAGES_DIR = "pages";
 
 // Files kept in the repo but not served on the site.
 const UNPUBLISHED = ["Max Yankov - CV.pdf"];
@@ -116,8 +122,9 @@ function wrapTables(html) {
 // Links between markdown files in the repo become links between pages on the
 // site, so the same file reads correctly on GitHub and here.
 function rewriteLinks(html) {
-  return html.replace(/href="([^"]+)\.md(#[^"]*)?"/g, (_, name, hash) =>
-    `href="/${name}/${hash ?? ""}"`
+  return html.replace(
+    /href="(?:pages\/)?([^"\/]+)\.md(#[^"]*)?"/g,
+    (_, name, hash) => `href="/${name}/${hash ?? ""}"`
   );
 }
 
@@ -144,30 +151,42 @@ const layout = fs.readFileSync(path.join(theme, "layout.html"), "utf8");
 const styleCss = fs.readFileSync(path.join(theme, "style.css"), "utf8");
 const styleHref = `/style.${createHash("sha256").update(styleCss).digest("hex").slice(0, 8)}.css`;
 
-const files = fs
+const postFiles = fs
   .readdirSync(root)
   .filter((name) => name.endsWith(".md") && name !== HOMEPAGE)
-  .sort();
+  .sort()
+  .map((name) => ({ kind: "post", file: name }));
+
+const pageFiles = (
+  fs.existsSync(path.join(root, PAGES_DIR))
+    ? fs.readdirSync(path.join(root, PAGES_DIR))
+    : []
+)
+  .filter((name) => name.endsWith(".md"))
+  .sort()
+  .map((name) => ({ kind: "page", file: path.join(PAGES_DIR, name) }));
 
 const pages = [];
-for (const file of files) {
+for (const { kind, file } of [...postFiles, ...pageFiles]) {
   const markdown = fs.readFileSync(path.join(root, file), "utf8");
   if (!conforms(markdown)) {
     console.warn(`skipped ${file}: no H1 heading in the first lines`);
     continue;
   }
-  const slug = file.replace(/\.md$/, "");
+  const slug = path.basename(file, ".md");
   const langMatch = slug.match(/-(\w{2})$/);
   const lang = langMatch && LANGUAGES[langMatch[1]] ? langMatch[1] : "en";
   pages.push({
+    kind,
     file,
     slug,
     lang,
     // `foo-ru.md` is a translation of `foo.md`; only the original is listed.
     translationOf: lang === "en" ? null : slug.slice(0, -(lang.length + 1)),
     title: titleOf(markdown, slug),
-    created: gitDate(file, true),
-    updated: gitDate(file, false),
+    // Permanent pages are undated: they get revised, not published.
+    created: kind === "post" ? gitDate(file, true) : null,
+    updated: kind === "post" ? gitDate(file, false) : null,
     markdown,
   });
 }
@@ -179,7 +198,9 @@ if (pages.length === 0) {
 // Dates come from git history. If the whole repo reports no dates, we are
 // building from a shallow clone and every post would silently lose its date —
 // fail loudly instead. (A single missing date just means a new, uncommitted file.)
-if (pages.every((page) => !page.created)) {
+const posts = pages.filter((page) => page.kind === "post");
+
+if (posts.every((page) => !page.created)) {
   throw new Error(
     "no git history available: dates cannot be derived. " +
       "Ensure the build checks out full history (Cloudflare Pages: unset shallow clone), " +
@@ -187,11 +208,11 @@ if (pages.every((page) => !page.created)) {
   );
 }
 
-for (const page of pages) {
+for (const page of posts) {
   if (!page.created) console.warn(`no git date for ${page.file} (uncommitted?)`);
 }
 
-const originals = pages
+const originals = posts
   .filter((page) => !page.translationOf)
   .sort((a, b) => (b.created ?? "").localeCompare(a.created ?? ""));
 
