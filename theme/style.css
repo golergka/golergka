@@ -56,6 +56,33 @@ table {
   max-width: 100%;
 }
 
+/* Same hairline as <hr>: enough to separate rows, not a grid of boxes. */
+table {
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.4rem 1rem 0.4rem 0;
+  border-bottom: 1px solid;
+}
+
+/* The border colour is the text colour, so it has to be quieted down
+   per element — opacity would fade the text with it. */
+th {
+  border-bottom-color: color-mix(in srgb, currentColor 35%, transparent);
+}
+
+td {
+  border-bottom-color: color-mix(in srgb, currentColor 15%, transparent);
+}
+
+table tr:last-child td {
+  border-bottom: none;
+}
+
 img {
   max-width: 100%;
   height: auto;

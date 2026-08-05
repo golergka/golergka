@@ -26,6 +26,9 @@ const HOMEPAGE = "README.md";
 // Files kept in the repo but not served on the site.
 const UNPUBLISHED = ["Max Yankov - CV.pdf"];
 
+// Old paths that were live once and should keep working.
+const REDIRECTS = [["/fighting-opentelemetry/*", "/opentelemetry-integration/"]];
+
 const root = path.dirname(fileURLToPath(import.meta.url));
 const dist = path.join(root, "dist");
 const theme = path.join(root, "theme");
@@ -248,6 +251,13 @@ writePage(
   })
 );
 
+
+if (REDIRECTS.length) {
+  fs.writeFileSync(
+    path.join(dist, "_redirects"),
+    REDIRECTS.map(([from, to]) => `${from} ${to} 301`).join("\n") + "\n"
+  );
+}
 
 fs.copyFileSync(path.join(theme, "style.css"), path.join(dist, "style.css"));
 
