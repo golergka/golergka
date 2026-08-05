@@ -47,19 +47,22 @@ pre {
   font-size: 0.9em;
 }
 
-/* Long content (tables, code, ascii diagrams) scrolls itself
-   instead of pushing the page sideways. */
+/* Long content (code, ascii diagrams) scrolls itself instead of pushing the
+   page sideways. Tables get a wrapper for this — `display: block` on a table
+   would stop border-collapse from applying. */
 pre,
-table {
+.scroll {
   overflow-x: auto;
-  display: block;
   max-width: 100%;
+}
+
+.scroll {
+  margin: 1.5rem 0;
 }
 
 /* Same hairline as <hr>: enough to separate rows, not a grid of boxes. */
 table {
   border-collapse: collapse;
-  margin: 1.5rem 0;
 }
 
 th,

@@ -5,6 +5,7 @@
 // when git first saw it, and `<name>-ru.md` is the Russian translation of
 // `<name>.md`. No frontmatter, no manifest, no config beyond the constants below.
 
+import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
@@ -65,6 +66,14 @@ function escapeHtml(text) {
     .replace(/"/g, "&quot;");
 }
 
+// Wide tables scroll inside their own box. This needs a wrapper element:
+// `display: block` on the table itself would disable border-collapse.
+function wrapTables(html) {
+  return html
+    .replace(/<table>/g, '<div class="scroll"><table>')
+    .replace(/<\/table>/g, "</table></div>");
+}
+
 // Links between markdown files in the repo become links between pages on the
 // site, so the same file reads correctly on GitHub and here.
 function rewriteLinks(html) {
@@ -90,6 +99,11 @@ function writePage(outPath, html) {
 // --- collect ---------------------------------------------------------------
 
 const layout = fs.readFileSync(path.join(theme, "layout.html"), "utf8");
+
+// The stylesheet URL carries a hash of its contents, so a design change is
+// never hidden behind a stale cached copy.
+const styleCss = fs.readFileSync(path.join(theme, "style.css"), "utf8");
+const styleHref = `/style.${createHash("sha256").update(styleCss).digest("hex").slice(0, 8)}.css`;
 
 const files = fs
   .readdirSync(root)
@@ -163,7 +177,7 @@ for (const page of pages) {
           : ""
       }</p>`
     : "";
-  const html = rewriteLinks(marked.parse(page.markdown));
+  const html = wrapTables(rewriteLinks(marked.parse(page.markdown)));
   // The H1 belongs to the markdown; the date slots in just underneath it.
   const body = html.includes("</h1>")
     ? html.replace("</h1>", `</h1>\n${dated}`)
@@ -174,6 +188,7 @@ for (const page of pages) {
       lang: page.lang,
       title: `${escapeHtml(page.title)} — ${SITE_NAME}`,
       sitename: SITE_NAME,
+      stylesheet: styleHref,
       canonical: canonicalTag(`/${page.slug}/`),
       content: body,
       footer: FOOTER,
@@ -204,9 +219,10 @@ writePage(
     lang: "en",
     title: SITE_NAME,
     sitename: SITE_NAME,
+    stylesheet: styleHref,
     canonical: canonicalTag("/"),
     content:
-      rewriteLinks(marked.parse(readme)) +
+      wrapTables(rewriteLinks(marked.parse(readme))) +
       `\n<h2>Writing</h2>\n<ul class="posts">\n${list}\n</ul>`,
     footer: FOOTER,
   })
@@ -246,6 +262,7 @@ writePage(
     lang: "en",
     title: `Not found — ${SITE_NAME}`,
     sitename: SITE_NAME,
+    stylesheet: styleHref,
     content: `<h1>Not found</h1>\n<p>No page at this address. <a href="/">Back to the front page</a>.</p>`,
     footer: FOOTER,
   })
@@ -259,7 +276,7 @@ if (REDIRECTS.length) {
   );
 }
 
-fs.copyFileSync(path.join(theme, "style.css"), path.join(dist, "style.css"));
+fs.writeFileSync(path.join(dist, styleHref.slice(1)), styleCss);
 
 // Anything else in the root that is not source (PDFs, images) is served as-is.
 for (const name of fs.readdirSync(root)) {
