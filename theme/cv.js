@@ -199,9 +199,18 @@ controls.addEventListener("keydown", (event) => {
 });
 appNode.addEventListener("click", (event) => {
   if (handleTopicToggle(event)) return;
-  const button = event.target.closest?.("[data-add-tag]");
-  const tag = button?.dataset.addTag;
+  const control = event.target.closest?.("[data-add-tag]");
+  const tag = control?.dataset.addTag;
   if (!tag || !allowed.has(tag)) return;
+  selected.add(tag);
+  update();
+});
+appNode.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  const control = event.target.closest?.("[data-add-tag]");
+  const tag = control?.dataset.addTag;
+  if (!tag || !allowed.has(tag)) return;
+  event.preventDefault();
   selected.add(tag);
   update();
 });

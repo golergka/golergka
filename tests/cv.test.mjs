@@ -77,18 +77,20 @@ test("topics form semantic trees without visual category buckets", () => {
   const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
   assert.doesNotMatch(controls, /cv-filter-group|Focus|Engineering systems|Domains|Technologies/);
   assert.doesNotMatch(controls, /<input|type="checkbox"/);
-  assert.match(css, /\.cv-tags \{ display: block; line-height:/);
-  assert.match(css, /\.cv-topic-children > \.cv-filter-node:not\(:last-child\)::after \{ content: "·";/);
-  assert.match(css, /\.cv-tags > \.cv-filter-node \{ display: inline;/);
+  assert.match(css, /\.cv-topic-list \{ display: inline; line-height:/);
+  assert.match(css, /\.cv-topic-children > \[data-depth\]:not\(:last-child\)::after \{ content: "·";/);
+  assert.match(css, /\.cv-topic-list > \[data-depth="0"\] \{ display: inline;/);
   assert.doesNotMatch(controls, />\+[0-9]+<\/button>/);
   assert.match(css, /\.cv-topic-select \{[\s\S]*?user-select: none;[\s\S]*?-webkit-user-select: none;/);
-  assert.doesNotMatch(css, /\.cv-tags \{[^}]*grid-template-columns/);
+  assert.doesNotMatch(css, /\.cv-suggestion-options \{[^}]*grid-template-columns/);
   assert.match(controls, /<span class="cv-topic-select" data-select-tag="agents" role="button" tabindex="0" aria-pressed="false">AI &amp; agents<\/span>[\s\S]*data-topic-toggle[\s\S]*cv-topic-children-agents" hidden[\s\S]*data-depth="1"><span class="cv-topic-select" data-select-tag="pydantic-ai"/);
   assert.doesNotMatch(controls, /data-depth="2"/);
   assert.match(controls, /data-depth="1"><span class="cv-topic-select" data-select-tag="braintrust"/);
   assert.match(controls, /data-depth="1"><span class="cv-topic-select" data-select-tag="betterstack"/);
   const coloph = renderWork(data);
   assert.doesNotMatch(coloph, /cv-suggestion-group|data-filter-group/);
+  assert.match(coloph, /cv-suggestion-options cv-topic-list/);
+  assert.match(coloph, /class="cv-topic-select" role="button" tabindex="0" data-add-tag=/);
   assert.match(coloph, /data-topic-toggle[\s\S]*cv-topic-children/);
 });
 

@@ -9,7 +9,7 @@
 <form class="cv-controls" aria-label="Highlight experience by topic" hidden>
   <fieldset>
     <legend>Highlight by topic <span class="cv-filter-hint">— choose several</span></legend>
-    <div id="cv-tags" class="cv-tags">{{cvTags}}</div>
+    <div id="cv-tags" class="cv-tags cv-topic-list">{{cvTags}}</div>
   </fieldset>
   <button type="button" id="cv-clear">Clear highlights</button>
 </form>

@@ -196,11 +196,11 @@ export function renderWork(data, selected = new Set(), { staticView = false, com
       ${preview.length ? `<ul class="cv-points">${preview.map((point) => renderPoint(point, selected, labels, aliases, graph)).join("")}</ul>` : ""}
       ${remaining.length && !compact ? staticView
         ? `<ul class="cv-points">${remaining.map((point) => renderPoint(point, selected, labels, aliases, graph)).join("")}</ul>`
-        : suggestedTags.length ? `<div class="cv-topic-suggestions"><span class="cv-topic-suggestions-label">Explore related topics</span><div class="cv-suggestion-options">${renderFilterTree(suggestionTree, ({id, label}, depth, children, childCount) => {
+        : suggestedTags.length ? `<div class="cv-topic-suggestions"><span class="cv-topic-suggestions-label">Explore related topics</span><div class="cv-suggestion-options cv-topic-list">${renderFilterTree(suggestionTree, ({id, label}, depth, children, childCount) => {
           const controlsId = `experience-${index}-topic-children-${escapeHtml(id)}`;
           const option = directSuggestedIds.has(id) && !selected.has(id)
-            ? `<button type="button" data-add-tag="${escapeHtml(id)}">${escapeHtml(label)}</button>`
-            : `<span>${escapeHtml(label)}</span>`;
+            ? `<span class="cv-topic-select" role="button" tabindex="0" data-add-tag="${escapeHtml(id)}">${escapeHtml(label)}</span>`
+            : `<span class="cv-topic-select cv-topic-placeholder">${escapeHtml(label)}</span>`;
           return `<div class="cv-suggestion-node" data-depth="${depth}">${childCount
             ? `<div class="cv-topic-parent-row">${option}<button type="button" class="cv-topic-toggle" data-topic-toggle aria-expanded="false" aria-controls="${controlsId}" aria-label="Show subtopics for ${escapeHtml(label)}">▸</button></div><div class="cv-topic-children" id="${controlsId}" hidden>${children}</div>`
             : option}</div>`;
