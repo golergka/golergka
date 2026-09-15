@@ -318,6 +318,10 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
+.cv-highlightable,
+.cv-topic-mark[data-highlightable-topics] { cursor: pointer; }
+.cv-highlightable:focus-visible,
+.cv-topic-mark[data-highlightable-topics]:focus-visible { outline: 2px solid LinkText; outline-offset: 2px; }
 .cv-highlightable:hover,
 .cv-topic-mark:hover {
   background: linear-gradient(178deg, transparent 10%, var(--topic-hover-color) 10% 91%, transparent 91%);

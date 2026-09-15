@@ -90,7 +90,7 @@ test("topic highlighting uses Mark.js for selectors and experience evidence", ()
 test("topic clicks cannot create browser text selections", () => {
   const script = readFileSync(new URL("../theme/cv.js", import.meta.url), "utf8");
   assert.match(script, /function preventTopicTextSelection\(event\)/);
-  assert.match(script, /closest\?\.\("\[data-select-tag\], \[data-add-tag\]"\)\) event\.preventDefault\(\)/);
+  assert.match(script, /closest\?\.\("\[data-select-tag\], \[data-add-tag\], \[data-highlightable-topics\]"\)\) event\.preventDefault\(\)/);
   assert.match(script, /controls\.addEventListener\("mousedown", preventTopicTextSelection\)/);
   assert.match(script, /controls\.addEventListener\("dblclick", preventTopicTextSelection\)/);
   assert.match(script, /appNode\.addEventListener\("mousedown", preventTopicTextSelection\)/);
@@ -113,8 +113,10 @@ test("every evidence phrase can be highlighted independently on hover", () => {
   const script = readFileSync(new URL("../theme/cv.js", import.meta.url), "utf8");
   const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
   assert.match(html, /class="cv-highlightable" data-highlightable-topics="/);
+  assert.match(html, /data-highlightable-topics="[^"]+" role="button" tabindex="0"/);
   assert.match(script, /pointerover/);
-  assert.match(script, /topicColor\(tag, 0\.5\)/);
+  assert.match(script, /topicColor\(tag, 0\.31\)/);
+  assert.match(script, /updateWithAnchor\(evidence, \(\) => selected\.add\(evidenceTag\)\)/);
   assert.match(css, /\.cv-highlightable:hover,[\s\S]*?\.cv-topic-mark:hover[\s\S]*?--topic-hover-color/);
 });
 

@@ -30,7 +30,7 @@ const topicColor = (tag, alpha = 0.62) => topicColors.color(tag, alpha);
 const partialTopicColor = (tag) => topicColor(tag, 0.48);
 const hoverTopicColor = (tag) => {
   topicColors.ensure(tag);
-  return topicColor(tag, 0.5);
+  return topicColor(tag, 0.31);
 };
 
 function loadMarkLibrary() {
@@ -77,6 +77,8 @@ async function applyTopicHighlights() {
       element.dataset.highlightTopics = range.topics.join(",");
       const hoverTopics = range.hoverTopics?.length ? range.hoverTopics : range.topics;
       element.dataset.highlightableTopics = hoverTopics.join(",");
+      element.setAttribute("role", "button");
+      element.tabIndex = 0;
       if (range.derived) element.dataset.highlightDerived = "true";
       if (range.title) element.title = range.title;
       element.style.setProperty("--topic-color", range.derived ? partialTopicColor(range.topics[0]) : topicColor(range.topics[0]));
@@ -124,6 +126,7 @@ async function applyTopicHighlights() {
   } catch (error) {
     console.warn("Enhanced topic highlighting unavailable; using native marks.", error);
   }
+  for (const element of appNode.querySelectorAll("[data-highlightable-topics]")) prepareHoverHighlight(element);
 }
 // Old export URLs now show the interactive CV; exporting never navigates away.
 const cleanUrl = new URL(location.href);
@@ -217,7 +220,7 @@ function toggleTopic(control) {
 }
 
 function preventTopicTextSelection(event) {
-  if (event.target.closest?.("[data-select-tag], [data-add-tag]")) event.preventDefault();
+  if (event.target.closest?.("[data-select-tag], [data-add-tag], [data-highlightable-topics]")) event.preventDefault();
 }
 
 function prepareHoverHighlight(element) {
@@ -241,6 +244,12 @@ appNode.addEventListener("mousedown", preventTopicTextSelection);
 appNode.addEventListener("dblclick", preventTopicTextSelection);
 appNode.addEventListener("pointerover", (event) => prepareHoverHighlight(event.target.closest?.("[data-highlightable-topics]")));
 appNode.addEventListener("click", (event) => {
+  const evidence = event.target.closest?.("[data-highlightable-topics]");
+  const evidenceTag = evidence?.dataset.highlightableTopics?.split(",")[0];
+  if (evidenceTag && allowed.has(evidenceTag)) {
+    updateWithAnchor(evidence, () => selected.add(evidenceTag));
+    return;
+  }
   const control = event.target.closest?.("[data-add-tag]");
   const tag = control?.dataset.addTag;
   if (!tag || !allowed.has(tag)) return;
@@ -248,6 +257,13 @@ appNode.addEventListener("click", (event) => {
 });
 appNode.addEventListener("keydown", (event) => {
   if (event.key !== "Enter" && event.key !== " ") return;
+  const evidence = event.target.closest?.("[data-highlightable-topics]");
+  const evidenceTag = evidence?.dataset.highlightableTopics?.split(",")[0];
+  if (evidenceTag && allowed.has(evidenceTag)) {
+    event.preventDefault();
+    updateWithAnchor(evidence, () => selected.add(evidenceTag));
+    return;
+  }
   const control = event.target.closest?.("[data-add-tag]");
   const tag = control?.dataset.addTag;
   if (!tag || !allowed.has(tag)) return;

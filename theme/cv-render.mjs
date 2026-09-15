@@ -92,8 +92,8 @@ function highlightText(point, selected, labels, aliases, graph) {
       cursor = range.end;
       const hoverTopics = escapeHtml(range.hoverTags.join(","));
       const hoverTitle = escapeHtml(range.hoverTags.map((tag) => labels.get(tag)).filter(Boolean).join(", "));
-      if (!range.selected) return `${prefix}<span class="cv-highlightable" data-highlightable-topics="${hoverTopics}" title="${hoverTitle}">${escapeHtml(range.text)}</span>`;
-      return `${prefix}<mark data-highlight-topics="${escapeHtml(range.tags.join(","))}" data-highlightable-topics="${hoverTopics}"${range.derived ? ' data-highlight-derived="true"' : ""} title="${escapeHtml(range.tags.map((tag) => labels.get(tag)).join(", "))}">${escapeHtml(range.text)}</mark>`;
+      if (!range.selected) return `${prefix}<span class="cv-highlightable" data-highlightable-topics="${hoverTopics}" role="button" tabindex="0" title="${hoverTitle}">${escapeHtml(range.text)}</span>`;
+      return `${prefix}<mark data-highlight-topics="${escapeHtml(range.tags.join(","))}" data-highlightable-topics="${hoverTopics}" role="button" tabindex="0"${range.derived ? ' data-highlight-derived="true"' : ""} title="${escapeHtml(range.tags.map((tag) => labels.get(tag)).join(", "))}">${escapeHtml(range.text)}</mark>`;
     }).join("") + escapeHtml(point.text.slice(cursor));
   }
   return escapeHtml(point.text);
