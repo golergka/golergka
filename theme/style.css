@@ -287,6 +287,8 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
   line-height: 1.5;
   text-align: left;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .cv-filter-node[data-depth="0"] > .cv-topic-select,
 .cv-filter-node[data-depth="0"] > .cv-topic-parent-row > .cv-topic-select { font-weight: bold; }

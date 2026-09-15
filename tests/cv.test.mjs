@@ -81,6 +81,7 @@ test("topics form semantic trees without visual category buckets", () => {
   assert.match(css, /\.cv-topic-children > \.cv-filter-node:not\(:last-child\)::after \{ content: "·";/);
   assert.match(css, /\.cv-tags > \.cv-filter-node \{ display: inline;/);
   assert.doesNotMatch(controls, />\+[0-9]+<\/button>/);
+  assert.match(css, /\.cv-topic-select \{[\s\S]*?user-select: none;[\s\S]*?-webkit-user-select: none;/);
   assert.doesNotMatch(css, /\.cv-tags \{[^}]*grid-template-columns/);
   assert.match(controls, /<span class="cv-topic-select" data-select-tag="agents" role="button" tabindex="0" aria-pressed="false">AI &amp; agents<\/span>[\s\S]*data-topic-toggle[\s\S]*cv-topic-children-agents" hidden[\s\S]*data-depth="1"><span class="cv-topic-select" data-select-tag="pydantic-ai"/);
   assert.doesNotMatch(controls, /data-depth="2"/);
