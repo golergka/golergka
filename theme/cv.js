@@ -137,7 +137,7 @@ function render() {
       const toggle = children.parentElement.querySelector(":scope > .cv-topic-parent-row [data-topic-toggle]");
       if (toggle) {
         toggle.setAttribute("aria-expanded", "true");
-        toggle.textContent = `−${toggle.textContent.slice(1)}`;
+        toggle.textContent = "▾";
       }
     }
   }
@@ -173,7 +173,7 @@ function handleTopicToggle(event) {
   if (!children) return true;
   const expanded = button.getAttribute("aria-expanded") !== "true";
   button.setAttribute("aria-expanded", String(expanded));
-  button.textContent = `${expanded ? "−" : "+"}${button.textContent.slice(1)}`;
+  button.textContent = expanded ? "▾" : "▸";
   children.hidden = !expanded;
   return true;
 }

@@ -127,7 +127,7 @@ export function renderTags(filters) {
     const id = `cv-topic-children-${escapeHtml(tag.id)}`;
     const option = `<span class="cv-topic-select" data-select-tag="${escapeHtml(tag.id)}" role="button" tabindex="0" aria-pressed="false">${escapeHtml(tag.label)}</span>`;
     return `<div class="cv-filter-node" data-depth="${depth}">${childCount
-      ? `<div class="cv-topic-parent-row">${option}<button type="button" class="cv-topic-toggle" data-topic-toggle aria-expanded="false" aria-controls="${id}" aria-label="Show subtopics for ${escapeHtml(tag.label)}">+${childCount}</button></div><div class="cv-topic-children" id="${id}" hidden>${children}</div>`
+      ? `<div class="cv-topic-parent-row">${option}<button type="button" class="cv-topic-toggle" data-topic-toggle aria-expanded="false" aria-controls="${id}" aria-label="Show subtopics for ${escapeHtml(tag.label)}">▸</button></div><div class="cv-topic-children" id="${id}" hidden>${children}</div>`
       : option}</div>`;
   });
 }
@@ -202,7 +202,7 @@ export function renderWork(data, selected = new Set(), { staticView = false, com
             ? `<button type="button" data-add-tag="${escapeHtml(id)}">${escapeHtml(label)}</button>`
             : `<span>${escapeHtml(label)}</span>`;
           return `<div class="cv-suggestion-node" data-depth="${depth}">${childCount
-            ? `<div class="cv-topic-parent-row">${option}<button type="button" class="cv-topic-toggle" data-topic-toggle aria-expanded="false" aria-controls="${controlsId}" aria-label="Show subtopics for ${escapeHtml(label)}">+${childCount}</button></div><div class="cv-topic-children" id="${controlsId}" hidden>${children}</div>`
+            ? `<div class="cv-topic-parent-row">${option}<button type="button" class="cv-topic-toggle" data-topic-toggle aria-expanded="false" aria-controls="${controlsId}" aria-label="Show subtopics for ${escapeHtml(label)}">▸</button></div><div class="cv-topic-children" id="${controlsId}" hidden>${children}</div>`
             : option}</div>`;
         })}</div></div>` : "" : ""}
       ${links.length ? `<p class="cv-evidence">${links.map((link) => `<a href="${escapeHtml(link.url)}">${escapeHtml(link.label)}</a>`).join(" · ")}</p>` : ""}
