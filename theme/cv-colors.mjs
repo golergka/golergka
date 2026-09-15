@@ -1,11 +1,13 @@
 const normalizeHue = (value) => ((Math.round(Number(value)) % 360) + 360) % 360;
 const hueDistance = (left, right) => Math.min(Math.abs(left - right), 360 - Math.abs(left - right));
 const MIN_SAVED_HUE_DISTANCE = 12;
+export const CV_TEXT_SELECTION_HUE = 210;
+const RESERVED_UI_HUES = [CV_TEXT_SELECTION_HUE];
 
 export function createTopicColorDirectory(topicIds, saved = {}, persist = () => {}) {
   const allowed = new Set(topicIds);
   const hues = new Map();
-  const used = new Set();
+  const used = new Set(RESERVED_UI_HUES);
   let repaired = Object.keys(saved).some((topic) => !allowed.has(topic));
 
   for (const topic of topicIds) {
@@ -28,7 +30,7 @@ export function createTopicColorDirectory(topicIds, saved = {}, persist = () => 
   const save = () => persist(snapshot());
 
   function chooseHue() {
-    const comparison = [...hues.values()];
+    const comparison = [...used];
     let bestHue = 346;
     let bestDistance = -1;
 

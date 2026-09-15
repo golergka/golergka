@@ -230,6 +230,7 @@ body:has(.cv-profile) {
   --cv-rule: color-mix(in srgb, CanvasText 20%, Canvas);
   --cv-highlight: #fff0a6;
 }
+body:has(.cv-profile) ::selection { color: inherit; background: var(--cv-text-selection); }
 
 body:has(.cv-profile) main > h1 {
   margin: 0 0 0.3rem;
@@ -308,6 +309,16 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
   background: repeating-linear-gradient(135deg,
     var(--topic-color) 0 0.28em,
     color-mix(in srgb, var(--topic-color) 48%, transparent) 0.28em 0.46em);
+}
+#cv-app { view-transition-name: cv-experience-list; }
+::view-transition-old(cv-experience-list),
+::view-transition-new(cv-experience-list) {
+  animation-duration: 140ms;
+  animation-timing-function: ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(cv-experience-list),
+  ::view-transition-new(cv-experience-list) { animation: none; }
 }
 .cv-topic-suggestions { margin: 0.65rem 0 0; font-size: 0.85rem; }
 .cv-topic-suggestions .cv-topic-select { font-size: inherit; }

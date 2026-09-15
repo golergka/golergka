@@ -1,5 +1,5 @@
 import { renderWork, defaultTags, partitionWork, escapeHtml, buildTopicGraph, sourceForTag, matchesTags } from "./cv-render.mjs";
-import { createTopicColorDirectory } from "./cv-colors.mjs";
+import { createTopicColorDirectory, CV_TEXT_SELECTION_HUE } from "./cv-colors.mjs";
 
 const data = JSON.parse(document.querySelector("#cv-data").textContent);
 const controls = document.querySelector(".cv-controls");
@@ -12,6 +12,7 @@ const aliases = data.topicAliases || {};
 const exportLink = document.querySelector("#cv-export");
 const generationNote = document.querySelector("#cv-generation-note");
 const topicGraph = buildTopicGraph(data.filters, data.topicRelations);
+document.documentElement.style.setProperty("--cv-text-selection", `hsla(${CV_TEXT_SELECTION_HUE}, 82%, 67%, 0.58)`);
 let highlightEpoch = 0;
 let markLibrary;
 
@@ -155,7 +156,7 @@ function render() {
   publicUrl.searchParams.set("tags", [...selected].join(","));
   generationNote.innerHTML = `Generated ${topics ? `for ${escapeHtml(topics)}` : "overview"} · <a href="${escapeHtml(publicUrl.href)}">Full CV</a>`;
   generationNote.hidden = true;
-  void applyTopicHighlights();
+  return applyTopicHighlights();
 }
 
 function update() {
@@ -164,15 +165,47 @@ function update() {
   next.searchParams.delete("depth");
   next.searchParams.set("tags", [...selected].join(","));
   history.replaceState(null, "", next);
-  render();
+  return render();
+}
+
+function captureScrollAnchor(control) {
+  const node = control?.closest?.(".cv-role") || control?.closest?.("[data-select-tag]") || control;
+  if (!node) return () => {};
+  const top = node.getBoundingClientRect().top;
+  const roleId = node.classList?.contains("cv-role") ? node.id : null;
+  const tag = node.dataset?.selectTag;
+  const id = node.id;
+  return () => {
+    const next = roleId ? document.getElementById(roleId)
+      : tag ? tagsNode.querySelector(`[data-select-tag="${tag}"]`)
+        : id ? document.getElementById(id) : null;
+    if (!next) return;
+    const delta = next.getBoundingClientRect().top - top;
+    if (Math.abs(delta) > 0.5) window.scrollBy(0, delta);
+  };
+}
+
+function updateWithAnchor(control, change) {
+  const restoreScroll = captureScrollAnchor(control);
+  const apply = async () => {
+    change();
+    await update();
+    restoreScroll();
+  };
+  if (document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.startViewTransition(apply);
+  } else {
+    void apply();
+  }
 }
 
 function toggleTopic(control) {
   const tag = control?.dataset.selectTag;
   if (!tag || !allowed.has(tag)) return;
-  if (selected.has(tag)) selected.delete(tag);
-  else selected.add(tag);
-  update();
+  updateWithAnchor(control, () => {
+    if (selected.has(tag)) selected.delete(tag);
+    else selected.add(tag);
+  });
 }
 
 function preventTopicTextSelection(event) {
@@ -197,8 +230,7 @@ appNode.addEventListener("click", (event) => {
   const control = event.target.closest?.("[data-add-tag]");
   const tag = control?.dataset.addTag;
   if (!tag || !allowed.has(tag)) return;
-  selected.add(tag);
-  update();
+  updateWithAnchor(control, () => selected.add(tag));
 });
 appNode.addEventListener("keydown", (event) => {
   if (event.key !== "Enter" && event.key !== " ") return;
@@ -206,10 +238,9 @@ appNode.addEventListener("keydown", (event) => {
   const tag = control?.dataset.addTag;
   if (!tag || !allowed.has(tag)) return;
   event.preventDefault();
-  selected.add(tag);
-  update();
+  updateWithAnchor(control, () => selected.add(tag));
 });
-clearButton.addEventListener("click", () => { selected.clear(); update(); });
+clearButton.addEventListener("click", () => updateWithAnchor(clearButton, () => selected.clear()));
 controls.addEventListener("submit", (event) => event.preventDefault());
 window.addEventListener("popstate", () => { selected = readSelection(); render(); });
 

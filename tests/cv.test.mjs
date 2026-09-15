@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { partitionWork, renderTags, renderWork } from "../theme/cv-render.mjs";
 import { createCvPdf } from "../theme/cv-pdf.mjs";
-import { createTopicColorDirectory } from "../theme/cv-colors.mjs";
+import { createTopicColorDirectory, CV_TEXT_SELECTION_HUE } from "../theme/cv-colors.mjs";
 import { jsPDF } from "jspdf";
 
 const data = JSON.parse(readFileSync(new URL("../data/cv.json", import.meta.url)));
@@ -16,7 +16,8 @@ test("topic colors are unique, maximally separated, and persistent", () => {
   colors.ensure("leadership", ["observability", "product"]);
   const first = colors.snapshot();
   assert.equal(new Set(Object.values(first)).size, 3);
-  assert.equal(Math.abs(first.observability - first.product), 180);
+  const distanceFromSelection = (hue) => Math.min(Math.abs(hue - CV_TEXT_SELECTION_HUE), 360 - Math.abs(hue - CV_TEXT_SELECTION_HUE));
+  assert.ok(Object.values(first).every((hue) => distanceFromSelection(hue) >= 12));
 
   const retained = first.observability;
   colors.ensure("observability", ["leadership"]);
@@ -27,6 +28,22 @@ test("topic colors are unique, maximally separated, and persistent", () => {
   assert.equal(restored.snapshot().observability, retained);
   restored.ensure("agents", ["observability", "product", "leadership"]);
   assert.equal(new Set(Object.values(restored.snapshot())).size, 4);
+});
+
+test("native text selection has a permanently reserved topic hue", () => {
+  const colors = createTopicColorDirectory(["selection-adjacent", "another"], {
+    "selection-adjacent": CV_TEXT_SELECTION_HUE,
+  });
+  assert.deepEqual(colors.snapshot(), {});
+  colors.ensureSelection(["selection-adjacent", "another"]);
+  for (const hue of Object.values(colors.snapshot())) {
+    const distance = Math.min(Math.abs(hue - CV_TEXT_SELECTION_HUE), 360 - Math.abs(hue - CV_TEXT_SELECTION_HUE));
+    assert.ok(distance >= 12);
+  }
+  const script = readFileSync(new URL("../theme/cv.js", import.meta.url), "utf8");
+  const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
+  assert.match(script, /--cv-text-selection/);
+  assert.match(css, /::selection \{ color: inherit; background: var\(--cv-text-selection\); \}/);
 });
 
 test("topic color registry repairs visual collisions and respects every reserved color", () => {
@@ -60,7 +77,7 @@ test("topic highlighting uses Mark.js for selectors and experience evidence", ()
   assert.match(script, /cv-topic-implied-partial/);
   assert.match(css, /\.cv-topic-mark\[data-highlight-derived="true"\] \{[\s\S]*?repeating-linear-gradient/);
   assert.match(css, /color-mix\(in srgb, var\(--topic-color\) 48%, transparent\)/);
-  assert.doesNotMatch(script, /rough-notation|ResizeObserver|getBoundingClientRect/);
+  assert.doesNotMatch(script, /rough-notation|ResizeObserver/);
 });
 
 test("topic clicks cannot create browser text selections", () => {
@@ -71,6 +88,17 @@ test("topic clicks cannot create browser text selections", () => {
   assert.match(script, /controls\.addEventListener\("dblclick", preventTopicTextSelection\)/);
   assert.match(script, /appNode\.addEventListener\("mousedown", preventTopicTextSelection\)/);
   assert.match(script, /appNode\.addEventListener\("dblclick", preventTopicTextSelection\)/);
+});
+
+test("topic changes preserve the clicked anchor and use a short view transition", () => {
+  const script = readFileSync(new URL("../theme/cv.js", import.meta.url), "utf8");
+  const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
+  assert.match(script, /function captureScrollAnchor\(control\)/);
+  assert.match(script, /window\.scrollBy\(0, delta\)/);
+  assert.match(script, /document\.startViewTransition\(apply\)/);
+  assert.match(script, /prefers-reduced-motion: reduce/);
+  assert.match(css, /view-transition-name: cv-experience-list/);
+  assert.match(css, /animation-duration: 140ms/);
 });
 
 test("every topic combination retains every experience and chronological group placement", () => {
