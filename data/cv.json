@@ -37,6 +37,7 @@
     { "id": "data", "label": "Data & knowledge" },
     { "id": "sql", "label": "Advanced SQL", "parent": "data" },
     { "id": "knowledge-graphs", "label": "Knowledge graphs", "parent": "data" },
+    { "id": "structured-data", "label": "Structured data", "parent": "data" },
     { "id": "ingestion", "label": "Data ingestion", "parent": "data" },
     { "id": "search", "label": "Search & retrieval", "parent": "data" },
     { "id": "postgres", "label": "PostgreSQL", "parent": "data" },
@@ -60,6 +61,9 @@
   ],
   "topicRelations": [
     { "from": "evals", "to": "braintrust" },
+    { "from": "automation", "to": "pydantic-ai" },
+    { "from": "pydantic-ai", "to": "python" },
+    { "from": "livekit", "to": "quo" },
     { "from": "frontend", "to": "react" },
     { "from": "backend", "to": "fastapi" },
     { "from": "postgres", "to": "pgvector" },
@@ -191,7 +195,7 @@
       "summaryTags": ["knowledge-graphs"],
       "artifacts": ["Coloph Works", "Coloph Migrations", "Coloph Sync"],
       "keywords": [
-        "knowledge-graphs", "search", "python", "postgres", "sql", "pgvector",
+        "knowledge-graphs", "structured-data", "search", "python", "postgres", "sql", "pgvector",
         "pydantic-ai", "model-infrastructure", "claude-code", "fastapi",
         "react", "typescript", "platform", "kubernetes",
         "developer-tools", "autonomous-development", "automation", "evals",
@@ -201,10 +205,11 @@
         { "text": "Designed a temporal knowledge graph of natural-language entities, rules, procedures, typed relationships, and effective time windows—not isolated chat history or flat document retrieval.", "emphasis": "temporal knowledge graph", "emphasisTags": ["knowledge-graphs"], "tags": ["knowledge-graphs"] },
         { "text": "Made facts atomic, source-cited, and fully traceable to who said them, when they became true, and what they superseded.", "emphasis": "atomic, source-cited, and fully traceable", "emphasisTags": ["knowledge-graphs"], "tags": ["knowledge-graphs"] },
         { "text": "Built contradiction detection and proactive interception of outdated claims, preserving both old and current facts and the reason one replaced another.", "emphasis": "contradiction detection and proactive interception", "emphasisTags": ["knowledge-graphs", "product"], "tags": ["knowledge-graphs", "product"] },
-        { "text": "Built ingestion for Telegram, email, Google Docs and Sheets, Notion, Trello, web pages, PDFs, git, YouGile, GetCourse, and Shopify inboxes, with versioned source identities, sections, chunks, fingerprints, and reingestion.", "emphases": [
-          { "text": "ingestion for Telegram, email, Google Docs and Sheets, Notion, Trello, web pages, PDFs, git, YouGile, GetCourse, and Shopify inboxes", "tags": ["ingestion"] },
+        { "text": "Built ingestion for messages and documents across Telegram, email, Google Docs, web pages, PDFs, git, GetCourse, and Shopify, plus structured data from Google Sheets, Notion, Trello, and YouGile, with versioned source identities, sections, chunks, fingerprints, and reingestion.", "emphases": [
+          { "text": "ingestion for messages and documents across Telegram, email, Google Docs, web pages, PDFs, git, GetCourse, and Shopify", "tags": ["ingestion"] },
+          { "text": "structured data from Google Sheets, Notion, Trello, and YouGile", "tags": ["structured-data"] },
           { "text": "versioned source identities, sections, chunks, fingerprints, and reingestion", "tags": ["backend"] }
-        ], "tags": ["ingestion", "backend"] },
+        ], "tags": ["ingestion", "structured-data", "backend"] },
         { "text": "Implemented lexical and embedding retrieval, graph-neighbor expansion, temporal filtering, citation-aware answers, and a managed pgvector/IVFFlat embedding lifecycle.", "emphases": [
           { "text": "lexical and embedding retrieval, graph-neighbor expansion, temporal filtering, citation-aware answers", "tags": ["search"] },
           { "text": "managed pgvector/IVFFlat embedding lifecycle", "tags": ["pgvector"] }
@@ -296,7 +301,7 @@
           { "text": "sync coordination, and delivery across Git worktrees", "tags": ["developer-tools", "autonomous-development"] }
         ], "tags": ["developer-tools", "autonomous-development", "sql", "safety"] }
       ],
-      "tags": ["knowledge-graphs", "product", "ingestion", "backend", "search", "pgvector", "automation", "platform", "production-engineering", "agents", "safety", "postgres", "sql", "developer-tools", "frontend", "react", "typescript", "python", "pydantic-ai", "fastapi", "model-infrastructure", "claude-code", "kubernetes", "observability", "betterstack", "braintrust", "evals", "autonomous-development", "founder"]
+      "tags": ["knowledge-graphs", "structured-data", "product", "ingestion", "backend", "search", "pgvector", "automation", "platform", "production-engineering", "agents", "safety", "postgres", "sql", "developer-tools", "frontend", "react", "typescript", "python", "pydantic-ai", "fastapi", "model-infrastructure", "claude-code", "kubernetes", "observability", "betterstack", "braintrust", "evals", "autonomous-development", "founder"]
     },
     {
       "organization": "Hotline (Gestalt Systems)",

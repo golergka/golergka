@@ -75,8 +75,8 @@ test("topic highlighting uses Mark.js for selectors and experience evidence", ()
   assert.match(script, /new Mark\(button\)\.markRanges/);
   assert.match(script, /cv-topic-selector-mark/);
   assert.match(script, /cv-topic-implied-partial/);
-  assert.match(css, /\.cv-topic-mark\[data-highlight-derived="true"\] \{[\s\S]*?repeating-linear-gradient/);
-  assert.match(css, /color-mix\(in srgb, var\(--topic-color\) 48%, transparent\)/);
+  assert.match(css, /\.cv-topic-mark\[data-highlight-derived="true"\] \{[\s\S]*?linear-gradient\(176deg/);
+  assert.match(css, /transparent 52%[\s\S]*?var\(--topic-color\) 52% 88%[\s\S]*?transparent 88%/);
   assert.match(css, /\.cv-topic-mark \{[\s\S]*?padding-inline: 0;/);
   assert.match(css, /\.cv-topic-select > \.cv-topic-selector-mark \{ padding-inline: 0; \}/);
   assert.doesNotMatch(css, /\.cv-topic-mark \{[\s\S]*?padding-inline: 0\.\d/);
@@ -131,7 +131,7 @@ test("Coloph keeps depth collapsed and promotes evidence selected by the global 
   assert.doesNotMatch(overview, /334,000 emails and 150M source tokens/);
 
   const ingestion = renderWork(data, new Set(["ingestion"]));
-  assert.match(ingestion, /ingestion for Telegram/);
+  assert.match(ingestion, /ingestion for messages and documents across Telegram/);
   assert.match(ingestion, /334,000 emails and 150M source tokens/);
   assert.doesNotMatch(ingestion, /data-add-tag="ingestion"/);
 });
@@ -197,6 +197,9 @@ test("leadership terms in role titles carry explicit topic evidence", () => {
 test("topic relationships form a directed acyclic graph independent of the visual tree", () => {
   assert.ok(data.topicRelations.some(({from, to}) => from === "observability" && to === "braintrust"));
   assert.ok(data.topicRelations.some(({from, to}) => from === "observability" && to === "betterstack"));
+  assert.ok(data.topicRelations.some(({from, to}) => from === "automation" && to === "pydantic-ai"));
+  assert.ok(data.topicRelations.some(({from, to}) => from === "pydantic-ai" && to === "python"));
+  assert.ok(data.topicRelations.some(({from, to}) => from === "livekit" && to === "quo"));
   const ids = new Set(data.filters.map(({id}) => id));
   const graph = new Map(data.filters.map(({id}) => [id, []]));
   for (const {id, parent} of data.filters) if (parent) graph.get(parent).push(id);
@@ -215,6 +218,21 @@ test("topic relationships form a directed acyclic graph independent of the visua
     visited.add(id);
   };
   graph.forEach((_, id) => visit(id));
+});
+
+test("agent and voice topics expose their related technologies", () => {
+  const workflows = renderWork(data, new Set(["automation"]));
+  assert.match(workflows, /data-highlight-topics="automation" data-highlight-derived="true"[^>]*>Pydantic AI<\/mark>/);
+  const pydantic = renderWork(data, new Set(["pydantic-ai"]));
+  assert.match(pydantic, /data-highlight-topics="pydantic-ai" data-highlight-derived="true"[^>]*>Python backend<\/mark>/);
+  const voice = renderWork(data, new Set(["livekit"]));
+  assert.match(voice, /data-highlight-topics="livekit" data-highlight-derived="true"[^>]*>Quo \(formerly OpenPhone\)<\/mark>/);
+});
+
+test("Coloph identifies structured business data for agents", () => {
+  const structured = renderWork(data, new Set(["structured-data"]));
+  assert.match(structured, /data-highlight-topics="structured-data"[^>]*>structured data from Google Sheets, Notion, Trello, and YouGile<\/mark>/);
+  assert.ok(data.work.find(({organization}) => organization === "Coloph").tags.includes("structured-data"));
 });
 
 test("React and Preact share one topic and Telegram is not a technology topic", () => {
