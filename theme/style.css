@@ -7,7 +7,7 @@
 }
 
 body {
-  max-width: 40rem;
+  max-width: 44rem;
   margin: 0 auto;
   padding: 1rem 1.25rem 4rem;
   /* Charter and its descendants: same shape as the default serif, better fitted
@@ -144,4 +144,233 @@ footer {
 
 .posts a {
   font-size: 1.15em;
+}
+
+/* The site remains deliberately quiet, but project cards make the portfolio
+   easy to scan without turning it into a dashboard. */
+.home-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(12rem, 1fr);
+  gap: 1.5rem 2rem;
+  align-items: start;
+}
+
+.home-columns h2,
+.contact-card h2 {
+  margin-top: 0;
+}
+
+.contact-card {
+  padding: 1rem 1.15rem;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: 0.7rem;
+}
+
+.contact-card ul {
+  margin-bottom: 0;
+  padding-left: 1.1rem;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0 2rem;
+}
+
+.project-card {
+  box-sizing: border-box;
+  padding: 1.2rem;
+  border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  border-radius: 0.7rem;
+  background: color-mix(in srgb, Canvas 94%, currentColor 6%);
+}
+
+.project-card h3 {
+  margin: 0.15rem 0 0.5rem;
+}
+
+.project-card p:last-child {
+  margin-bottom: 0;
+}
+
+.project-card:hover {
+  border-color: color-mix(in srgb, currentColor 42%, transparent);
+}
+
+.eyebrow {
+  margin: 0;
+  color: color-mix(in srgb, currentColor 65%, transparent);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.section-link {
+  margin-top: -0.8rem;
+}
+
+.revival-card {
+  margin: 1.25rem 0 2rem;
+}
+
+@media (max-width: 36rem) {
+  .home-columns,
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* A CV with the same ink, paper, and serif as the rest of the site.
+   Topic selection behaves like a reader's highlighter. */
+body:has(.cv-profile) {
+  --cv-muted: color-mix(in srgb, CanvasText 68%, Canvas);
+  --cv-rule: color-mix(in srgb, CanvasText 20%, Canvas);
+  --cv-highlight: #fff0a6;
+}
+
+body:has(.cv-profile) main > h1 {
+  margin: 0 0 0.3rem;
+  font-size: 2.8rem;
+  letter-spacing: -0.035em;
+}
+
+body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
+
+.cv-profile { margin-bottom: 1.75rem; }
+.cv-headline { margin: 0; font-size: 1.4rem; line-height: 1.35; }
+.cv-global-lead { margin: 1rem 0; }
+.cv-links { margin: 0; font-size: 1rem; }
+.cv-links a { white-space: nowrap; }
+
+.cv-controls {
+  position: relative;
+  padding: 1rem 0;
+  border-block: 1px solid var(--cv-rule);
+}
+.cv-controls fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.cv-controls legend { padding: 0; margin-bottom: 0.5rem; font-weight: bold; font-size: 1.05rem; }
+.cv-filter-hint { color: var(--cv-muted); font-size: 0.95rem; font-weight: normal; }
+.cv-tags { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.45rem 1.25rem; }
+.cv-filter-node { min-width: 0; }
+.cv-filter-node[data-depth="0"] { padding: 0.35rem 0 0.5rem; border-bottom: 1px solid var(--cv-rule); }
+.cv-filter-node .cv-filter-node { margin-left: 1.4rem; }
+.cv-filter-node[data-depth="1"] .cv-filter-node { margin-left: 0; }
+.cv-filter-node[data-depth="0"] > label { font-weight: bold; }
+.cv-topic-parent-row { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.cv-filter-node[data-depth="0"] > .cv-topic-parent-row > label { font-weight: bold; }
+.cv-topic-toggle { min-width: 2rem; padding: 0.15rem 0.25rem; border: 0; color: var(--cv-muted); background: none; font: inherit; font-size: 0.8rem; cursor: pointer; }
+.cv-topic-toggle:hover { color: CanvasText; }
+.cv-topic-toggle:focus-visible { outline: 2px solid LinkText; outline-offset: 2px; }
+.cv-topic-children { border-left: 1px solid var(--cv-rule); }
+.cv-topic-children .cv-topic-children { border-left: 0; }
+.cv-tags label { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 2rem; cursor: pointer; font-size: 0.95rem; user-select: none; -webkit-user-select: none; }
+.cv-tags input { margin: 0; width: 0.95rem; height: 0.95rem; accent-color: CanvasText; cursor: pointer; }
+.cv-tags input:checked + span {
+  padding-inline: 0.08em;
+  background: linear-gradient(177deg, transparent 9%, var(--topic-color, var(--cv-highlight)) 9% 91%, transparent 91%);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.cv-tags span.cv-topic-implied {
+  padding-inline: 0.08em;
+  background: linear-gradient(177deg, transparent 9%, var(--topic-color) 9% 91%, transparent 91%);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.cv-tags span.cv-topic-implied-partial {
+  background: repeating-linear-gradient(135deg, var(--topic-color) 0 0.18em, transparent 0.18em 0.36em);
+}
+.cv-tags input:focus-visible { outline: 2px solid LinkText; outline-offset: 4px; }
+#cv-clear { position: absolute; top: 1.15rem; right: 0; padding: 0; margin: 0; border: 0; color: LinkText; background: none; font: inherit; font-size: 0.9rem; text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
+#cv-clear:disabled { color: var(--cv-muted); text-decoration: none; cursor: default; }
+
+.cv-section-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.3rem 1rem; margin: 1.8rem 0 0; }
+.cv-section-heading h2 { margin: 0; font-size: 1.6rem; }
+#cv-status { margin: 0; color: var(--cv-muted); font-size: 0.9rem; }
+#cv-status a { color: inherit; text-decoration: underline; text-underline-offset: 0.2em; }
+.cv-role { padding: 1.6rem 0; border-bottom: 1px solid var(--cv-rule); scroll-margin-top: 1rem; }
+.cv-role-title { margin: 0; font-size: 1.35rem; line-height: 1.35; text-wrap: pretty; }
+.cv-role-name { font-weight: normal; }
+.cv-role-separator { padding: 0 0.15em; font-weight: normal; color: var(--cv-muted); }
+.cv-role-meta { margin: 0.3rem 0 0.75rem; font-size: 0.95rem; color: var(--cv-muted); font-variant-numeric: tabular-nums; }
+.cv-role-meta time { white-space: nowrap; }
+.cv-summary { margin: 0; }
+.cv-points { margin: 0.7rem 0 0; padding-left: 1.15rem; }
+.cv-points li { padding-left: 0.15rem; margin: 0.3rem 0; }
+.cv-role mark {
+  padding-inline: 0.05em;
+  color: inherit;
+  background: linear-gradient(178deg, transparent 10%, var(--topic-color, var(--cv-highlight)) 10% 91%, transparent 91%);
+  box-shadow: inset 0 -0.11em var(--topic-color-2, transparent), inset 0 -0.22em var(--topic-color-3, transparent);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.cv-role mark[data-highlight-derived="true"] {
+  background: repeating-linear-gradient(135deg, var(--topic-color) 0 0.2em, transparent 0.2em 0.4em);
+}
+.cv-topic-suggestions { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 0.75rem; margin: 0.65rem 0 0; font-size: 0.9rem; }
+.cv-topic-suggestions-label { color: var(--cv-muted); }
+.cv-suggestion-options { display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); gap: 0.3rem 1rem; margin: 0.35rem 0 0 1rem; }
+.cv-suggestion-node .cv-suggestion-node { margin-left: 1rem; }
+.cv-suggestion-node[data-depth="1"] .cv-suggestion-node { margin-left: 0; }
+.cv-suggestion-node > span, .cv-suggestion-node .cv-topic-parent-row > span { color: var(--cv-muted); }
+.cv-topic-suggestions button { padding: 0; border: 0; color: LinkText; background: none; font: inherit; text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
+.cv-topic-suggestions button:focus-visible { outline: 2px solid LinkText; outline-offset: 3px; }
+.cv-evidence { margin: 0.7rem 0 0; font-size: 0.95rem; }
+.cv-earlier { padding: 1.6rem 0; }
+.cv-archive { margin-top: 0.9rem; }
+.cv-archive > summary { width: fit-content; color: LinkText; cursor: pointer; }
+.cv-archive > summary:focus-visible { outline: 2px solid LinkText; outline-offset: 4px; }
+.cv-archive[open] > summary { margin-bottom: 0.5rem; }
+.cv-archive .cv-role:last-child { border-bottom: 0; padding-bottom: 0; }
+.cv-earlier + .cv-earlier { border-top: 1px solid var(--cv-rule); }
+.cv-export-actions { margin: -0.75rem 0 1.5rem; font-size: 0.95rem; }
+.cv-export-actions button { padding: 0; border: 0; background: none; color: LinkText; text-decoration: underline; font: inherit; cursor: pointer; }
+.cv-export-actions button:disabled { color: var(--cv-muted); cursor: wait; }
+#cv-pdf-status { margin-left: 0.6rem; color: var(--cv-muted); font-size: 0.85rem; }
+.cv-generation-note { margin: 0.25rem 0 0.75rem; color: var(--cv-muted); font-size: 0.85rem; }
+.cv-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+@media (prefers-color-scheme: dark) {
+  body:has(.cv-profile) { --cv-highlight: #554914; }
+}
+
+@media (max-width: 30rem) {
+  body:has(.cv-profile) { padding-inline: 1rem; }
+  body:has(.cv-profile) main > h1 { font-size: 2.35rem; }
+  .cv-headline { font-size: 1.25rem; }
+  .cv-tags { grid-template-columns: 1fr; }
+  .cv-suggestion-options { grid-template-columns: 1fr; }
+  .cv-controls legend { padding-right: 5rem; }
+  .cv-filter-hint { display: none; }
+  #cv-clear { font-size: 0.9rem; }
+  .cv-section-heading { margin-top: 1.7rem; }
+  .cv-role-title { font-size: 1.25rem; }
+  .cv-role { padding-block: 1.4rem; }
+}
+
+@media print {
+  @page { margin: 9mm; }
+  body:has(.cv-profile) { max-width: none; padding: 0; font-size: 8pt; line-height: 1.15; color: #000; background: #fff; color-scheme: light; --cv-muted: #555; --cv-rule: #ccc; --cv-highlight: #fff0a6; }
+  body:has(.cv-profile) > header,
+  body:has(.cv-profile) > footer,
+  .cv-controls, #cv-status, .cv-export-actions { display: none; }
+  body:has(.cv-profile) main > h1 { font-size: 18pt; }
+  .cv-headline { font-size: 10pt; }
+  .cv-global-lead { margin: 3pt 0; }
+  .cv-links, .cv-role-meta, .cv-evidence, .cv-generation-note { font-size: 7pt; margin: 2pt 0; }
+  .cv-profile { margin-bottom: 5pt; }
+  .cv-section-heading { margin-top: 5pt; }
+  .cv-section-heading h2 { font-size: 11pt; }
+  .cv-role-title { font-size: 9pt; }
+  .cv-points { margin-top: 2pt; }
+  .cv-points li { margin: 1pt 0; }
+  .cv-role, .cv-earlier { break-inside: avoid; padding: 4pt 0; }
+  .cv-role-title { break-after: avoid; }
+  .cv-role mark { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .cv-generation-note { display: block; break-inside: avoid; }
+  .cv-generation-note a { overflow-wrap: anywhere; }
 }

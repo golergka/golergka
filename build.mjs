@@ -14,12 +14,13 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { marked } from "marked";
 import { createHighlighter } from "shiki";
+import { renderProfile, renderTags, renderWork } from "./theme/cv-render.mjs";
 
 const SITE_NAME = "Max Yankov";
 const SITE_URL = "https://golergka.com";
 const SITE_DESCRIPTION = "Notes by Max Yankov (golergka).";
 
-const FOOTER = `<a href="/my-repositories/">Projects</a> ·
+const FOOTER = `<a href="/projects/">Projects</a> ·
 <a href="https://github.com/golergka">GitHub</a> ·
 <a href="http://t.me/golergka">Telegram</a> ·
 <a href="mailto:golergka@gmail.com">Email</a> ·
@@ -35,7 +36,10 @@ const PAGES_DIR = "pages";
 const UNPUBLISHED = ["Max Yankov - CV.pdf"];
 
 // Old paths that were live once and should keep working.
-const REDIRECTS = [["/fighting-opentelemetry/*", "/opentelemetry-integration/"]];
+const REDIRECTS = [
+  ["/fighting-opentelemetry/*", "/opentelemetry-integration/"],
+  ["/my-repositories/*", "/projects/"],
+];
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const dist = path.join(root, "dist");
@@ -151,6 +155,32 @@ const layout = fs.readFileSync(path.join(theme, "layout.html"), "utf8");
 const styleCss = fs.readFileSync(path.join(theme, "style.css"), "utf8");
 const styleHref = `/style.${createHash("sha256").update(styleCss).digest("hex").slice(0, 8)}.css`;
 
+// Render the CV at build time too, so the experience is readable without JS.
+// The repository keeps editorial notes; the public page receives display data.
+const cvSource = JSON.parse(fs.readFileSync(path.join(root, "data/cv.json"), "utf8"));
+const cvData = {
+  cvStart: cvSource.cvStart,
+  profile: cvSource.profile,
+  filters: cvSource.filters,
+  topicRelations: cvSource.topicRelations,
+  topicAliases: cvSource.topicAliases,
+  earlierWork: cvSource.earlierWork,
+  recentWork: cvSource.recentWork,
+  artifacts: cvSource.artifacts,
+  work: cvSource.work.map(({ dateNote, ...work }) => work),
+};
+const cvRenderer = fs.readFileSync(path.join(theme, "cv-render.mjs"), "utf8");
+const cvRendererName = `render.${createHash("sha256").update(cvRenderer).digest("hex").slice(0, 8)}.js`;
+const cvColors = fs.readFileSync(path.join(theme, "cv-colors.mjs"), "utf8");
+const cvColorsName = `colors.${createHash("sha256").update(cvColors).digest("hex").slice(0, 8)}.js`;
+const cvPdf = fs.readFileSync(path.join(theme, "cv-pdf.mjs"), "utf8");
+const cvPdfName = `pdf.${createHash("sha256").update(cvPdf).digest("hex").slice(0, 8)}.js`;
+const cvScript = fs.readFileSync(path.join(theme, "cv.js"), "utf8")
+  .replace("./cv-render.mjs", `./${cvRendererName}`)
+  .replace("./cv-colors.mjs", `./${cvColorsName}`)
+  .replace("./cv-pdf.mjs", `./${cvPdfName}`);
+const cvScriptName = `cv.${createHash("sha256").update(cvScript).digest("hex").slice(0, 8)}.js`;
+
 const postFiles = fs
   .readdirSync(root)
   .filter((name) => name.endsWith(".md") && name !== HOMEPAGE)
@@ -237,7 +267,16 @@ for (const page of pages) {
           : ""
       }</p>`
     : "";
-  const html = wrapTables(rewriteLinks(marked.parse(page.markdown)));
+  let html = wrapTables(rewriteLinks(marked.parse(page.markdown)));
+  if (page.slug === "cv") {
+    html = render(html, {
+      cvProfile: renderProfile(cvData.profile),
+      cvTags: renderTags(cvData.filters),
+      cvWork: renderWork(cvData),
+      cvData: JSON.stringify(cvData).replaceAll("<", "\\u003c"),
+      cvScript: `/cv/${cvScriptName}`,
+    });
+  }
   // The H1 belongs to the markdown; the date slots in just underneath it.
   const body = html.includes("</h1>")
     ? html.replace("</h1>", `</h1>\n${dated}`)
@@ -246,7 +285,7 @@ for (const page of pages) {
     path.join(dist, page.slug, "index.html"),
     render(layout, {
       lang: page.lang,
-      title: `${escapeHtml(page.title)} — ${SITE_NAME}`,
+      title: page.slug === "cv" ? `Experience — ${SITE_NAME}` : `${escapeHtml(page.title)} — ${SITE_NAME}`,
       sitename: SITE_NAME,
       stylesheet: styleHref,
       canonical: canonicalTag(`/${page.slug}/`),
@@ -337,6 +376,18 @@ if (REDIRECTS.length) {
 }
 
 fs.writeFileSync(path.join(dist, styleHref.slice(1)), styleCss);
+
+// The adaptive CV is generated from structured data rather than duplicated in
+// its page markup. Keep both files beside the rendered /cv/ page.
+const cvDir = path.join(dist, "cv");
+fs.mkdirSync(cvDir, { recursive: true });
+fs.writeFileSync(path.join(cvDir, "data.json"), JSON.stringify(cvData));
+fs.writeFileSync(path.join(cvDir, cvScriptName), cvScript);
+fs.writeFileSync(path.join(cvDir, cvRendererName), cvRenderer);
+fs.writeFileSync(path.join(cvDir, cvColorsName), cvColors);
+fs.writeFileSync(path.join(cvDir, cvPdfName), cvPdf);
+fs.copyFileSync(path.join(root, "node_modules/jspdf/dist/jspdf.umd.min.js"), path.join(cvDir, "jspdf.umd.min.js"));
+fs.copyFileSync(path.join(root, "node_modules/mark.js/dist/mark.min.js"), path.join(cvDir, "mark.min.js"));
 
 // Anything else in the root that is not source (PDFs, images) is served as-is.
 for (const name of fs.readdirSync(root)) {
