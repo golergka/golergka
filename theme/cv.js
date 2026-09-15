@@ -153,6 +153,12 @@ function toggleTopic(control) {
   update();
 }
 
+function preventTopicTextSelection(event) {
+  if (event.target.closest?.("[data-select-tag], [data-add-tag]")) event.preventDefault();
+}
+
+controls.addEventListener("mousedown", preventTopicTextSelection);
+controls.addEventListener("dblclick", preventTopicTextSelection);
 controls.addEventListener("click", (event) => {
   toggleTopic(event.target.closest?.("[data-select-tag]"));
 });
@@ -163,6 +169,8 @@ controls.addEventListener("keydown", (event) => {
   event.preventDefault();
   toggleTopic(control);
 });
+appNode.addEventListener("mousedown", preventTopicTextSelection);
+appNode.addEventListener("dblclick", preventTopicTextSelection);
 appNode.addEventListener("click", (event) => {
   const control = event.target.closest?.("[data-add-tag]");
   const tag = control?.dataset.addTag;

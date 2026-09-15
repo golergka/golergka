@@ -40,6 +40,16 @@ test("topic highlighting uses native inline marks, not positioned overlays", () 
   assert.doesNotMatch(script, /rough-notation|ResizeObserver|getBoundingClientRect/);
 });
 
+test("topic clicks cannot create browser text selections", () => {
+  const script = readFileSync(new URL("../theme/cv.js", import.meta.url), "utf8");
+  assert.match(script, /function preventTopicTextSelection\(event\)/);
+  assert.match(script, /closest\?\.\("\[data-select-tag\], \[data-add-tag\]"\)\) event\.preventDefault\(\)/);
+  assert.match(script, /controls\.addEventListener\("mousedown", preventTopicTextSelection\)/);
+  assert.match(script, /controls\.addEventListener\("dblclick", preventTopicTextSelection\)/);
+  assert.match(script, /appNode\.addEventListener\("mousedown", preventTopicTextSelection\)/);
+  assert.match(script, /appNode\.addEventListener\("dblclick", preventTopicTextSelection\)/);
+});
+
 test("every topic combination retains every experience and chronological group placement", () => {
   const ids = data.filters.map(({id}) => id);
   const visibleIndexes = data.work.map((item, index) => ({item, index}))
