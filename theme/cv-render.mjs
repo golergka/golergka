@@ -124,11 +124,9 @@ function renderFilterTree(filters, renderNode) {
 
 export function renderTags(filters) {
   return renderFilterTree(filters, (tag, depth, children, childCount) => {
-    const id = `cv-topic-children-${escapeHtml(tag.id)}`;
     const option = `<span class="cv-topic-select" data-select-tag="${escapeHtml(tag.id)}" role="button" tabindex="0" aria-pressed="false">${escapeHtml(tag.label)}</span>`;
-    return `<div class="cv-filter-node" data-depth="${depth}">${childCount
-      ? `<div class="cv-topic-parent-row">${option}<button type="button" class="cv-topic-toggle" data-topic-toggle aria-expanded="false" aria-controls="${id}" aria-label="Show subtopics for ${escapeHtml(tag.label)}">▸</button></div><div class="cv-topic-children" id="${id}" hidden>${children}</div>`
-      : option}</div>`;
+    return `<div class="cv-filter-node" data-depth="${depth}">${option}${childCount
+      ? `<div class="cv-topic-children">${children}</div>` : ""}</div>`;
   });
 }
 
@@ -198,13 +196,11 @@ export function renderWork(data, selected = new Set(), { staticView = false, com
       ${remaining.length && !compact ? staticView
         ? `<ul class="cv-points">${remaining.map((point) => renderPoint(point, selected, labels, aliases, graph)).join("")}</ul>`
         : suggestedTags.length ? `<div class="cv-topic-suggestions"><span class="cv-topic-suggestions-label">Explore related topics</span><div class="cv-suggestion-options cv-topic-list">${renderFilterTree(suggestionTree, ({id, label}, depth, children, childCount) => {
-          const controlsId = `experience-${index}-topic-children-${escapeHtml(id)}`;
           const option = directSuggestedIds.has(id) && !selected.has(id)
             ? `<span class="cv-topic-select" role="button" tabindex="0" data-add-tag="${escapeHtml(id)}">${escapeHtml(label)}</span>`
             : `<span class="cv-topic-select cv-topic-placeholder">${escapeHtml(label)}</span>`;
-          return `<div class="cv-suggestion-node" data-depth="${depth}">${childCount
-            ? `<div class="cv-topic-parent-row">${option}<button type="button" class="cv-topic-toggle" data-topic-toggle aria-expanded="false" aria-controls="${controlsId}" aria-label="Show subtopics for ${escapeHtml(label)}">▸</button></div><div class="cv-topic-children" id="${controlsId}" hidden>${children}</div>`
-            : option}</div>`;
+          return `<div class="cv-suggestion-node" data-depth="${depth}">${option}${childCount
+            ? `<div class="cv-topic-children">${children}</div>` : ""}</div>`;
         })}</div></div>` : "" : ""}
       ${links.length ? `<p class="cv-evidence">${links.map((link) => `<a href="${escapeHtml(link.url)}">${escapeHtml(link.label)}</a>`).join(" · ")}</p>` : ""}
     </article>`;

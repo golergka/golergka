@@ -119,27 +119,6 @@ function render() {
     button.setAttribute("aria-pressed", String(isSelected));
     const implied = !isSelected && sourceForTag(tag, selected, aliases, topicGraph);
     if (!isSelected && !implied) continue;
-    const node = button.closest(".cv-filter-node");
-    const containers = [
-      ...(isSelected ? node.querySelectorAll(".cv-topic-children") : []),
-      ...function ancestors() {
-        const result = [];
-        let current = node.parentElement.closest(".cv-topic-children");
-        while (current) {
-          result.push(current);
-          current = current.parentElement.parentElement.closest(".cv-topic-children");
-        }
-        return result;
-      }(),
-    ];
-    for (const children of containers) {
-      children.hidden = false;
-      const toggle = children.parentElement.querySelector(":scope > .cv-topic-parent-row [data-topic-toggle]");
-      if (toggle) {
-        toggle.setAttribute("aria-expanded", "true");
-        toggle.textContent = "▾";
-      }
-    }
   }
   const matching = data.work.map((item, index) => ({item, index})).filter(({item}) => matchesTags(item.tags, selected, aliases, topicGraph));
   const { individual, grouped, recentGrouped } = partitionWork(data, selected);
@@ -166,18 +145,6 @@ function update() {
   render();
 }
 
-function handleTopicToggle(event) {
-  const button = event.target.closest?.("[data-topic-toggle]");
-  if (!button) return false;
-  const children = document.getElementById(button.getAttribute("aria-controls"));
-  if (!children) return true;
-  const expanded = button.getAttribute("aria-expanded") !== "true";
-  button.setAttribute("aria-expanded", String(expanded));
-  button.textContent = expanded ? "▾" : "▸";
-  children.hidden = !expanded;
-  return true;
-}
-
 function toggleTopic(control) {
   const tag = control?.dataset.selectTag;
   if (!tag || !allowed.has(tag)) return;
@@ -187,7 +154,6 @@ function toggleTopic(control) {
 }
 
 controls.addEventListener("click", (event) => {
-  if (handleTopicToggle(event)) return;
   toggleTopic(event.target.closest?.("[data-select-tag]"));
 });
 controls.addEventListener("keydown", (event) => {
@@ -198,7 +164,6 @@ controls.addEventListener("keydown", (event) => {
   toggleTopic(control);
 });
 appNode.addEventListener("click", (event) => {
-  if (handleTopicToggle(event)) return;
   const control = event.target.closest?.("[data-add-tag]");
   const tag = control?.dataset.addTag;
   if (!tag || !allowed.has(tag)) return;

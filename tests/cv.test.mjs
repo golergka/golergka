@@ -78,12 +78,12 @@ test("topics form semantic trees without visual category buckets", () => {
   assert.doesNotMatch(controls, /cv-filter-group|Focus|Engineering systems|Domains|Technologies/);
   assert.doesNotMatch(controls, /<input|type="checkbox"/);
   assert.match(css, /\.cv-topic-list \{ display: inline; line-height:/);
-  assert.match(css, /\.cv-topic-children > \[data-depth\]:not\(:last-child\)::after \{ content: "·";/);
+  assert.match(css, /\.cv-topic-children > \[data-depth\]:not\(:last-child\)::after \{ content: ", ";/);
   assert.match(css, /\.cv-topic-list > \[data-depth="0"\] \{ display: inline;/);
-  assert.doesNotMatch(controls, />\+[0-9]+<\/button>/);
+  assert.doesNotMatch(controls, /data-topic-toggle|<button|[▸▾]/);
   assert.match(css, /\.cv-topic-select \{[\s\S]*?user-select: none;[\s\S]*?-webkit-user-select: none;/);
   assert.doesNotMatch(css, /\.cv-suggestion-options \{[^}]*grid-template-columns/);
-  assert.match(controls, /<span class="cv-topic-select" data-select-tag="agents" role="button" tabindex="0" aria-pressed="false">AI &amp; agents<\/span>[\s\S]*data-topic-toggle[\s\S]*cv-topic-children-agents" hidden[\s\S]*data-depth="1"><span class="cv-topic-select" data-select-tag="pydantic-ai"/);
+  assert.match(controls, /<span class="cv-topic-select" data-select-tag="agents" role="button" tabindex="0" aria-pressed="false">AI &amp; agents<\/span>[\s\S]*class="cv-topic-children">[\s\S]*data-depth="1"><span class="cv-topic-select" data-select-tag="pydantic-ai"/);
   assert.doesNotMatch(controls, /data-depth="2"/);
   assert.match(controls, /data-depth="1"><span class="cv-topic-select" data-select-tag="braintrust"/);
   assert.match(controls, /data-depth="1"><span class="cv-topic-select" data-select-tag="betterstack"/);
@@ -93,7 +93,8 @@ test("topics form semantic trees without visual category buckets", () => {
   assert.match(coloph, /class="cv-topic-select" role="button" tabindex="0" data-add-tag=/);
   assert.match(css, /\.cv-topic-suggestions \{[^}]*font-size: 0\.85rem;/);
   assert.match(css, /\.cv-topic-suggestions \.cv-topic-select \{ font-size: inherit; \}/);
-  assert.match(coloph, /data-topic-toggle[\s\S]*cv-topic-children/);
+  assert.doesNotMatch(coloph, /data-topic-toggle|[▸▾]/);
+  assert.match(coloph, /cv-topic-children/);
 });
 
 test("direct visual children are solid while DAG relatives are partial", () => {
