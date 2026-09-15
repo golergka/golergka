@@ -74,8 +74,12 @@ test("Coloph keeps depth collapsed and promotes evidence selected by the global 
 
 test("topics form semantic trees without visual category buckets", () => {
   const controls = renderTags(data.filters);
+  const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
   assert.doesNotMatch(controls, /cv-filter-group|Focus|Engineering systems|Domains|Technologies/);
   assert.doesNotMatch(controls, /<input|type="checkbox"/);
+  assert.match(css, /\.cv-tags \{ display: flex; flex-direction: column;/);
+  assert.match(css, /\.cv-topic-children > \.cv-filter-node:not\(:last-child\)::after \{ content: "·";/);
+  assert.doesNotMatch(css, /\.cv-tags \{[^}]*grid-template-columns/);
   assert.match(controls, /<span class="cv-topic-select" data-select-tag="agents" role="button" tabindex="0" aria-pressed="false">AI &amp; agents<\/span>[\s\S]*data-topic-toggle[\s\S]*cv-topic-children-agents" hidden[\s\S]*data-depth="1"><span class="cv-topic-select" data-select-tag="pydantic-ai"/);
   assert.doesNotMatch(controls, /data-depth="2"/);
   assert.match(controls, /data-depth="1"><span class="cv-topic-select" data-select-tag="braintrust"/);
