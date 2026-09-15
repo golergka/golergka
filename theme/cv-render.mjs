@@ -189,8 +189,9 @@ export function renderWork(data, selected = new Set(), { staticView = false, com
     const organization = item.url
       ? `<a href="${escapeHtml(item.url)}">${escapeHtml(item.organization)}</a>`
       : escapeHtml(item.organization);
+    const role = highlightText({text: item.role, tags: item.tags, emphases: item.roleEmphases || []}, selected, labels, aliases, graph);
     return `<article class="cv-role${relevant ? " cv-relevant" : ""}" id="experience-${index}">
-      <h3 class="cv-role-title">${organization} <span class="cv-role-separator">/</span> <span class="cv-role-name">${escapeHtml(item.role)}</span></h3>
+      <h3 class="cv-role-title">${organization} <span class="cv-role-separator">/</span> <span class="cv-role-name">${role}</span></h3>
       <p class="cv-role-meta">${periodHtml(item)}<span aria-hidden="true"> · </span>${escapeHtml(item.location)}</p>
       <p class="cv-summary">${highlightText({text: item.summary, emphasis: item.summaryEmphasis, emphasisTags: item.summaryEmphasisTags, emphases: item.summaryEmphases, tags: item.summaryTags || []}, selected, labels, aliases, graph)}</p>
       ${preview.length ? `<ul class="cv-points">${preview.map((point) => renderPoint(point, selected, labels, aliases, graph)).join("")}</ul>` : ""}

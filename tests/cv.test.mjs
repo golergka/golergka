@@ -109,6 +109,23 @@ test("direct visual children are solid while DAG relatives are partial", () => {
   assert.doesNotMatch(exact, /data-highlight-topics="betterstack" data-highlight-derived/);
 });
 
+test("leadership terms in role titles carry explicit topic evidence", () => {
+  const founder = renderWork(data, new Set(["founder"]));
+  assert.match(founder, /cv-role-name"><mark data-highlight-topics="founder"[^>]*>Founder<\/mark> &amp; Product Engineer/);
+  assert.match(founder, /cv-role-name"><mark data-highlight-topics="founder"[^>]*>Co-Founder<\/mark> &amp; CTO/);
+  assert.match(founder, /cv-role-name">CEO &amp; <mark data-highlight-topics="founder"[^>]*>Founder<\/mark>/);
+
+  const leadership = renderWork(data, new Set(["leadership"]));
+  assert.match(leadership, /cv-role-name"><mark data-highlight-topics="leadership"[^>]*>Founding Engineer<\/mark>/);
+  assert.match(leadership, /cv-role-name">[^<]*<mark data-highlight-topics="leadership"[^>]*>Lead Game Designer<\/mark>/);
+
+  const teamLead = renderWork(data, new Set(["team-lead"]));
+  assert.match(teamLead, /cv-role-name"><mark data-highlight-topics="team-lead"[^>]*>Lead Developer<\/mark>/);
+
+  const cto = renderWork(data, new Set(["cto"]));
+  assert.match(cto, /cv-role-name"><mark data-highlight-topics="cto"[^>]*>CTO<\/mark>/);
+});
+
 test("topic relationships form a directed acyclic graph independent of the visual tree", () => {
   assert.ok(data.topicRelations.some(({from, to}) => from === "observability" && to === "braintrust"));
   assert.ok(data.topicRelations.some(({from, to}) => from === "observability" && to === "betterstack"));
@@ -191,13 +208,15 @@ test("every experience tag has explicitly reviewed display evidence", () => {
       !covered.has(tag) && !text.includes(labels.get(tag) || "\0"));
   };
   for (const item of data.work) {
+    assert.deepEqual(uncovered(item.roleEmphases?.flatMap(({tags}) => tags) || [], item.role, [], item.roleEmphases), [],
+      `${item.organization} role has an unreviewed tag`);
     assert.deepEqual(uncovered(item.summaryTags || [], item.summary, item.summaryEmphasisTags, item.summaryEmphases), [],
       `${item.organization} summary has an unreviewed tag`);
     for (const point of item.highlights) {
       assert.deepEqual(uncovered(point.tags, point.text, point.emphasisTags, point.emphases), [],
         `${item.organization} has an unreviewed bullet tag: ${point.text}`);
     }
-    const evidence = new Set([...(item.summaryTags || []), ...item.highlights.flatMap(({tags}) => tags)].map(resolve));
+    const evidence = new Set([...(item.roleEmphases || []).flatMap(({tags}) => tags), ...(item.summaryTags || []), ...item.highlights.flatMap(({tags}) => tags)].map(resolve));
     assert.deepEqual([...new Set(item.tags.map(resolve))].filter((tag) => !evidence.has(tag)), [],
       `${item.organization} has an experience tag without summary or bullet evidence`);
     assert.deepEqual([...evidence].filter((tag) => !new Set(item.tags.map(resolve)).has(tag)), [],
@@ -208,6 +227,7 @@ test("every experience tag has explicitly reviewed display evidence", () => {
 test("reviewed highlight phrases exist and never overlap", () => {
   for (const item of data.work) {
     for (const source of [
+      {text: item.role, emphases: item.roleEmphases || []},
       {text: item.summary, emphases: item.summaryEmphases || []},
       ...item.highlights.map(({text, emphases = []}) => ({text, emphases})),
     ]) {

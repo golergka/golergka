@@ -178,6 +178,10 @@
     {
       "organization": "Coloph",
       "role": "Founder & Product Engineer",
+      "roleEmphases": [
+        { "text": "Founder", "tags": ["founder"] },
+        { "text": "Product Engineer", "tags": ["product"] }
+      ],
       "start": "2025",
       "end": "present",
       "location": "Independent",
@@ -297,6 +301,7 @@
     {
       "organization": "Hotline (Gestalt Systems)",
       "role": "Founding Engineer",
+      "roleEmphases": [{ "text": "Founding Engineer", "tags": ["leadership"] }],
       "start": "2025-07",
       "end": "2026-03",
       "location": "Remote",
@@ -534,6 +539,7 @@
     {
       "organization": "Sofq Games",
       "role": "CTO",
+      "roleEmphases": [{ "text": "CTO", "tags": ["cto"] }],
       "start": "2019",
       "end": "2020",
       "dateNote": "One previous CV says 2021; verify before external use.",
@@ -563,6 +569,7 @@
     {
       "organization": "Hypetrain Digital",
       "role": "Lead Developer",
+      "roleEmphases": [{ "text": "Lead Developer", "tags": ["team-lead"] }],
       "start": "2017-07",
       "end": "2019",
       "dateNote": "One previous CV says 2018; verify before external use.",
@@ -612,6 +619,10 @@
     {
       "organization": "Delos Technologies",
       "role": "Co-Founder & CTO",
+      "roleEmphases": [
+        { "text": "Co-Founder", "tags": ["founder"] },
+        { "text": "CTO", "tags": ["cto"] }
+      ],
       "start": "2016-09",
       "end": "2017-02",
       "location": "Israel",
@@ -636,6 +647,7 @@
     {
       "organization": "Innovision Labs",
       "role": "Lead Developer",
+      "roleEmphases": [{ "text": "Lead Developer", "tags": ["team-lead"] }],
       "start": "2015-11",
       "end": "2016-06",
       "location": "Israel",
@@ -691,6 +703,7 @@
     {
       "organization": "KamaGames",
       "role": "Developer; previously Lead Game Designer",
+      "roleEmphases": [{ "text": "Lead Game Designer", "tags": ["leadership"] }],
       "start": "2012",
       "end": "2014-08",
       "location": "Russia",
@@ -703,11 +716,12 @@
         { "text": "Worked in C#, Unity, Java, JavaScript, C, and Objective-C.", "emphasis": "C#, Unity, Java, JavaScript, C, and Objective-C", "emphasisTags": ["unity", "native"], "tags": ["unity", "native"] },
         { "text": "Designed mechanics and balance; analyzed product data with SQL, Excel, and R.", "emphasis": "analyzed product data", "emphasisTags": ["games", "data", "product"], "tags": ["games", "data", "product"] }
       ],
-      "tags": ["games", "unity", "native", "product", "data"]
+      "tags": ["games", "unity", "native", "product", "data", "leadership"]
     },
     {
       "organization": "Pixonic",
       "role": "Producer",
+      "roleEmphases": [{ "text": "Producer", "tags": ["leadership"] }],
       "start": "2011-02",
       "end": "2011-11",
       "location": "Russia",
@@ -728,6 +742,10 @@
     {
       "organization": "adOffer",
       "role": "CEO & Founder",
+      "roleEmphases": [
+        { "text": "CEO", "tags": ["ceo"] },
+        { "text": "Founder", "tags": ["founder"] }
+      ],
       "start": "2010-07",
       "end": "2011-02",
       "location": "Russia",
@@ -747,6 +765,7 @@
     {
       "organization": "Playnatic Entertainment",
       "role": "Lead Game Designer",
+      "roleEmphases": [{ "text": "Lead Game Designer", "tags": ["leadership"] }],
       "start": "2009-10",
       "end": "2010-07",
       "location": "Russia",
@@ -763,6 +782,7 @@
     {
       "organization": "SKAZKA Studio",
       "role": "Lead Game Designer",
+      "roleEmphases": [{ "text": "Lead Game Designer", "tags": ["leadership"] }],
       "start": "2009-04",
       "end": "2009-12",
       "location": "Russia",
