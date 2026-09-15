@@ -41,16 +41,16 @@ function loadMarkLibrary() {
 
 async function applyTopicHighlights() {
   const epoch = ++highlightEpoch;
-  const checked = [...tagsNode.querySelectorAll("input:checked")];
   const marks = [...document.querySelectorAll("mark[data-highlight-topics]")];
-  for (const input of tagsNode.querySelectorAll("input")) {
-    const label = input.nextElementSibling;
-    const source = input.checked ? null : sourceForTag(input.value, selected, aliases, topicGraph);
-    label.classList.toggle("cv-topic-implied", Boolean(source));
-    label.classList.toggle("cv-topic-implied-partial", Boolean(source?.derived));
-    const colorTopic = input.checked ? input.value : source?.topic;
-    if (colorTopic) label.style.setProperty("--topic-color", topicColor(colorTopic, source?.derived ? 0.27 : 0.62));
-    else label.style.removeProperty("--topic-color");
+  for (const button of tagsNode.querySelectorAll("[data-select-tag]")) {
+    const tag = button.dataset.selectTag;
+    const isSelected = selected.has(tag);
+    const source = isSelected ? null : sourceForTag(tag, selected, aliases, topicGraph);
+    button.classList.toggle("cv-topic-implied", Boolean(source));
+    button.classList.toggle("cv-topic-implied-partial", Boolean(source?.derived));
+    const colorTopic = isSelected ? tag : source?.topic;
+    if (colorTopic) button.style.setProperty("--topic-color", topicColor(colorTopic, source?.derived ? 0.27 : 0.62));
+    else button.style.removeProperty("--topic-color");
   }
   marks.forEach((mark) => mark.style.setProperty("--topic-color", topicColor(mark.dataset.highlightTopics.split(",")[0], mark.dataset.highlightDerived ? 0.27 : 0.62)));
   if (!marks.length) return;
@@ -113,13 +113,15 @@ function render() {
   const openDetails = new Set([...appNode.querySelectorAll("details[open]")].map((node) => node.id));
   appNode.innerHTML = renderWork(data, selected);
   for (const node of appNode.querySelectorAll("details")) node.open = openDetails.has(node.id);
-  for (const input of tagsNode.querySelectorAll("input")) input.checked = selected.has(input.value);
-  for (const input of tagsNode.querySelectorAll("input")) {
-    const implied = !input.checked && sourceForTag(input.value, selected, aliases, topicGraph);
-    if (!input.checked && !implied) continue;
-    const node = input.closest(".cv-filter-node");
+  for (const button of tagsNode.querySelectorAll("[data-select-tag]")) {
+    const tag = button.dataset.selectTag;
+    const isSelected = selected.has(tag);
+    button.setAttribute("aria-pressed", String(isSelected));
+    const implied = !isSelected && sourceForTag(tag, selected, aliases, topicGraph);
+    if (!isSelected && !implied) continue;
+    const node = button.closest(".cv-filter-node");
     const containers = [
-      ...(input.checked ? node.querySelectorAll(".cv-topic-children") : []),
+      ...(isSelected ? node.querySelectorAll(".cv-topic-children") : []),
       ...function ancestors() {
         const result = [];
         let current = node.parentElement.closest(".cv-topic-children");
@@ -176,13 +178,25 @@ function handleTopicToggle(event) {
   return true;
 }
 
-tagsNode.addEventListener("change", (event) => {
-  if (!allowed.has(event.target.value)) return;
-  if (event.target.checked) selected.add(event.target.value);
-  else selected.delete(event.target.value);
+function toggleTopic(control) {
+  const tag = control?.dataset.selectTag;
+  if (!tag || !allowed.has(tag)) return;
+  if (selected.has(tag)) selected.delete(tag);
+  else selected.add(tag);
   update();
+}
+
+controls.addEventListener("click", (event) => {
+  if (handleTopicToggle(event)) return;
+  toggleTopic(event.target.closest?.("[data-select-tag]"));
 });
-controls.addEventListener("click", handleTopicToggle);
+controls.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  const control = event.target.closest?.("[data-select-tag]");
+  if (!control) return;
+  event.preventDefault();
+  toggleTopic(control);
+});
 appNode.addEventListener("click", (event) => {
   if (handleTopicToggle(event)) return;
   const button = event.target.closest?.("[data-add-tag]");

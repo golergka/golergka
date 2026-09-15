@@ -125,7 +125,7 @@ function renderFilterTree(filters, renderNode) {
 export function renderTags(filters) {
   return renderFilterTree(filters, (tag, depth, children, childCount) => {
     const id = `cv-topic-children-${escapeHtml(tag.id)}`;
-    const option = `<label><input type="checkbox" name="tag" value="${escapeHtml(tag.id)}"><span>${escapeHtml(tag.label)}</span></label>`;
+    const option = `<span class="cv-topic-select" data-select-tag="${escapeHtml(tag.id)}" role="button" tabindex="0" aria-pressed="false">${escapeHtml(tag.label)}</span>`;
     return `<div class="cv-filter-node" data-depth="${depth}">${childCount
       ? `<div class="cv-topic-parent-row">${option}<button type="button" class="cv-topic-toggle" data-topic-toggle aria-expanded="false" aria-controls="${id}" aria-label="Show subtopics for ${escapeHtml(tag.label)}">+${childCount}</button></div><div class="cv-topic-children" id="${id}" hidden>${children}</div>`
       : option}</div>`;

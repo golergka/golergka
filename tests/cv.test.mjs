@@ -35,8 +35,8 @@ test("topic highlighting uses native inline marks, not positioned overlays", () 
   assert.match(script, /mark\.min\.js/);
   assert.match(script, /markRanges/);
   assert.match(script, /cv-topic-implied-partial/);
-  assert.match(css, /\.cv-tags span\.cv-topic-implied \{[\s\S]*?linear-gradient/);
-  assert.match(css, /\.cv-tags span\.cv-topic-implied-partial \{[\s\S]*?repeating-linear-gradient/);
+  assert.match(css, /\.cv-topic-select\.cv-topic-implied \{[\s\S]*?linear-gradient/);
+  assert.match(css, /\.cv-topic-select\.cv-topic-implied-partial \{[\s\S]*?repeating-linear-gradient/);
   assert.doesNotMatch(script, /rough-notation|ResizeObserver|getBoundingClientRect/);
 });
 
@@ -75,10 +75,11 @@ test("Coloph keeps depth collapsed and promotes evidence selected by the global 
 test("topics form semantic trees without visual category buckets", () => {
   const controls = renderTags(data.filters);
   assert.doesNotMatch(controls, /cv-filter-group|Focus|Engineering systems|Domains|Technologies/);
-  assert.match(controls, /value="agents"[\s\S]*data-topic-toggle[\s\S]*cv-topic-children-agents" hidden[\s\S]*data-depth="1"><label><input type="checkbox" name="tag" value="pydantic-ai"/);
+  assert.doesNotMatch(controls, /<input|type="checkbox"/);
+  assert.match(controls, /<span class="cv-topic-select" data-select-tag="agents" role="button" tabindex="0" aria-pressed="false">AI &amp; agents<\/span>[\s\S]*data-topic-toggle[\s\S]*cv-topic-children-agents" hidden[\s\S]*data-depth="1"><span class="cv-topic-select" data-select-tag="pydantic-ai"/);
   assert.doesNotMatch(controls, /data-depth="2"/);
-  assert.match(controls, /data-depth="1"><label><input type="checkbox" name="tag" value="braintrust"/);
-  assert.match(controls, /data-depth="1"><label><input type="checkbox" name="tag" value="betterstack"/);
+  assert.match(controls, /data-depth="1"><span class="cv-topic-select" data-select-tag="braintrust"/);
+  assert.match(controls, /data-depth="1"><span class="cv-topic-select" data-select-tag="betterstack"/);
   const coloph = renderWork(data);
   assert.doesNotMatch(coloph, /cv-suggestion-group|data-filter-group/);
   assert.match(coloph, /data-topic-toggle[\s\S]*cv-topic-children/);
