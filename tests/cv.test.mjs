@@ -10,22 +10,22 @@ const data = JSON.parse(readFileSync(new URL("../data/cv.json", import.meta.url)
 
 test("topic colors are unique, maximally separated, and persistent", () => {
   let saved;
-  const colors = createTopicColorDirectory(["observability", "product", "ceo", "agents"], {}, (value) => { saved = value; });
+  const colors = createTopicColorDirectory(["observability", "product", "leadership", "agents"], {}, (value) => { saved = value; });
   colors.ensure("observability", []);
   colors.ensure("product", ["observability"]);
-  colors.ensure("ceo", ["observability", "product"]);
+  colors.ensure("leadership", ["observability", "product"]);
   const first = colors.snapshot();
   assert.equal(new Set(Object.values(first)).size, 3);
   assert.equal(Math.abs(first.observability - first.product), 180);
 
   const retained = first.observability;
-  colors.ensure("observability", ["ceo"]);
+  colors.ensure("observability", ["leadership"]);
   assert.equal(colors.snapshot().observability, retained);
 
-  const restored = createTopicColorDirectory(["observability", "product", "ceo", "agents"], saved);
-  restored.ensure("observability", ["ceo"]);
+  const restored = createTopicColorDirectory(["observability", "product", "leadership", "agents"], saved);
+  restored.ensure("observability", ["leadership"]);
   assert.equal(restored.snapshot().observability, retained);
-  restored.ensure("agents", ["observability", "product", "ceo"]);
+  restored.ensure("agents", ["observability", "product", "leadership"]);
   assert.equal(new Set(Object.values(restored.snapshot())).size, 4);
 });
 
@@ -113,7 +113,7 @@ test("leadership terms in role titles carry explicit topic evidence", () => {
   const founder = renderWork(data, new Set(["founder"]));
   assert.match(founder, /cv-role-name"><mark data-highlight-topics="founder"[^>]*>Founder<\/mark> &amp; Product Engineer/);
   assert.match(founder, /cv-role-name"><mark data-highlight-topics="founder"[^>]*>Co-Founder<\/mark> &amp; CTO/);
-  assert.match(founder, /cv-role-name">CEO &amp; <mark data-highlight-topics="founder"[^>]*>Founder<\/mark>/);
+  assert.match(founder, /cv-role-name"><mark data-highlight-topics="founder"[^>]*>CEO<\/mark> &amp; <mark data-highlight-topics="founder"[^>]*>Founder<\/mark>/);
 
   const leadership = renderWork(data, new Set(["leadership"]));
   assert.match(leadership, /cv-role-name"><mark data-highlight-topics="leadership"[^>]*>Founding Engineer<\/mark>/);
@@ -121,6 +121,9 @@ test("leadership terms in role titles carry explicit topic evidence", () => {
 
   const teamLead = renderWork(data, new Set(["team-lead"]));
   assert.match(teamLead, /cv-role-name"><mark data-highlight-topics="team-lead"[^>]*>Lead Developer<\/mark>/);
+
+  assert.equal(data.filters.some(({id}) => id === "ceo"), false);
+  assert.equal(data.topicAliases.ceo, "founder");
 
   const cto = renderWork(data, new Set(["cto"]));
   assert.match(cto, /cv-role-name"><mark data-highlight-topics="cto"[^>]*>CTO<\/mark>/);

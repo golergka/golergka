@@ -50,8 +50,7 @@
     { "id": "safety", "label": "Security & safety", "parent": "production-engineering" },
     { "id": "kubernetes", "label": "Kubernetes / k3s", "parent": "production-engineering" },
     { "id": "leadership", "label": "Technical leadership" },
-    { "id": "founder", "label": "Founder", "parent": "leadership" },
-    { "id": "ceo", "label": "CEO", "parent": "leadership" },
+    { "id": "founder", "label": "Founder / CEO", "parent": "leadership" },
     { "id": "cto", "label": "CTO", "parent": "leadership" },
     { "id": "team-lead", "label": "Team lead", "parent": "leadership" },
     { "id": "hiring", "label": "Hiring", "parent": "leadership" },
@@ -81,7 +80,8 @@
     "openai": "model-infrastructure",
     "litellm": "model-infrastructure",
     "voice-ai": "livekit",
-    "preact": "react"
+    "preact": "react",
+    "ceo": "founder"
   },
   "recentWork": {
     "title": "Other recent work",
@@ -743,7 +743,7 @@
       "organization": "adOffer",
       "role": "CEO & Founder",
       "roleEmphases": [
-        { "text": "CEO", "tags": ["ceo"] },
+        { "text": "CEO", "tags": ["founder"] },
         { "text": "Founder", "tags": ["founder"] }
       ],
       "start": "2010-07",
@@ -756,11 +756,11 @@
       "summaryTags": ["founder", "product"],
       "highlights": [{ "text": "As founder and CEO, raised seed investment, attracted the first advertisers, and developed and launched the offer system.", "emphasis": "founder and CEO", "emphases": [
         { "text": "founder", "tags": ["founder"] },
-        { "text": "CEO", "tags": ["ceo"] },
+        { "text": "CEO", "tags": ["founder"] },
         { "text": "raised seed investment, attracted the first advertisers", "tags": ["founder"] },
         { "text": "developed and launched the offer system", "tags": ["product"] }
-      ], "tags": ["product", "founder", "ceo"] }],
-      "tags": ["product", "founder", "ceo"]
+      ], "tags": ["product", "founder"] }],
+      "tags": ["product", "founder"]
     },
     {
       "organization": "Playnatic Entertainment",
