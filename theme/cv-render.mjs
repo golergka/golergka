@@ -104,7 +104,23 @@ const renderPoint = (point, selected, labels, aliases, graph) => `<li>${highligh
 export function renderProfile(profile) {
   return `<p class="cv-headline">${escapeHtml(profile.headline)}</p>
     <p class="cv-global-lead">${escapeHtml(profile.summary)}</p>
-    <p class="cv-links"><a href="mailto:${escapeHtml(profile.email)}">${escapeHtml(profile.email)}</a><span aria-hidden="true"> · </span><a href="${escapeHtml(profile.github)}">GitHub</a>${profile.linkedin ? `<span aria-hidden="true"> · </span><a href="${escapeHtml(profile.linkedin)}">LinkedIn</a>` : ""}<span aria-hidden="true"> · </span><a href="${escapeHtml(profile.stackoverflow)}">Stack Overflow</a></p>`;
+    <p class="cv-links"><a href="mailto:${escapeHtml(profile.email)}">${escapeHtml(profile.email)}</a><span aria-hidden="true"> · </span><a href="${escapeHtml(profile.github)}">github.com/golergka</a>${profile.linkedin ? `<span aria-hidden="true"> · </span><a href="${escapeHtml(profile.linkedin)}">linkedin.com/in/maxyankov</a>` : ""}<span aria-hidden="true"> · </span><a href="${escapeHtml(profile.stackoverflow)}">stackoverflow.com/users/312725/max-yankov</a></p>`;
+}
+
+export function expertiseLabels(filters, selected = new Set()) {
+  const active = selected.size ? filters.filter(({id}) => selected.has(id)) : filters.filter(({parent}) => !parent);
+  return active.map(({label}) => label);
+}
+
+export function renderExpertise(filters, selected = new Set()) {
+  return `<p id="cv-expertise" class="cv-expertise"><strong>Selected expertise:</strong> <span id="cv-expertise-topics">${expertiseLabels(filters, selected).map(escapeHtml).join(" · ")}</span></p>`;
+}
+
+export function renderCredentials({education = [], languages = []}) {
+  return `<div class="cv-credentials">
+    ${education.length ? `<p><strong>Education:</strong> ${education.map(escapeHtml).join(" · ")}</p>` : ""}
+    ${languages.length ? `<p><strong>Languages:</strong> ${languages.map(escapeHtml).join(" · ")}</p>` : ""}
+  </div>`;
 }
 
 function renderFilterTree(filters, renderNode) {
@@ -144,7 +160,7 @@ export function partitionWork(data, selected = new Set()) {
   return { individual, grouped, recentGrouped };
 }
 
-export function renderWork(data, selected = new Set(), { staticView = false, compact = false } = {}) {
+export function renderWork(data, selected = new Set(), { staticView = false, compact = false, complete = false } = {}) {
   const labels = new Map(data.filters.map(({ id, label }) => [id, label]));
   const aliases = data.topicAliases || {};
   const parents = topicParents(data.filters);
@@ -162,7 +178,7 @@ export function renderWork(data, selected = new Set(), { staticView = false, com
     const uncovered = new Set(selected);
     const eligible = selected.size ? points.filter((point) => point.score) : [...points];
     // Default stays short; an explicit topic selection reveals all matching evidence.
-    const previewLimit = selected.size ? eligible.length : 2;
+    const previewLimit = complete ? eligible.length : selected.size ? eligible.length : 2;
     while (preview.length < previewLimit && eligible.length) {
       eligible.sort((a, b) => b.matchedTopics.filter((tag) => uncovered.has(tag)).length - a.matchedTopics.filter((tag) => uncovered.has(tag)).length || a.order - b.order);
       const point = eligible.shift();
@@ -221,7 +237,7 @@ export function renderWork(data, selected = new Set(), { staticView = false, com
     <h3 class="cv-role-title" id="${id}-heading">${escapeHtml(config.title)}${titleTopics ? ` <span class="cv-role-separator">/</span> <span class="cv-role-name">${escapeHtml(titleTopics)}</span>` : ""}</h3>
     <p class="cv-role-meta">${period} · ${members.length} ${members.length === 1 ? "experience" : "experiences"}</p>
     <p class="cv-summary">${summary}</p>
-    ${staticView ? "" : `<details class="cv-archive" id="${id}-details">
+    ${complete ? members.map(renderEntry).join("") : staticView ? "" : `<details class="cv-archive" id="${id}-details">
       <summary>Explore ${members.length === 1 ? "this experience" : `these ${members.length} experiences`}</summary>
       ${members.map(renderEntry).join("")}
     </details>`}

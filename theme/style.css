@@ -248,6 +248,9 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
 .cv-global-lead { margin: 1rem 0; }
 .cv-links { margin: 0; font-size: 1rem; }
 .cv-links a { white-space: nowrap; }
+.cv-expertise { margin: 0.8rem 0 0; font-size: 0.95rem; }
+.cv-credentials { margin-top: 0.55rem; color: var(--cv-muted); font-size: 0.9rem; }
+.cv-credentials p { margin: 0.2rem 0; }
 
 .cv-controls {
   position: relative;
@@ -381,7 +384,8 @@ html.cv-scroll-lock #cv-app { overflow-anchor: none; }
   body:has(.cv-profile) main > h1 { font-size: 18pt; }
   .cv-headline { font-size: 10pt; }
   .cv-global-lead { margin: 3pt 0; }
-  .cv-links, .cv-role-meta, .cv-evidence, .cv-generation-note { font-size: 7pt; margin: 2pt 0; }
+  .cv-links, .cv-expertise, .cv-credentials, .cv-role-meta, .cv-evidence, .cv-generation-note { font-size: 7pt; margin: 2pt 0; }
+  .cv-credentials p { margin: 1pt 0; }
   .cv-profile { margin-bottom: 5pt; }
   .cv-section-heading { margin-top: 5pt; }
   .cv-section-heading h2 { font-size: 11pt; }

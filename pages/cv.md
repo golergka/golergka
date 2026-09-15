@@ -2,7 +2,7 @@
 
 <p id="cv-generation-note" class="cv-generation-note" hidden></p>
 
-<div id="cv-profile" class="cv-profile">{{cvProfile}}</div>
+<div id="cv-profile" class="cv-profile">{{cvProfile}}{{cvExpertise}}{{cvCredentials}}</div>
 
 <p class="cv-export-actions" hidden><button type="button" id="cv-export">Download PDF</button> <span id="cv-pdf-status" role="status"></span></p>
 

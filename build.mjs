@@ -14,7 +14,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { marked } from "marked";
 import { createHighlighter } from "shiki";
-import { renderProfile, renderTags, renderWork } from "./theme/cv-render.mjs";
+import { defaultTags, renderCredentials, renderExpertise, renderProfile, renderTags, renderWork } from "./theme/cv-render.mjs";
 
 const SITE_NAME = "Max Yankov";
 const SITE_URL = "https://golergka.com";
@@ -168,6 +168,9 @@ const cvData = {
   recentWork: cvSource.recentWork,
   artifacts: cvSource.artifacts,
   work: cvSource.work.map(({ dateNote, ...work }) => work),
+  skills: cvSource.skills,
+  education: cvSource.education,
+  languages: cvSource.languages,
 };
 const cvRenderer = fs.readFileSync(path.join(theme, "cv-render.mjs"), "utf8");
 const cvRendererName = `render.${createHash("sha256").update(cvRenderer).digest("hex").slice(0, 8)}.js`;
@@ -271,8 +274,10 @@ for (const page of pages) {
   if (page.slug === "cv") {
     html = render(html, {
       cvProfile: renderProfile(cvData.profile),
+      cvExpertise: renderExpertise(cvData.filters, new Set(defaultTags)),
+      cvCredentials: renderCredentials(cvData),
       cvTags: renderTags(cvData.filters),
-      cvWork: renderWork(cvData),
+      cvWork: renderWork(cvData, new Set(), { staticView: true, complete: true }),
       cvData: JSON.stringify(cvData).replaceAll("<", "\\u003c"),
       cvScript: `/cv/${cvScriptName}`,
     });

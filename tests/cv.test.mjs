@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { defaultTags, partitionWork, renderTags, renderWork } from "../theme/cv-render.mjs";
+import { defaultTags, expertiseLabels, partitionWork, renderCredentials, renderExpertise, renderTags, renderWork } from "../theme/cv-render.mjs";
 import { createCvPdf } from "../theme/cv-pdf.mjs";
 import { createTopicColorDirectory, CV_TEXT_SELECTION_HUE } from "../theme/cv-colors.mjs";
 import { jsPDF } from "jspdf";
@@ -58,6 +58,23 @@ test("topic colors use fixed perceptual brightness tuned for light and dark mode
 
 test("the public CV defaults to the four agent-focused topics", () => {
   assert.deepEqual(defaultTags, ["automation", "evals", "livekit", "knowledge-graphs"]);
+});
+
+test("selected expertise and credentials are explicit text", () => {
+  const selected = new Set(defaultTags);
+  assert.deepEqual(expertiseLabels(data.filters, selected), ["Agent workflows", "LLM evaluation", "LiveKit / voice AI", "Knowledge graphs"]);
+  assert.match(renderExpertise(data.filters, selected), /Selected expertise:[\s\S]*Agent workflows[\s\S]*Knowledge graphs/);
+  const credentials = renderCredentials(data);
+  assert.match(credentials, /Education:[\s\S]*Moscow State University/);
+  assert.match(credentials, /Languages:[\s\S]*Spanish — intermediate[\s\S]*Ukrainian — beginner/);
+});
+
+test("the no-JavaScript CV contains the complete public timeline", () => {
+  const html = renderWork(data, new Set(), {staticView: true, complete: true});
+  assert.match(html, /334,000 emails and 150M source tokens/);
+  assert.match(html, /adOffer/);
+  assert.match(html, /raised seed investment, attracted the first advertisers/);
+  assert.doesNotMatch(html, /<details/);
 });
 
 test("topic color registry repairs visual collisions and respects every reserved color", () => {

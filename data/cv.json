@@ -368,13 +368,17 @@
           { "text": "testing, integration", "tags": ["developer-tools"] },
           { "text": "production delivery", "tags": ["production-engineering"] }
         ], "tags": ["agents", "autonomous-development", "developer-tools", "production-engineering"] },
-        { "text": "Instrumented and investigated production with OpenTelemetry, Better Stack, Braintrust, Sentry, and voice metrics covering STT, LLM, TTS, VAD, silence, latency, and usage.", "emphases": [
+        { "text": "Instrumented and investigated production with OpenTelemetry, Better Stack, Braintrust, Sentry, and voice metrics covering speech-to-text (STT), large language models (LLMs), text-to-speech (TTS), voice activity detection (VAD), silence, latency, and usage.", "emphases": [
           { "text": "Instrumented and investigated production", "tags": ["production-engineering", "observability"] },
           { "text": "OpenTelemetry", "tags": ["opentelemetry"] },
           { "text": "Better Stack", "tags": ["betterstack"] },
           { "text": "Braintrust", "tags": ["braintrust"] },
           { "text": "voice metrics", "tags": ["observability", "livekit"] }
-        ], "tags": ["observability", "betterstack", "braintrust", "opentelemetry", "production-engineering", "livekit"] }
+        ], "tags": ["observability", "betterstack", "braintrust", "opentelemetry", "production-engineering", "livekit"] },
+        { "text": "Kept agent responses highly responsive at roughly 200–500 ms while tool calls and longer-running work continued in the background.", "emphases": [
+          { "text": "roughly 200–500 ms", "tags": ["livekit", "production-engineering"] },
+          { "text": "tool calls and longer-running work continued in the background", "tags": ["automation", "backend"] }
+        ], "tags": ["livekit", "production-engineering", "automation", "backend"] }
       ],
       "tags": ["leadership", "agents", "livekit", "model-infrastructure", "product", "backend", "platform", "twilio", "quo", "automation", "safety", "evals", "braintrust", "betterstack", "observability", "production-engineering", "developer-tools", "postgres", "typescript", "frontend", "autonomous-development", "opentelemetry"]
     },
@@ -386,7 +390,8 @@
       "location": "USA / remote",
       "url": "https://jam.dev",
       "links": [{ "label": "LinkedIn company", "url": "https://www.linkedin.com/company/75655821/" }],
-      "summary": "Collaborative bug reporting, as an engineer on a small Series A team.",
+      "summary": "Collaborative bug reporting for a product used by 250,000+ users, as an engineer on a small Series A team.",
+      "factSources": [{ "claim": "250,000+ users", "url": "https://jam.dev/", "checked": "2026-09-15" }],
       "summaryEmphasis": "Collaborative bug reporting",
       "summaryEmphasisTags": ["developer-tools", "product"],
       "summaryTags": ["developer-tools", "product"],
@@ -425,7 +430,8 @@
       "location": "USA / remote",
       "url": "https://popsql.com",
       "links": [{ "label": "LinkedIn company", "url": "https://www.linkedin.com/company/18775391/" }],
-      "summary": "Worked across frontend, services, data infrastructure, and product delivery for a collaborative SQL editor.",
+      "summary": "Worked across frontend, services, data infrastructure, and product delivery for a collaborative SQL editor used by 2,000+ companies.",
+      "factSources": [{ "claim": "2,000+ companies", "url": "https://popsql.com/blog/series-a", "published": "2022-02-09" }],
       "summaryEmphasis": "collaborative SQL editor",
       "summaryEmphasisTags": ["ides"],
       "summaryTags": ["ides"],
@@ -851,7 +857,7 @@
     "Mathematics class, Moscow State School 57",
     "Studied Bioengineering and Bioinformatics at Moscow State University"
   ],
-  "languages": ["Russian — native", "English — excellent (TOEFL 114/120 in prior CV)", "Hebrew — intermediate in prior CV"],
+  "languages": ["Russian — native", "English — excellent (TOEFL 114/120)", "Hebrew — intermediate", "Spanish — intermediate", "Ukrainian — beginner"],
   "editorialNotes": [
     "This is the source record, not a single application-ready CV.",
     "Verify conflicting end dates for Sofq Games and Hypetrain Digital before external use.",

@@ -20,7 +20,9 @@ export function pdfBlocks(root) {
     block(root.querySelector(".cv-generation-note"), 8, 5, {color:85}),
     block(root.querySelector(".cv-headline"), 11, 3),
     block(root.querySelector(".cv-global-lead"), 9, 3),
+    block(root.querySelector(".cv-expertise"), 8, 2),
     block(root.querySelector(".cv-links"), 8, 7),
+    ...[...root.querySelectorAll(".cv-credentials p")].map((node) => block(node, 8, 2)),
   ]);
   groups.push([block(root.querySelector(".cv-section-heading h2"), 12, 5)]);
   for (const entry of root.querySelector("#cv-app").children) {

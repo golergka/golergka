@@ -1,4 +1,4 @@
-import { renderWork, defaultTags, partitionWork, escapeHtml, buildTopicGraph, sourceForTag, matchesTags } from "./cv-render.mjs";
+import { renderWork, defaultTags, expertiseLabels, partitionWork, escapeHtml, buildTopicGraph, sourceForTag, matchesTags } from "./cv-render.mjs";
 import { createTopicColorDirectory, CV_TEXT_SELECTION_HUE } from "./cv-colors.mjs";
 
 const data = JSON.parse(document.querySelector("#cv-data").textContent);
@@ -163,9 +163,10 @@ function render() {
     : `${individual.length} experiences${groupedLabel}`;
   clearButton.disabled = selected.size === 0;
   const topics = data.filters.filter(({id}) => selected.has(id)).map(({label}) => label).join(", ");
+  document.querySelector("#cv-expertise-topics").textContent = expertiseLabels(data.filters, selected).join(" · ");
   const publicUrl = new URL(document.querySelector('link[rel="canonical"]').href);
   publicUrl.searchParams.set("tags", [...selected].join(","));
-  generationNote.innerHTML = `Generated ${topics ? `for ${escapeHtml(topics)}` : "overview"} · <a href="${escapeHtml(publicUrl.href)}">Full CV</a>`;
+  generationNote.innerHTML = `Generated ${topics ? `for ${escapeHtml(topics)}` : "overview"} · <a href="${escapeHtml(publicUrl.href)}">golergka.com/cv/</a>`;
   generationNote.hidden = true;
   return applyTopicHighlights();
 }
