@@ -327,19 +327,9 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
   background: linear-gradient(178deg, transparent 10%, var(--topic-hover-color) 10% 91%, transparent 91%);
   box-shadow: none;
 }
-#cv-app { view-transition-name: cv-experience-list; }
 html.cv-scroll-lock,
 html.cv-scroll-lock body,
 html.cv-scroll-lock #cv-app { overflow-anchor: none; }
-::view-transition-old(cv-experience-list),
-::view-transition-new(cv-experience-list) {
-  animation-duration: 140ms;
-  animation-timing-function: ease-out;
-}
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(cv-experience-list),
-  ::view-transition-new(cv-experience-list) { animation: none; }
-}
 .cv-topic-suggestions { margin: 0.65rem 0 0; font-size: 0.85rem; }
 .cv-topic-suggestions .cv-topic-select { font-size: inherit; }
 .cv-topic-suggestions-label { color: var(--cv-muted); }

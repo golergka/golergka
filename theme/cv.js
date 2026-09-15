@@ -182,16 +182,29 @@ function update() {
 function captureScrollAnchor(control) {
   const role = control?.closest?.(".cv-role");
   const suggestions = control?.closest?.(".cv-topic-suggestions");
-  const node = suggestions || control?.closest?.("[data-select-tag]") || role || control;
+  const evidence = control?.closest?.("[data-highlightable-topics]");
+  const node = suggestions || evidence || control?.closest?.("[data-select-tag]") || role || control;
   if (!node) return () => {};
   const top = node.getBoundingClientRect().top;
   const roleId = role?.id;
   const isSuggestionLine = node.classList?.contains("cv-topic-suggestions");
+  const evidenceTopics = evidence?.dataset.highlightableTopics;
+  const evidenceText = evidence?.textContent;
+  const evidenceIndex = evidence && role
+    ? [...role.querySelectorAll("[data-highlightable-topics]")]
+      .filter((candidate) => candidate.dataset.highlightableTopics === evidenceTopics && candidate.textContent === evidenceText)
+      .indexOf(evidence)
+    : -1;
   const tag = node.dataset?.selectTag;
   const id = node.id;
   return () => {
     const nextRole = roleId ? document.getElementById(roleId) : null;
+    const matchingEvidence = evidenceTopics && nextRole
+      ? [...nextRole.querySelectorAll("[data-highlightable-topics]")]
+        .filter((candidate) => candidate.dataset.highlightableTopics === evidenceTopics && candidate.textContent === evidenceText)
+      : [];
     const next = isSuggestionLine ? nextRole?.querySelector(".cv-topic-suggestions") || nextRole
+      : evidence ? matchingEvidence[evidenceIndex] || matchingEvidence[0] || nextRole
       : tag ? tagsNode.querySelector(`[data-select-tag="${tag}"]`)
         : nextRole || (id ? document.getElementById(id) : null);
     if (!next) return;
@@ -205,28 +218,17 @@ function updateWithAnchor(control, change) {
   const root = document.documentElement;
   root.classList.add("cv-scroll-lock");
   if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-  const apply = async () => {
-    change();
-    await update();
-  };
-  const restoreAfterLayout = () => new Promise((resolve) => requestAnimationFrame(() => {
+  change();
+  const rendered = update();
+  restoreScroll();
+  const finish = () => requestAnimationFrame(() => {
     restoreScroll();
     requestAnimationFrame(() => {
       restoreScroll();
-      resolve();
+      root.classList.remove("cv-scroll-lock");
     });
-  }));
-  const finish = () => {
-    restoreScroll();
-    root.classList.remove("cv-scroll-lock");
-  };
-  if (document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const transition = document.startViewTransition(apply);
-    void transition.updateCallbackDone.then(restoreAfterLayout, restoreAfterLayout);
-    void transition.finished.then(finish, finish);
-  } else {
-    void apply().then(restoreAfterLayout).then(finish, finish);
-  }
+  });
+  void rendered.then(finish, finish);
 }
 
 function toggleTopic(control) {
@@ -247,6 +249,17 @@ function prepareHoverHighlight(element) {
   if (topic && allowed.has(topic)) element.style.setProperty("--topic-hover-color", hoverTopicColor(topic));
 }
 
+function toggleEvidenceTopic(evidence) {
+  const selectedTopic = evidence?.dataset.highlightTopics?.split(",").find((tag) => selected.has(tag));
+  const topic = selectedTopic || evidence?.dataset.highlightableTopics?.split(",")[0];
+  if (!topic || !allowed.has(topic)) return false;
+  updateWithAnchor(evidence, () => {
+    if (selected.has(topic)) selected.delete(topic);
+    else selected.add(topic);
+  });
+  return true;
+}
+
 controls.addEventListener("mousedown", preventTopicTextSelection);
 controls.addEventListener("dblclick", preventTopicTextSelection);
 controls.addEventListener("click", (event) => {
@@ -264,11 +277,7 @@ appNode.addEventListener("dblclick", preventTopicTextSelection);
 appNode.addEventListener("pointerover", (event) => prepareHoverHighlight(event.target.closest?.("[data-highlightable-topics]")));
 appNode.addEventListener("click", (event) => {
   const evidence = event.target.closest?.("[data-highlightable-topics]");
-  const evidenceTag = evidence?.dataset.highlightableTopics?.split(",")[0];
-  if (evidenceTag && allowed.has(evidenceTag)) {
-    updateWithAnchor(evidence, () => selected.add(evidenceTag));
-    return;
-  }
+  if (toggleEvidenceTopic(evidence)) return;
   const control = event.target.closest?.("[data-add-tag]");
   const tag = control?.dataset.addTag;
   if (!tag || !allowed.has(tag)) return;
@@ -277,10 +286,9 @@ appNode.addEventListener("click", (event) => {
 appNode.addEventListener("keydown", (event) => {
   if (event.key !== "Enter" && event.key !== " ") return;
   const evidence = event.target.closest?.("[data-highlightable-topics]");
-  const evidenceTag = evidence?.dataset.highlightableTopics?.split(",")[0];
-  if (evidenceTag && allowed.has(evidenceTag)) {
+  if (evidence) {
     event.preventDefault();
-    updateWithAnchor(evidence, () => selected.add(evidenceTag));
+    toggleEvidenceTopic(evidence);
     return;
   }
   const control = event.target.closest?.("[data-add-tag]");

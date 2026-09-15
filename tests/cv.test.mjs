@@ -97,20 +97,18 @@ test("topic clicks cannot create browser text selections", () => {
   assert.match(script, /appNode\.addEventListener\("dblclick", preventTopicTextSelection\)/);
 });
 
-test("topic changes preserve the clicked anchor and use a short view transition", () => {
+test("topic changes preserve the exact clicked anchor without an intermediate page transition", () => {
   const script = readFileSync(new URL("../theme/cv.js", import.meta.url), "utf8");
   const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
   assert.match(script, /function captureScrollAnchor\(control\)/);
   assert.match(script, /control\?\.closest\?\.\("\.cv-topic-suggestions"\)/);
   assert.match(script, /nextRole\?\.querySelector\("\.cv-topic-suggestions"\)/);
+  assert.match(script, /control\?\.closest\?\.\("\[data-highlightable-topics\]"\)/);
+  assert.match(script, /candidate\.dataset\.highlightableTopics === evidenceTopics && candidate\.textContent === evidenceText/);
   assert.match(script, /window\.scrollBy\(0, delta\)/);
-  assert.match(script, /document\.startViewTransition\(apply\)/);
-  assert.match(script, /transition\.updateCallbackDone\.then\(restoreAfterLayout/);
-  assert.match(script, /transition\.finished\.then\(finish, finish\)/);
-  assert.match(script, /prefers-reduced-motion: reduce/);
+  assert.doesNotMatch(script, /startViewTransition/);
+  assert.doesNotMatch(css, /view-transition-name/);
   assert.match(css, /html\.cv-scroll-lock #cv-app \{ overflow-anchor: none; \}/);
-  assert.match(css, /view-transition-name: cv-experience-list/);
-  assert.match(css, /animation-duration: 140ms/);
 });
 
 test("every evidence phrase can be highlighted independently on hover", () => {
@@ -121,7 +119,9 @@ test("every evidence phrase can be highlighted independently on hover", () => {
   assert.match(html, /data-highlightable-topics="[^"]+" role="button" tabindex="0"/);
   assert.match(script, /pointerover/);
   assert.match(script, /topicColor\(tag, 0\.31\)/);
-  assert.match(script, /updateWithAnchor\(evidence, \(\) => selected\.add\(evidenceTag\)\)/);
+  assert.match(script, /function toggleEvidenceTopic\(evidence\)/);
+  assert.match(script, /if \(selected\.has\(topic\)\) selected\.delete\(topic\)/);
+  assert.match(script, /else selected\.add\(topic\)/);
   assert.match(css, /\.cv-highlightable:hover,[\s\S]*?\.cv-topic-mark:hover[\s\S]*?--topic-hover-color/);
 });
 
