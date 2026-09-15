@@ -278,7 +278,7 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
   -webkit-user-select: none;
 }
 .cv-topic-list > [data-depth="0"] > .cv-topic-select { font-weight: bold; }
-.cv-topic-select > .cv-topic-selector-mark { padding-inline: 0.08em; }
+.cv-topic-select > .cv-topic-selector-mark { padding-inline: 0; }
 .cv-topic-select:focus-visible { outline: 2px solid LinkText; outline-offset: 3px; }
 .cv-topic-placeholder { color: var(--cv-muted); cursor: default; }
 #cv-clear { position: absolute; top: 1.15rem; right: 0; padding: 0; margin: 0; border: 0; color: LinkText; background: none; font: inherit; font-size: 0.9rem; text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
@@ -298,7 +298,7 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
 .cv-points { margin: 0.7rem 0 0; padding-left: 1.15rem; }
 .cv-points li { padding-left: 0.15rem; margin: 0.3rem 0; }
 .cv-topic-mark {
-  padding-inline: 0.05em;
+  padding-inline: 0;
   color: inherit;
   background: linear-gradient(178deg, transparent 10%, var(--topic-color, var(--cv-highlight)) 10% 91%, transparent 91%);
   box-shadow: inset 0 -0.11em var(--topic-color-2, transparent), inset 0 -0.22em var(--topic-color-3, transparent);

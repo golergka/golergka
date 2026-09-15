@@ -77,6 +77,9 @@ test("topic highlighting uses Mark.js for selectors and experience evidence", ()
   assert.match(script, /cv-topic-implied-partial/);
   assert.match(css, /\.cv-topic-mark\[data-highlight-derived="true"\] \{[\s\S]*?repeating-linear-gradient/);
   assert.match(css, /color-mix\(in srgb, var\(--topic-color\) 48%, transparent\)/);
+  assert.match(css, /\.cv-topic-mark \{[\s\S]*?padding-inline: 0;/);
+  assert.match(css, /\.cv-topic-select > \.cv-topic-selector-mark \{ padding-inline: 0; \}/);
+  assert.doesNotMatch(css, /\.cv-topic-mark \{[\s\S]*?padding-inline: 0\.\d/);
   assert.doesNotMatch(script, /rough-notation|ResizeObserver/);
 });
 
