@@ -312,6 +312,17 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
     transparent 88%);
   box-shadow: inset 0 -0.06em color-mix(in srgb, var(--topic-color) 58%, transparent);
 }
+.cv-highlightable {
+  color: inherit;
+  background: transparent;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.cv-highlightable:hover,
+.cv-topic-mark:hover {
+  background: linear-gradient(178deg, transparent 10%, var(--topic-hover-color) 10% 91%, transparent 91%);
+  box-shadow: none;
+}
 #cv-app { view-transition-name: cv-experience-list; }
 ::view-transition-old(cv-experience-list),
 ::view-transition-new(cv-experience-list) {

@@ -1,4 +1,4 @@
-export const defaultTags = [];
+export const defaultTags = ["automation", "evals", "livekit", "knowledge-graphs"];
 
 export const escapeHtml = (value) => String(value)
   .replaceAll("&", "&amp;").replaceAll("<", "&lt;")
@@ -60,18 +60,23 @@ export const matchesTags = (tags, selected, aliases, graph) => matchSources(tags
 
 function highlightText(point, selected, labels, aliases, graph) {
   const matching = matchSources(point.tags, selected, aliases, graph);
-  const explicitEmphases = (point.emphases || []).map((emphasis) => ({
-    ...emphasis,
-    sources: matchSources(emphasis.tags || [], selected, aliases, graph),
-  })).filter((emphasis) => emphasis.sources.length && point.text.includes(emphasis.text))
-    .map((emphasis) => ({
+  const rawEmphases = point.emphases?.length ? point.emphases
+    : point.emphasis ? [{text: point.emphasis, tags: point.emphasisTags || point.tags || []}] : [];
+  const explicitEmphases = rawEmphases.filter(({text}) => point.text.includes(text)).map((emphasis) => {
+    const hoverTags = canonicalTags(emphasis.tags || [], aliases);
+    const sources = matchSources(hoverTags, selected, aliases, graph);
+    return {
       ...emphasis,
-      tags: emphasis.sources.map(({topic}) => topic),
-      derived: emphasis.sources.every(({derived}) => derived),
-    }));
-  const explicitlyCovered = new Set(explicitEmphases.flatMap(({tags}) => tags));
+      hoverTags,
+      sources,
+      tags: sources.map(({topic}) => topic),
+      derived: sources.length > 0 && sources.every(({derived}) => derived),
+      selected: sources.length > 0,
+    };
+  });
+  const explicitlyCovered = new Set(explicitEmphases.filter(({selected}) => selected).flatMap(({tags}) => tags));
   const automaticEmphases = matching.filter(({topic, derived}) => !derived && !explicitlyCovered.has(topic))
-    .map(({topic}) => ({text: labels.get(topic), tags: [topic], derived: false}))
+    .map(({topic}) => ({text: labels.get(topic), tags: [topic], hoverTags: [topic], derived: false, selected: true}))
     .filter(({text}) => text && point.text.includes(text));
   const emphases = [...explicitEmphases, ...automaticEmphases];
   if (emphases.length) {
@@ -85,18 +90,13 @@ function highlightText(point, selected, labels, aliases, graph) {
     return ranges.map((range) => {
       const prefix = escapeHtml(point.text.slice(cursor, range.start));
       cursor = range.end;
-      return `${prefix}<mark data-highlight-topics="${escapeHtml(range.tags.join(","))}"${range.derived ? ' data-highlight-derived="true"' : ""} title="${escapeHtml(range.tags.map((tag) => labels.get(tag)).join(", "))}">${escapeHtml(range.text)}</mark>`;
+      const hoverTopics = escapeHtml(range.hoverTags.join(","));
+      const hoverTitle = escapeHtml(range.hoverTags.map((tag) => labels.get(tag)).filter(Boolean).join(", "));
+      if (!range.selected) return `${prefix}<span class="cv-highlightable" data-highlightable-topics="${hoverTopics}" title="${hoverTitle}">${escapeHtml(range.text)}</span>`;
+      return `${prefix}<mark data-highlight-topics="${escapeHtml(range.tags.join(","))}" data-highlightable-topics="${hoverTopics}"${range.derived ? ' data-highlight-derived="true"' : ""} title="${escapeHtml(range.tags.map((tag) => labels.get(tag)).join(", "))}">${escapeHtml(range.text)}</mark>`;
     }).join("") + escapeHtml(point.text.slice(cursor));
   }
-  let text = escapeHtml(point.text);
-  const fallbackSources = matchSources(point.emphasisTags || [], selected, aliases, graph);
-  const fallbackMatching = fallbackSources.map(({topic}) => topic);
-  if (fallbackMatching.length && point.emphasis) {
-    const phrase = escapeHtml(point.emphasis);
-    const derived = fallbackSources.every((source) => source.derived);
-    text = text.replace(phrase, `<mark data-highlight-topics="${escapeHtml(fallbackMatching.join(","))}"${derived ? ' data-highlight-derived="true"' : ""} title="${escapeHtml(fallbackMatching.map((tag) => labels.get(tag)).join(", "))}">${phrase}</mark>`);
-  }
-  return text;
+  return escapeHtml(point.text);
 }
 
 const renderPoint = (point, selected, labels, aliases, graph) => `<li>${highlightText(point, selected, labels, aliases, graph)}</li>`;

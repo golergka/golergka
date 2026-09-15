@@ -28,6 +28,10 @@ const topicColors = createTopicColorDirectory(
 );
 const topicColor = (tag, alpha = 0.62) => topicColors.color(tag, alpha);
 const partialTopicColor = (tag) => topicColor(tag, 0.48);
+const hoverTopicColor = (tag) => {
+  topicColors.ensure(tag);
+  return topicColor(tag, 0.5);
+};
 
 function loadMarkLibrary() {
   markLibrary ||= new Promise((resolve, reject) => {
@@ -71,9 +75,12 @@ async function applyTopicHighlights() {
     if (epoch !== highlightEpoch || marks.some((mark) => !mark.isConnected)) return;
     const styleHighlight = (element, range) => {
       element.dataset.highlightTopics = range.topics.join(",");
+      const hoverTopics = range.hoverTopics?.length ? range.hoverTopics : range.topics;
+      element.dataset.highlightableTopics = hoverTopics.join(",");
       if (range.derived) element.dataset.highlightDerived = "true";
       if (range.title) element.title = range.title;
       element.style.setProperty("--topic-color", range.derived ? partialTopicColor(range.topics[0]) : topicColor(range.topics[0]));
+      element.style.setProperty("--topic-hover-color", hoverTopicColor(hoverTopics[0]));
       element.style.setProperty("--topic-color-2", range.topics[1] ? topicColor(range.topics[1], 0.95) : "transparent");
       element.style.setProperty("--topic-color-3", range.topics[2] ? topicColor(range.topics[2], 0.95) : "transparent");
     };
@@ -87,6 +94,7 @@ async function applyTopicHighlights() {
         start: before.toString().length,
         length: mark.textContent.length,
         topics: mark.dataset.highlightTopics.split(",").filter(Boolean),
+        hoverTopics: mark.dataset.highlightableTopics.split(",").filter(Boolean),
         title: mark.title,
         derived: mark.dataset.highlightDerived === "true",
       };
@@ -212,6 +220,11 @@ function preventTopicTextSelection(event) {
   if (event.target.closest?.("[data-select-tag], [data-add-tag]")) event.preventDefault();
 }
 
+function prepareHoverHighlight(element) {
+  const topic = element?.dataset.highlightableTopics?.split(",")[0];
+  if (topic && allowed.has(topic)) element.style.setProperty("--topic-hover-color", hoverTopicColor(topic));
+}
+
 controls.addEventListener("mousedown", preventTopicTextSelection);
 controls.addEventListener("dblclick", preventTopicTextSelection);
 controls.addEventListener("click", (event) => {
@@ -226,6 +239,7 @@ controls.addEventListener("keydown", (event) => {
 });
 appNode.addEventListener("mousedown", preventTopicTextSelection);
 appNode.addEventListener("dblclick", preventTopicTextSelection);
+appNode.addEventListener("pointerover", (event) => prepareHoverHighlight(event.target.closest?.("[data-highlightable-topics]")));
 appNode.addEventListener("click", (event) => {
   const control = event.target.closest?.("[data-add-tag]");
   const tag = control?.dataset.addTag;

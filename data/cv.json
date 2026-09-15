@@ -324,7 +324,9 @@
           { "text": "OpenAI", "tags": ["model-infrastructure"] }
         ], "tags": ["agents", "livekit", "model-infrastructure", "product", "backend"] },
         { "text": "Built inbound and outbound voice, SMS, and email communication with Twilio, LiveKit SIP/PSTN, AWS, and Quo (formerly OpenPhone).", "emphases": [
-          { "text": "inbound and outbound voice, SMS, and email communication", "tags": ["product"] },
+          { "text": "inbound and outbound voice", "tags": ["product"] },
+          { "text": "SMS", "tags": ["product", "twilio"] },
+          { "text": "email communication", "tags": ["product"] },
           { "text": "Twilio", "tags": ["twilio"] },
           { "text": "LiveKit SIP/PSTN", "tags": ["livekit", "backend", "platform"] },
           { "text": "AWS", "tags": ["platform"] },

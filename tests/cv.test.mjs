@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { partitionWork, renderTags, renderWork } from "../theme/cv-render.mjs";
+import { defaultTags, partitionWork, renderTags, renderWork } from "../theme/cv-render.mjs";
 import { createCvPdf } from "../theme/cv-pdf.mjs";
 import { createTopicColorDirectory, CV_TEXT_SELECTION_HUE } from "../theme/cv-colors.mjs";
 import { jsPDF } from "jspdf";
@@ -44,6 +44,10 @@ test("native text selection has a permanently reserved topic hue", () => {
   const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
   assert.match(script, /--cv-text-selection/);
   assert.match(css, /::selection \{ color: inherit; background: var\(--cv-text-selection\); \}/);
+});
+
+test("the public CV defaults to the four agent-focused topics", () => {
+  assert.deepEqual(defaultTags, ["automation", "evals", "livekit", "knowledge-graphs"]);
 });
 
 test("topic color registry repairs visual collisions and respects every reserved color", () => {
@@ -102,6 +106,16 @@ test("topic changes preserve the clicked anchor and use a short view transition"
   assert.match(script, /prefers-reduced-motion: reduce/);
   assert.match(css, /view-transition-name: cv-experience-list/);
   assert.match(css, /animation-duration: 140ms/);
+});
+
+test("every evidence phrase can be highlighted independently on hover", () => {
+  const html = renderWork(data, new Set());
+  const script = readFileSync(new URL("../theme/cv.js", import.meta.url), "utf8");
+  const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
+  assert.match(html, /class="cv-highlightable" data-highlightable-topics="/);
+  assert.match(script, /pointerover/);
+  assert.match(script, /topicColor\(tag, 0\.5\)/);
+  assert.match(css, /\.cv-highlightable:hover,[\s\S]*?\.cv-topic-mark:hover[\s\S]*?--topic-hover-color/);
 });
 
 test("every topic combination retains every experience and chronological group placement", () => {
@@ -163,21 +177,21 @@ test("topics form semantic trees without visual category buckets", () => {
 
 test("direct visual children are solid while DAG relatives are partial", () => {
   const observability = renderWork(data, new Set(["observability"]));
-  assert.match(observability, /data-highlight-topics="observability" data-highlight-derived="true"[^>]*>Better Stack<\/mark>/);
-  assert.match(observability, /data-highlight-topics="observability" data-highlight-derived="true"[^>]*>Datadog<\/mark>/);
-  assert.match(observability, /data-highlight-topics="observability" data-highlight-derived="true"[^>]*>OpenTelemetry<\/mark>/);
-  assert.match(observability, /data-highlight-topics="observability" data-highlight-derived="true"[^>]*>Braintrust<\/mark>/);
+  assert.match(observability, /data-highlight-topics="observability"[^>]*data-highlight-derived="true"[^>]*>Better Stack<\/mark>/);
+  assert.match(observability, /data-highlight-topics="observability"[^>]*data-highlight-derived="true"[^>]*>Datadog<\/mark>/);
+  assert.match(observability, /data-highlight-topics="observability"[^>]*data-highlight-derived="true"[^>]*>OpenTelemetry<\/mark>/);
+  assert.match(observability, /data-highlight-topics="observability"[^>]*data-highlight-derived="true"[^>]*>Braintrust<\/mark>/);
   const reliability = renderWork(data, new Set(["production-engineering"]));
-  assert.match(reliability, /data-highlight-topics="production-engineering" title="Reliability &amp; operations">Better Stack<\/mark>/);
+  assert.match(reliability, /data-highlight-topics="production-engineering"[^>]*title="Reliability &amp; operations">Better Stack<\/mark>/);
   const exact = renderWork(data, new Set(["betterstack"]));
-  assert.match(exact, /data-highlight-topics="betterstack" title="Better Stack">Better Stack<\/mark>/);
+  assert.match(exact, /data-highlight-topics="betterstack"[^>]*title="Better Stack">Better Stack<\/mark>/);
   assert.doesNotMatch(exact, /data-highlight-topics="betterstack" data-highlight-derived/);
 });
 
 test("leadership terms in role titles carry explicit topic evidence", () => {
   const founder = renderWork(data, new Set(["founder"]));
-  assert.match(founder, /cv-role-name"><mark data-highlight-topics="founder"[^>]*>Founder<\/mark> &amp; Product Engineer/);
-  assert.match(founder, /cv-role-name"><mark data-highlight-topics="founder"[^>]*>Co-Founder<\/mark> &amp; CTO/);
+  assert.match(founder, /cv-role-name"><mark data-highlight-topics="founder"[^>]*>Founder<\/mark>/);
+  assert.match(founder, /cv-role-name"><mark data-highlight-topics="founder"[^>]*>Co-Founder<\/mark>/);
   assert.match(founder, /cv-role-name"><mark data-highlight-topics="founder"[^>]*>CEO<\/mark> &amp; <mark data-highlight-topics="founder"[^>]*>Founder<\/mark>/);
 
   const leadership = renderWork(data, new Set(["leadership"]));
@@ -222,11 +236,11 @@ test("topic relationships form a directed acyclic graph independent of the visua
 
 test("agent and voice topics expose their related technologies", () => {
   const workflows = renderWork(data, new Set(["automation"]));
-  assert.match(workflows, /data-highlight-topics="automation" data-highlight-derived="true"[^>]*>Pydantic AI<\/mark>/);
+  assert.match(workflows, /data-highlight-topics="automation"[^>]*data-highlight-derived="true"[^>]*>Pydantic AI<\/mark>/);
   const pydantic = renderWork(data, new Set(["pydantic-ai"]));
-  assert.match(pydantic, /data-highlight-topics="pydantic-ai" data-highlight-derived="true"[^>]*>Python backend<\/mark>/);
+  assert.match(pydantic, /data-highlight-topics="pydantic-ai"[^>]*data-highlight-derived="true"[^>]*>Python backend<\/mark>/);
   const voice = renderWork(data, new Set(["livekit"]));
-  assert.match(voice, /data-highlight-topics="livekit" data-highlight-derived="true"[^>]*>Quo \(formerly OpenPhone\)<\/mark>/);
+  assert.match(voice, /data-highlight-topics="livekit"[^>]*data-highlight-derived="true"[^>]*>Quo \(formerly OpenPhone\)<\/mark>/);
 });
 
 test("Coloph identifies structured business data for agents", () => {
@@ -265,6 +279,12 @@ test("voice AI is represented by the LiveKit topic", () => {
   const html = renderWork(data, new Set(["livekit"]));
   assert.match(html, /data-highlight-topics="livekit"[^>]*>LiveKit<\/mark>/);
   assert.doesNotMatch(html, /data-highlight-topics="livekit"[^>]*>voice-agent pipeline<\/mark>/);
+});
+
+test("Twilio highlights the exact SMS evidence", () => {
+  const html = renderWork(data, new Set(["twilio"]));
+  assert.match(html, /data-highlight-topics="twilio"[^>]*>SMS<\/mark>/);
+  assert.match(html, /data-highlight-topics="twilio"[^>]*>Twilio<\/mark>/);
 });
 
 test("Kubernetes highlights Kubernetes evidence, never adjacent deployment text", () => {
