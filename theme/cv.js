@@ -180,16 +180,20 @@ function update() {
 }
 
 function captureScrollAnchor(control) {
-  const node = control?.closest?.(".cv-role") || control?.closest?.("[data-select-tag]") || control;
+  const role = control?.closest?.(".cv-role");
+  const suggestions = control?.closest?.(".cv-topic-suggestions");
+  const node = suggestions || control?.closest?.("[data-select-tag]") || role || control;
   if (!node) return () => {};
   const top = node.getBoundingClientRect().top;
-  const roleId = node.classList?.contains("cv-role") ? node.id : null;
+  const roleId = role?.id;
+  const isSuggestionLine = node.classList?.contains("cv-topic-suggestions");
   const tag = node.dataset?.selectTag;
   const id = node.id;
   return () => {
-    const next = roleId ? document.getElementById(roleId)
+    const nextRole = roleId ? document.getElementById(roleId) : null;
+    const next = isSuggestionLine ? nextRole?.querySelector(".cv-topic-suggestions") || nextRole
       : tag ? tagsNode.querySelector(`[data-select-tag="${tag}"]`)
-        : id ? document.getElementById(id) : null;
+        : nextRole || (id ? document.getElementById(id) : null);
     if (!next) return;
     const delta = next.getBoundingClientRect().top - top;
     if (Math.abs(delta) > 0.5) window.scrollBy(0, delta);
@@ -198,15 +202,30 @@ function captureScrollAnchor(control) {
 
 function updateWithAnchor(control, change) {
   const restoreScroll = captureScrollAnchor(control);
+  const root = document.documentElement;
+  root.classList.add("cv-scroll-lock");
+  if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
   const apply = async () => {
     change();
     await update();
+  };
+  const restoreAfterLayout = () => new Promise((resolve) => requestAnimationFrame(() => {
     restoreScroll();
+    requestAnimationFrame(() => {
+      restoreScroll();
+      resolve();
+    });
+  }));
+  const finish = () => {
+    restoreScroll();
+    root.classList.remove("cv-scroll-lock");
   };
   if (document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    document.startViewTransition(apply);
+    const transition = document.startViewTransition(apply);
+    void transition.updateCallbackDone.then(restoreAfterLayout, restoreAfterLayout);
+    void transition.finished.then(finish, finish);
   } else {
-    void apply();
+    void apply().then(restoreAfterLayout).then(finish, finish);
   }
 }
 

@@ -101,9 +101,14 @@ test("topic changes preserve the clicked anchor and use a short view transition"
   const script = readFileSync(new URL("../theme/cv.js", import.meta.url), "utf8");
   const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
   assert.match(script, /function captureScrollAnchor\(control\)/);
+  assert.match(script, /control\?\.closest\?\.\("\.cv-topic-suggestions"\)/);
+  assert.match(script, /nextRole\?\.querySelector\("\.cv-topic-suggestions"\)/);
   assert.match(script, /window\.scrollBy\(0, delta\)/);
   assert.match(script, /document\.startViewTransition\(apply\)/);
+  assert.match(script, /transition\.updateCallbackDone\.then\(restoreAfterLayout/);
+  assert.match(script, /transition\.finished\.then\(finish, finish\)/);
   assert.match(script, /prefers-reduced-motion: reduce/);
+  assert.match(css, /html\.cv-scroll-lock #cv-app \{ overflow-anchor: none; \}/);
   assert.match(css, /view-transition-name: cv-experience-list/);
   assert.match(css, /animation-duration: 140ms/);
 });

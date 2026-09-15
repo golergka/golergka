@@ -328,6 +328,9 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
   box-shadow: none;
 }
 #cv-app { view-transition-name: cv-experience-list; }
+html.cv-scroll-lock,
+html.cv-scroll-lock body,
+html.cv-scroll-lock #cv-app { overflow-anchor: none; }
 ::view-transition-old(cv-experience-list),
 ::view-transition-new(cv-experience-list) {
   animation-duration: 140ms;
