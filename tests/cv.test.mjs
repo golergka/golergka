@@ -91,6 +91,8 @@ test("topics form semantic trees without visual category buckets", () => {
   assert.doesNotMatch(coloph, /cv-suggestion-group|data-filter-group/);
   assert.match(coloph, /cv-suggestion-options cv-topic-list/);
   assert.match(coloph, /class="cv-topic-select" role="button" tabindex="0" data-add-tag=/);
+  assert.match(css, /\.cv-topic-suggestions \{[^}]*font-size: 0\.85rem;/);
+  assert.match(css, /\.cv-topic-suggestions \.cv-topic-select \{ font-size: inherit; \}/);
   assert.match(coloph, /data-topic-toggle[\s\S]*cv-topic-children/);
 });
 

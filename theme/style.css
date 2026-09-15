@@ -336,7 +336,8 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
 .cv-role mark[data-highlight-derived="true"] {
   background: repeating-linear-gradient(135deg, var(--topic-color) 0 0.2em, transparent 0.2em 0.4em);
 }
-.cv-topic-suggestions { margin: 0.65rem 0 0; font-size: 0.9rem; }
+.cv-topic-suggestions { margin: 0.65rem 0 0; font-size: 0.85rem; }
+.cv-topic-suggestions .cv-topic-select { font-size: inherit; }
 .cv-topic-suggestions-label { color: var(--cv-muted); }
 .cv-topic-suggestions-label::after { content: ": "; }
 .cv-suggestion-options { display: inline; }
