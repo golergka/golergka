@@ -50,14 +50,16 @@ test("topic color registry repairs visual collisions and respects every reserved
   assert.ok(Object.values(repaired).every((hue) => circularDistance(colors.snapshot().product, hue) >= 12));
 });
 
-test("topic highlighting uses native inline marks, not positioned overlays", () => {
+test("topic highlighting uses Mark.js for selectors and experience evidence", () => {
   const script = readFileSync(new URL("../theme/cv.js", import.meta.url), "utf8");
   const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
   assert.match(script, /mark\.min\.js/);
   assert.match(script, /markRanges/);
+  assert.match(script, /new Mark\(button\)\.markRanges/);
+  assert.match(script, /cv-topic-selector-mark/);
   assert.match(script, /cv-topic-implied-partial/);
-  assert.match(css, /\.cv-topic-select\.cv-topic-implied \{[\s\S]*?linear-gradient/);
-  assert.match(css, /\.cv-topic-select\.cv-topic-implied-partial \{[\s\S]*?repeating-linear-gradient/);
+  assert.match(css, /\.cv-topic-mark\[data-highlight-derived="true"\] \{[\s\S]*?repeating-linear-gradient/);
+  assert.match(css, /color-mix\(in srgb, var\(--topic-color\) 48%, transparent\)/);
   assert.doesNotMatch(script, /rough-notation|ResizeObserver|getBoundingClientRect/);
 });
 

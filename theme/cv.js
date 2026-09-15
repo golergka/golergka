@@ -26,6 +26,7 @@ const topicColors = createTopicColorDirectory(
   },
 );
 const topicColor = (tag, alpha = 0.62) => topicColors.color(tag, alpha);
+const partialTopicColor = (tag) => topicColor(tag, 0.48);
 
 function loadMarkLibrary() {
   markLibrary ||= new Promise((resolve, reject) => {
@@ -41,7 +42,13 @@ function loadMarkLibrary() {
 
 async function applyTopicHighlights() {
   const epoch = ++highlightEpoch;
+  for (const mark of tagsNode.querySelectorAll("mark.cv-topic-selector-mark")) {
+    const parent = mark.parentElement;
+    mark.replaceWith(document.createTextNode(mark.textContent));
+    parent.normalize();
+  }
   const marks = [...document.querySelectorAll("mark[data-highlight-topics]")];
+  const selectorRanges = [];
   for (const button of tagsNode.querySelectorAll("[data-select-tag]")) {
     const tag = button.dataset.selectTag;
     const isSelected = selected.has(tag);
@@ -49,14 +56,26 @@ async function applyTopicHighlights() {
     button.classList.toggle("cv-topic-implied", Boolean(source));
     button.classList.toggle("cv-topic-implied-partial", Boolean(source?.derived));
     const colorTopic = isSelected ? tag : source?.topic;
-    if (colorTopic) button.style.setProperty("--topic-color", topicColor(colorTopic, source?.derived ? 0.27 : 0.62));
-    else button.style.removeProperty("--topic-color");
+    if (colorTopic) selectorRanges.push({
+      button,
+      range: {start: 0, length: button.textContent.length, topics: [colorTopic], derived: Boolean(source?.derived)},
+    });
   }
-  marks.forEach((mark) => mark.style.setProperty("--topic-color", topicColor(mark.dataset.highlightTopics.split(",")[0], mark.dataset.highlightDerived ? 0.27 : 0.62)));
-  if (!marks.length) return;
+  marks.forEach((mark) => mark.style.setProperty("--topic-color", mark.dataset.highlightDerived
+    ? partialTopicColor(mark.dataset.highlightTopics.split(",")[0])
+    : topicColor(mark.dataset.highlightTopics.split(",")[0])));
+  if (!marks.length && !selectorRanges.length) return;
   try {
     const Mark = await loadMarkLibrary();
     if (epoch !== highlightEpoch || marks.some((mark) => !mark.isConnected)) return;
+    const styleHighlight = (element, range) => {
+      element.dataset.highlightTopics = range.topics.join(",");
+      if (range.derived) element.dataset.highlightDerived = "true";
+      if (range.title) element.title = range.title;
+      element.style.setProperty("--topic-color", range.derived ? partialTopicColor(range.topics[0]) : topicColor(range.topics[0]));
+      element.style.setProperty("--topic-color-2", range.topics[1] ? topicColor(range.topics[1], 0.95) : "transparent");
+      element.style.setProperty("--topic-color-3", range.topics[2] ? topicColor(range.topics[2], 0.95) : "transparent");
+    };
     const groups = new Map();
     for (const mark of marks) {
       const parent = mark.parentElement;
@@ -81,13 +100,16 @@ async function applyTopicHighlights() {
         element: "mark",
         className: "cv-topic-mark",
         each(element, range) {
-          element.dataset.highlightTopics = range.topics.join(",");
-          if (range.derived) element.dataset.highlightDerived = "true";
-          element.title = range.title;
-          element.style.setProperty("--topic-color", topicColor(range.topics[0], range.derived ? 0.27 : 0.62));
-          element.style.setProperty("--topic-color-2", range.topics[1] ? topicColor(range.topics[1], 0.95) : "transparent");
-          element.style.setProperty("--topic-color-3", range.topics[2] ? topicColor(range.topics[2], 0.95) : "transparent");
+          styleHighlight(element, range);
         },
+      });
+    }
+    for (const {button, range} of selectorRanges) {
+      if (!button.isConnected) continue;
+      new Mark(button).markRanges([range], {
+        element: "mark",
+        className: "cv-topic-mark cv-topic-selector-mark",
+        each: styleHighlight,
       });
     }
   } catch (error) {

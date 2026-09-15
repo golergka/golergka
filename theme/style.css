@@ -277,21 +277,7 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
   -webkit-user-select: none;
 }
 .cv-topic-list > [data-depth="0"] > .cv-topic-select { font-weight: bold; }
-.cv-topic-select[aria-pressed="true"] {
-  padding-inline: 0.08em;
-  background: linear-gradient(177deg, transparent 9%, var(--topic-color, var(--cv-highlight)) 9% 91%, transparent 91%);
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-}
-.cv-topic-select.cv-topic-implied {
-  padding-inline: 0.08em;
-  background: linear-gradient(177deg, transparent 9%, var(--topic-color) 9% 91%, transparent 91%);
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-}
-.cv-topic-select.cv-topic-implied-partial {
-  background: repeating-linear-gradient(135deg, var(--topic-color) 0 0.18em, transparent 0.18em 0.36em);
-}
+.cv-topic-select > .cv-topic-selector-mark { padding-inline: 0.08em; }
 .cv-topic-select:focus-visible { outline: 2px solid LinkText; outline-offset: 3px; }
 .cv-topic-placeholder { color: var(--cv-muted); cursor: default; }
 #cv-clear { position: absolute; top: 1.15rem; right: 0; padding: 0; margin: 0; border: 0; color: LinkText; background: none; font: inherit; font-size: 0.9rem; text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
@@ -310,7 +296,7 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
 .cv-summary { margin: 0; }
 .cv-points { margin: 0.7rem 0 0; padding-left: 1.15rem; }
 .cv-points li { padding-left: 0.15rem; margin: 0.3rem 0; }
-.cv-role mark {
+.cv-topic-mark {
   padding-inline: 0.05em;
   color: inherit;
   background: linear-gradient(178deg, transparent 10%, var(--topic-color, var(--cv-highlight)) 10% 91%, transparent 91%);
@@ -318,8 +304,10 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
-.cv-role mark[data-highlight-derived="true"] {
-  background: repeating-linear-gradient(135deg, var(--topic-color) 0 0.2em, transparent 0.2em 0.4em);
+.cv-topic-mark[data-highlight-derived="true"] {
+  background: repeating-linear-gradient(135deg,
+    var(--topic-color) 0 0.28em,
+    color-mix(in srgb, var(--topic-color) 48%, transparent) 0.28em 0.46em);
 }
 .cv-topic-suggestions { margin: 0.65rem 0 0; font-size: 0.85rem; }
 .cv-topic-suggestions .cv-topic-select { font-size: inherit; }
