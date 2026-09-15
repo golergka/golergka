@@ -1,15 +1,25 @@
 const normalizeHue = (value) => ((Math.round(Number(value)) % 360) + 360) % 360;
 const hueDistance = (left, right) => Math.min(Math.abs(left - right), 360 - Math.abs(left - right));
+const MIN_SAVED_HUE_DISTANCE = 12;
 
 export function createTopicColorDirectory(topicIds, saved = {}, persist = () => {}) {
   const allowed = new Set(topicIds);
   const hues = new Map();
   const used = new Set();
+  let repaired = Object.keys(saved).some((topic) => !allowed.has(topic));
 
   for (const topic of topicIds) {
-    if (!Object.hasOwn(saved, topic) || !Number.isFinite(Number(saved[topic]))) continue;
+    if (!Object.hasOwn(saved, topic)) continue;
+    if (!Number.isFinite(Number(saved[topic]))) {
+      repaired = true;
+      continue;
+    }
     const hue = normalizeHue(saved[topic]);
-    if (used.has(hue)) continue;
+    if (Number(saved[topic]) !== hue) repaired = true;
+    if ([...used].some((reserved) => hueDistance(reserved, hue) < MIN_SAVED_HUE_DISTANCE)) {
+      repaired = true;
+      continue;
+    }
     hues.set(topic, hue);
     used.add(hue);
   }
@@ -17,9 +27,8 @@ export function createTopicColorDirectory(topicIds, saved = {}, persist = () => 
   const snapshot = () => Object.fromEntries(hues);
   const save = () => persist(snapshot());
 
-  function chooseHue(activeTopics) {
-    const activeHues = [...new Set([...activeTopics].map((topic) => hues.get(topic)).filter(Number.isFinite))];
-    const comparison = activeHues.length ? activeHues : [...hues.values()];
+  function chooseHue() {
+    const comparison = [...hues.values()];
     let bestHue = 346;
     let bestDistance = -1;
 
@@ -37,10 +46,10 @@ export function createTopicColorDirectory(topicIds, saved = {}, persist = () => 
     return bestHue;
   }
 
-  function ensure(topic, activeTopics = []) {
+  function ensure(topic) {
     if (!allowed.has(topic)) return null;
     if (hues.has(topic)) return hues.get(topic);
-    const hue = chooseHue(activeTopics);
+    const hue = chooseHue();
     hues.set(topic, hue);
     used.add(hue);
     save();
@@ -48,12 +57,12 @@ export function createTopicColorDirectory(topicIds, saved = {}, persist = () => 
   }
 
   function ensureSelection(topics) {
-    const active = [];
     for (const topic of topics) {
-      ensure(topic, active);
-      active.push(topic);
+      ensure(topic);
     }
   }
+
+  if (repaired) save();
 
   return {
     ensure,

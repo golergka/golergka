@@ -29,6 +29,27 @@ test("topic colors are unique, maximally separated, and persistent", () => {
   assert.equal(new Set(Object.values(restored.snapshot())).size, 4);
 });
 
+test("topic color registry repairs visual collisions and respects every reserved color", () => {
+  let saved;
+  const colors = createTopicColorDirectory(
+    ["automation", "evals", "knowledge-graphs", "product"],
+    {automation: 346, evals: 347, "knowledge-graphs": 166},
+    (value) => { saved = value; },
+  );
+  assert.deepEqual(colors.snapshot(), {automation: 346, "knowledge-graphs": 166});
+  assert.deepEqual(saved, {automation: 346, "knowledge-graphs": 166});
+
+  colors.ensureSelection(["automation", "knowledge-graphs", "evals"]);
+  const repaired = colors.snapshot();
+  assert.equal(new Set(Object.values(repaired)).size, 3);
+  const circularDistance = (left, right) => Math.min(Math.abs(left - right), 360 - Math.abs(left - right));
+  assert.ok(circularDistance(repaired.evals, repaired.automation) >= 12);
+  assert.ok(circularDistance(repaired.evals, repaired["knowledge-graphs"]) >= 12);
+
+  colors.ensure("product", ["automation"]);
+  assert.ok(Object.values(repaired).every((hue) => circularDistance(colors.snapshot().product, hue) >= 12));
+});
+
 test("topic highlighting uses native inline marks, not positioned overlays", () => {
   const script = readFileSync(new URL("../theme/cv.js", import.meta.url), "utf8");
   const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
