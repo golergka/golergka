@@ -72,7 +72,9 @@ export function createTopicColorDirectory(topicIds, saved = {}, persist = () => 
     snapshot,
     color(topic, alpha = 0.62) {
       const hue = hues.get(topic);
-      return Number.isFinite(hue) ? `hsla(${hue}, 82%, 67%, ${alpha})` : "transparent";
+      return Number.isFinite(hue)
+        ? `oklch(var(--cv-topic-lightness) var(--cv-topic-chroma) ${hue} / ${alpha})`
+        : "transparent";
     },
   };
 }

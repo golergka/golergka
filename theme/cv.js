@@ -12,7 +12,7 @@ const aliases = data.topicAliases || {};
 const exportLink = document.querySelector("#cv-export");
 const generationNote = document.querySelector("#cv-generation-note");
 const topicGraph = buildTopicGraph(data.filters, data.topicRelations);
-document.documentElement.style.setProperty("--cv-text-selection", `hsla(${CV_TEXT_SELECTION_HUE}, 82%, 67%, 0.58)`);
+document.documentElement.style.setProperty("--cv-text-selection", `oklch(var(--cv-topic-lightness) var(--cv-topic-chroma) ${CV_TEXT_SELECTION_HUE} / 0.58)`);
 let highlightEpoch = 0;
 let markLibrary;
 

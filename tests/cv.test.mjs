@@ -16,6 +16,7 @@ test("topic colors are unique, maximally separated, and persistent", () => {
   colors.ensure("leadership", ["observability", "product"]);
   const first = colors.snapshot();
   assert.equal(new Set(Object.values(first)).size, 3);
+  assert.match(colors.color("observability"), /^oklch\(var\(--cv-topic-lightness\) var\(--cv-topic-chroma\) \d+ \/ 0\.62\)$/);
   const distanceFromSelection = (hue) => Math.min(Math.abs(hue - CV_TEXT_SELECTION_HUE), 360 - Math.abs(hue - CV_TEXT_SELECTION_HUE));
   assert.ok(Object.values(first).every((hue) => distanceFromSelection(hue) >= 12));
 
@@ -44,6 +45,15 @@ test("native text selection has a permanently reserved topic hue", () => {
   const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
   assert.match(script, /--cv-text-selection/);
   assert.match(css, /::selection \{ color: inherit; background: var\(--cv-text-selection\); \}/);
+});
+
+test("topic colors use fixed perceptual brightness tuned for light and dark modes", () => {
+  const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
+  const script = readFileSync(new URL("../theme/cv.js", import.meta.url), "utf8");
+  assert.match(css, /--cv-topic-lightness: 88%;/);
+  assert.match(css, /@media \(prefers-color-scheme: dark\)[\s\S]*?--cv-topic-lightness: 82%;/);
+  assert.match(css, /--cv-topic-chroma: 0\.145;/);
+  assert.match(script, /--cv-text-selection["'], `oklch\(var\(--cv-topic-lightness\) var\(--cv-topic-chroma\)/);
 });
 
 test("the public CV defaults to the four agent-focused topics", () => {
