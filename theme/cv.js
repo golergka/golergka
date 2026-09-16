@@ -190,6 +190,8 @@ function rootTopic(tag) {
   return root;
 }
 
+for (const tag of selected) expandedTopicRoots.add(rootTopic(tag));
+
 function syncTopicExpansion(justExpanded = null) {
   for (const branch of tagsNode.querySelectorAll(':scope > [data-depth="0"]')) {
     const children = branch.querySelector(':scope > .cv-topic-children');

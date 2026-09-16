@@ -227,6 +227,7 @@ test("topics form semantic trees without visual category buckets", () => {
   assert.match(controls, /data-depth="1"[^>]*><span class="cv-topic-select" data-select-tag="betterstack"/);
   assert.match(controls, /data-depth="0" data-topic-id="agents"/);
   assert.match(script, /const expandedTopicRoots = new Set\(\)/);
+  assert.match(script, /for \(const tag of selected\) expandedTopicRoots\.add\(rootTopic\(tag\)\)/);
   assert.match(script, /children\.hidden = !expanded/);
   assert.match(script, /expandedTopicRoots\.add\(root\)/);
   const coloph = renderWork(data);
