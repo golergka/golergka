@@ -77,9 +77,14 @@ test("the interactive CV hides export-only expertise and uses human link labels"
   assert.match(script, /beforeprint[\s\S]*expertiseNode\.hidden = false/);
   assert.match(profile, />GitHub<\/a>[\s\S]*>LinkedIn<\/a>[\s\S]*>Stack Overflow<\/a>/);
   assert.doesNotMatch(profile, />github\.com|>linkedin\.com|>stackoverflow\.com/);
-  assert.match(page, /<legend>Topics <span class="cv-filter-hint">— click!<\/span><\/legend>/);
+  assert.match(page, /<legend>Topics <span class="cv-filter-hint">↓ click!<\/span><\/legend>/);
   assert.match(page, /id="cv-clear">Clear<\/button>/);
   assert.ok(page.indexOf("{{cvCredentials}}") > page.indexOf('id="cv-app"'));
+});
+
+test("the homepage links directly to the CV", () => {
+  const homepage = readFileSync(new URL("../README.md", import.meta.url), "utf8");
+  assert.match(homepage, /\[Experience \/ CV\]\(\/cv\/\)/);
 });
 
 test("the no-JavaScript CV contains the complete public timeline", () => {
@@ -137,7 +142,7 @@ test("topic clicks cannot create browser text selections", () => {
   assert.match(script, /appNode\.addEventListener\("dblclick", preventTopicTextSelection\)/);
 });
 
-test("topic changes preserve the exact clicked anchor without an intermediate page transition", () => {
+test("topic changes preserve the clicked anchor, animate live content, and reveal offscreen evidence", () => {
   const script = readFileSync(new URL("../theme/cv.js", import.meta.url), "utf8");
   const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
   assert.match(script, /function captureScrollAnchor\(control\)/);
@@ -149,6 +154,13 @@ test("topic changes preserve the exact clicked anchor without an intermediate pa
   assert.doesNotMatch(script, /startViewTransition/);
   assert.doesNotMatch(css, /view-transition-name/);
   assert.match(css, /html\.cv-scroll-lock #cv-app \{ overflow-anchor: none; \}/);
+  assert.match(css, /@keyframes cv-highlight-in/);
+  assert.match(css, /@keyframes cv-topic-children-in/);
+  assert.match(css, /@keyframes cv-content-in/);
+  assert.match(script, /function revealFirstEvidence\(topic\)/);
+  assert.match(script, /const duration = 220;/);
+  assert.match(script, /window\.addEventListener\("wheel", interrupt/);
+  assert.match(script, /window\.addEventListener\("touchmove", interrupt/);
 });
 
 test("every evidence phrase can be highlighted independently on hover", () => {
@@ -200,6 +212,7 @@ test("Coloph keeps depth collapsed and promotes evidence selected by the global 
 test("topics form semantic trees without visual category buckets", () => {
   const controls = renderTags(data.filters);
   const css = readFileSync(new URL("../theme/style.css", import.meta.url), "utf8");
+  const script = readFileSync(new URL("../theme/cv.js", import.meta.url), "utf8");
   assert.doesNotMatch(controls, /cv-filter-group|Focus|Engineering systems|Domains|Technologies/);
   assert.doesNotMatch(controls, /<input|type="checkbox"/);
   assert.match(css, /\.cv-topic-list \{ display: inline; line-height:/);
@@ -208,10 +221,14 @@ test("topics form semantic trees without visual category buckets", () => {
   assert.doesNotMatch(controls, /data-topic-toggle|<button|[▸▾]/);
   assert.match(css, /\.cv-topic-select \{[\s\S]*?user-select: none;[\s\S]*?-webkit-user-select: none;/);
   assert.doesNotMatch(css, /\.cv-suggestion-options \{[^}]*grid-template-columns/);
-  assert.match(controls, /<span class="cv-topic-select" data-select-tag="agents" role="button" tabindex="0" aria-pressed="false">AI &amp; agents<\/span>[\s\S]*class="cv-topic-children">[\s\S]*data-depth="1"><span class="cv-topic-select" data-select-tag="pydantic-ai"/);
+  assert.match(controls, /<span class="cv-topic-select" data-select-tag="agents" role="button" tabindex="0" aria-pressed="false">AI &amp; agents<\/span>[\s\S]*class="cv-topic-children">[\s\S]*data-depth="1"[^>]*><span class="cv-topic-select" data-select-tag="pydantic-ai"/);
   assert.doesNotMatch(controls, /data-depth="2"/);
-  assert.match(controls, /data-depth="1"><span class="cv-topic-select" data-select-tag="braintrust"/);
-  assert.match(controls, /data-depth="1"><span class="cv-topic-select" data-select-tag="betterstack"/);
+  assert.match(controls, /data-depth="1"[^>]*><span class="cv-topic-select" data-select-tag="braintrust"/);
+  assert.match(controls, /data-depth="1"[^>]*><span class="cv-topic-select" data-select-tag="betterstack"/);
+  assert.match(controls, /data-depth="0" data-topic-id="agents"/);
+  assert.match(script, /const expandedTopicRoots = new Set\(\)/);
+  assert.match(script, /children\.hidden = !expanded/);
+  assert.match(script, /expandedTopicRoots\.add\(root\)/);
   const coloph = renderWork(data);
   assert.doesNotMatch(coloph, /cv-suggestion-group|data-filter-group/);
   assert.match(coloph, /cv-suggestion-options cv-topic-list/);

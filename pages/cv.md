@@ -8,7 +8,7 @@
 
 <form class="cv-controls" aria-label="Highlight experience by topic" hidden>
   <fieldset>
-    <legend>Topics <span class="cv-filter-hint">— click!</span></legend>
+    <legend>Topics <span class="cv-filter-hint">↓ click!</span></legend>
     <div id="cv-tags" class="cv-tags cv-topic-list">{{cvTags}}</div>
   </fieldset>
   <button type="button" id="cv-clear">Clear</button>

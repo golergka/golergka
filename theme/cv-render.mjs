@@ -141,7 +141,7 @@ function renderFilterTree(filters, renderNode) {
 export function renderTags(filters) {
   return renderFilterTree(filters, (tag, depth, children, childCount) => {
     const option = `<span class="cv-topic-select" data-select-tag="${escapeHtml(tag.id)}" role="button" tabindex="0" aria-pressed="false">${escapeHtml(tag.label)}</span>`;
-    return `<div class="cv-filter-node" data-depth="${depth}">${option}${childCount
+    return `<div class="cv-filter-node" data-depth="${depth}" data-topic-id="${escapeHtml(tag.id)}">${option}${childCount
       ? `<div class="cv-topic-children">${children}</div>` : ""}</div>`;
   });
 }

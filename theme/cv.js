@@ -13,9 +13,12 @@ const exportLink = document.querySelector("#cv-export");
 const generationNote = document.querySelector("#cv-generation-note");
 const expertiseNode = document.querySelector("#cv-expertise");
 const topicGraph = buildTopicGraph(data.filters, data.topicRelations);
+const topicParents = new Map(data.filters.filter(({parent}) => parent).map(({id, parent}) => [id, parent]));
+const expandedTopicRoots = new Set();
 document.documentElement.style.setProperty("--cv-text-selection", `oklch(var(--cv-topic-lightness) var(--cv-topic-chroma) ${CV_TEXT_SELECTION_HUE} / 0.58)`);
 let highlightEpoch = 0;
 let markLibrary;
+let topicScrollFrame = 0;
 
 const colorStorageKey = "cv-topic-color-directory-v1";
 let savedColors = {};
@@ -181,6 +184,107 @@ function update() {
   return render();
 }
 
+function rootTopic(tag) {
+  let root = tag;
+  while (topicParents.has(root)) root = topicParents.get(root);
+  return root;
+}
+
+function syncTopicExpansion(justExpanded = null) {
+  for (const branch of tagsNode.querySelectorAll(':scope > [data-depth="0"]')) {
+    const children = branch.querySelector(':scope > .cv-topic-children');
+    if (!children) continue;
+    const expanded = expandedTopicRoots.has(branch.dataset.topicId);
+    children.hidden = !expanded;
+    branch.dataset.expanded = String(expanded);
+    if (expanded && branch.dataset.topicId === justExpanded) {
+      children.classList.remove("cv-topic-children-entering");
+      void children.offsetWidth;
+      children.classList.add("cv-topic-children-entering");
+    }
+  }
+}
+
+function expandTopic(tag) {
+  const root = rootTopic(tag);
+  const added = !expandedTopicRoots.has(root);
+  expandedTopicRoots.add(root);
+  syncTopicExpansion(added ? root : null);
+}
+
+function visibleContentKeys() {
+  return new Set([...appNode.querySelectorAll(".cv-role[id], .cv-earlier")].map((node) =>
+    node.id || node.querySelector("[id]")?.id).filter(Boolean));
+}
+
+function animateNewContent(previousKeys) {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  for (const node of appNode.querySelectorAll(".cv-role[id], .cv-earlier")) {
+    const key = node.id || node.querySelector("[id]")?.id;
+    if (!key || previousKeys.has(key)) continue;
+    node.classList.add("cv-content-entering");
+    node.addEventListener("animationend", () => node.classList.remove("cv-content-entering"), {once: true});
+  }
+}
+
+function stopTopicScroll() {
+  if (topicScrollFrame) cancelAnimationFrame(topicScrollFrame);
+  topicScrollFrame = 0;
+}
+
+function quickScrollTo(y) {
+  stopTopicScroll();
+  const start = window.scrollY;
+  const distance = y - start;
+  if (Math.abs(distance) < 1) return;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    window.scrollTo(0, y);
+    return;
+  }
+  const duration = 220;
+  const started = performance.now();
+  const scrollKeys = new Set(["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "]);
+  const cleanup = () => {
+    window.removeEventListener("wheel", interrupt);
+    window.removeEventListener("touchmove", interrupt);
+    window.removeEventListener("pointerdown", interrupt);
+    window.removeEventListener("keydown", interrupt);
+  };
+  const interrupt = (event) => {
+    if (event.type === "keydown" && !scrollKeys.has(event.key)) return;
+    stopTopicScroll();
+    cleanup();
+  };
+  window.addEventListener("wheel", interrupt, {passive: true});
+  window.addEventListener("touchmove", interrupt, {passive: true});
+  window.addEventListener("pointerdown", interrupt, {passive: true});
+  window.addEventListener("keydown", interrupt);
+  const step = (now) => {
+    const progress = Math.min(1, (now - started) / duration);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    window.scrollTo(0, start + distance * eased);
+    if (progress < 1) topicScrollFrame = requestAnimationFrame(step);
+    else {
+      topicScrollFrame = 0;
+      cleanup();
+    }
+  };
+  topicScrollFrame = requestAnimationFrame(step);
+}
+
+function revealFirstEvidence(topic) {
+  const evidence = [...appNode.querySelectorAll("[data-highlight-topics]")].filter((node) =>
+    node.dataset.highlightTopics.split(",").includes(topic));
+  if (!evidence.length) return;
+  const visible = evidence.some((node) => {
+    const rect = node.getBoundingClientRect();
+    return rect.bottom > 0 && rect.top < window.innerHeight;
+  });
+  if (visible) return;
+  const rect = evidence[0].getBoundingClientRect();
+  quickScrollTo(Math.max(0, window.scrollY + rect.top - Math.min(80, window.innerHeight * 0.1)));
+}
+
 function captureScrollAnchor(control) {
   const role = control?.closest?.(".cv-role");
   const suggestions = control?.closest?.(".cv-topic-suggestions");
@@ -215,8 +319,9 @@ function captureScrollAnchor(control) {
   };
 }
 
-function updateWithAnchor(control, change) {
+function updateWithAnchor(control, change, activatedTopic = null) {
   const restoreScroll = captureScrollAnchor(control);
+  const previousKeys = visibleContentKeys();
   const root = document.documentElement;
   root.classList.add("cv-scroll-lock");
   if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
@@ -228,6 +333,8 @@ function updateWithAnchor(control, change) {
     requestAnimationFrame(() => {
       restoreScroll();
       root.classList.remove("cv-scroll-lock");
+      animateNewContent(previousKeys);
+      if (activatedTopic) revealFirstEvidence(activatedTopic);
     });
   });
   void rendered.then(finish, finish);
@@ -236,10 +343,12 @@ function updateWithAnchor(control, change) {
 function toggleTopic(control) {
   const tag = control?.dataset.selectTag;
   if (!tag || !allowed.has(tag)) return;
+  const activating = !selected.has(tag);
   updateWithAnchor(control, () => {
+    expandTopic(tag);
     if (selected.has(tag)) selected.delete(tag);
     else selected.add(tag);
-  });
+  }, activating ? tag : null);
 }
 
 function preventTopicTextSelection(event) {
@@ -255,10 +364,12 @@ function toggleEvidenceTopic(evidence) {
   const selectedTopic = evidence?.dataset.highlightTopics?.split(",").find((tag) => selected.has(tag));
   const topic = selectedTopic || evidence?.dataset.highlightableTopics?.split(",")[0];
   if (!topic || !allowed.has(topic)) return false;
+  const activating = !selected.has(topic);
   updateWithAnchor(evidence, () => {
+    expandTopic(topic);
     if (selected.has(topic)) selected.delete(topic);
     else selected.add(topic);
-  });
+  }, activating ? topic : null);
   return true;
 }
 
@@ -283,7 +394,10 @@ appNode.addEventListener("click", (event) => {
   const control = event.target.closest?.("[data-add-tag]");
   const tag = control?.dataset.addTag;
   if (!tag || !allowed.has(tag)) return;
-  updateWithAnchor(control, () => selected.add(tag));
+  updateWithAnchor(control, () => {
+    expandTopic(tag);
+    selected.add(tag);
+  }, tag);
 });
 appNode.addEventListener("keydown", (event) => {
   if (event.key !== "Enter" && event.key !== " ") return;
@@ -297,7 +411,10 @@ appNode.addEventListener("keydown", (event) => {
   const tag = control?.dataset.addTag;
   if (!tag || !allowed.has(tag)) return;
   event.preventDefault();
-  updateWithAnchor(control, () => selected.add(tag));
+  updateWithAnchor(control, () => {
+    expandTopic(tag);
+    selected.add(tag);
+  }, tag);
 });
 clearButton.addEventListener("click", () => updateWithAnchor(clearButton, () => selected.clear()));
 controls.addEventListener("submit", (event) => event.preventDefault());
@@ -353,6 +470,7 @@ exportLink.addEventListener("click", async (event) => {
     console.error(error);
   } finally { button.disabled = false; }
 });
+syncTopicExpansion();
 render();
 expertiseNode.hidden = true;
 controls.hidden = false;
