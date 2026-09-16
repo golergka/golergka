@@ -249,8 +249,9 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
 .cv-links { margin: 0; font-size: 1rem; }
 .cv-links a { white-space: nowrap; }
 .cv-expertise { margin: 0.8rem 0 0; font-size: 0.95rem; }
-.cv-credentials { margin-top: 0.55rem; color: var(--cv-muted); font-size: 0.9rem; }
-.cv-credentials p { margin: 0.2rem 0; }
+.cv-credentials { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 2rem; margin-top: 1.8rem; padding-top: 1.2rem; border-top: 1px solid var(--cv-rule); }
+.cv-credential-section h2 { margin: 0 0 0.35rem; font-size: 1.15rem; }
+.cv-credential-section p { margin: 0; color: var(--cv-muted); font-size: 0.9rem; }
 
 .cv-controls {
   position: relative;
@@ -373,6 +374,7 @@ html.cv-scroll-lock #cv-app { overflow-anchor: none; }
   .cv-section-heading { margin-top: 1.7rem; }
   .cv-role-title { font-size: 1.25rem; }
   .cv-role { padding-block: 1.4rem; }
+  .cv-credentials { grid-template-columns: 1fr; }
 }
 
 @media print {
@@ -384,8 +386,11 @@ html.cv-scroll-lock #cv-app { overflow-anchor: none; }
   body:has(.cv-profile) main > h1 { font-size: 18pt; }
   .cv-headline { font-size: 10pt; }
   .cv-global-lead { margin: 3pt 0; }
-  .cv-links, .cv-expertise, .cv-credentials, .cv-role-meta, .cv-evidence, .cv-generation-note { font-size: 7pt; margin: 2pt 0; }
-  .cv-credentials p { margin: 1pt 0; }
+  .cv-links, .cv-expertise, .cv-role-meta, .cv-evidence, .cv-generation-note { font-size: 7pt; margin: 2pt 0; }
+  .cv-credentials { display: block; margin-top: 4pt; padding-top: 3pt; }
+  .cv-credential-section { break-inside: avoid; margin-top: 3pt; }
+  .cv-credential-section h2 { font-size: 9pt; margin: 0 0 1pt; }
+  .cv-credential-section p { font-size: 7pt; margin: 0; }
   .cv-profile { margin-bottom: 5pt; }
   .cv-section-heading { margin-top: 5pt; }
   .cv-section-heading h2 { font-size: 11pt; }

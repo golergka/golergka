@@ -104,7 +104,7 @@ const renderPoint = (point, selected, labels, aliases, graph) => `<li>${highligh
 export function renderProfile(profile) {
   return `<p class="cv-headline">${escapeHtml(profile.headline)}</p>
     <p class="cv-global-lead">${escapeHtml(profile.summary)}</p>
-    <p class="cv-links"><a href="mailto:${escapeHtml(profile.email)}">${escapeHtml(profile.email)}</a><span aria-hidden="true"> · </span><a href="${escapeHtml(profile.github)}">github.com/golergka</a>${profile.linkedin ? `<span aria-hidden="true"> · </span><a href="${escapeHtml(profile.linkedin)}">linkedin.com/in/maxyankov</a>` : ""}<span aria-hidden="true"> · </span><a href="${escapeHtml(profile.stackoverflow)}">stackoverflow.com/users/312725/max-yankov</a></p>`;
+    <p class="cv-links"><a href="mailto:${escapeHtml(profile.email)}">${escapeHtml(profile.email)}</a><span aria-hidden="true"> · </span><a href="${escapeHtml(profile.github)}">GitHub</a>${profile.linkedin ? `<span aria-hidden="true"> · </span><a href="${escapeHtml(profile.linkedin)}">LinkedIn</a>` : ""}<span aria-hidden="true"> · </span><a href="${escapeHtml(profile.stackoverflow)}">Stack Overflow</a></p>`;
 }
 
 export function expertiseLabels(filters, selected = new Set()) {
@@ -118,8 +118,8 @@ export function renderExpertise(filters, selected = new Set()) {
 
 export function renderCredentials({education = [], languages = []}) {
   return `<div class="cv-credentials">
-    ${education.length ? `<p><strong>Education:</strong> ${education.map(escapeHtml).join(" · ")}</p>` : ""}
-    ${languages.length ? `<p><strong>Languages:</strong> ${languages.map(escapeHtml).join(" · ")}</p>` : ""}
+    ${education.length ? `<section class="cv-credential-section"><h2>Education</h2><p>${education.map(escapeHtml).join(" · ")}</p></section>` : ""}
+    ${languages.length ? `<section class="cv-credential-section"><h2>Languages</h2><p>${languages.map(escapeHtml).join(" · ")}</p></section>` : ""}
   </div>`;
 }
 

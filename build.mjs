@@ -292,6 +292,7 @@ for (const page of pages) {
       lang: page.lang,
       title: page.slug === "cv" ? `Experience — ${SITE_NAME}` : `${escapeHtml(page.title)} — ${SITE_NAME}`,
       sitename: SITE_NAME,
+      homeLabel: page.slug === "cv" ? "Writing &amp; projects" : SITE_NAME,
       stylesheet: styleHref,
       canonical: canonicalTag(`/${page.slug}/`),
       content: body,
@@ -323,6 +324,7 @@ writePage(
     lang: "en",
     title: SITE_NAME,
     sitename: SITE_NAME,
+    homeLabel: SITE_NAME,
     stylesheet: styleHref,
     canonical: canonicalTag("/"),
     content:
@@ -366,6 +368,7 @@ writePage(
     lang: "en",
     title: `Not found — ${SITE_NAME}`,
     sitename: SITE_NAME,
+    homeLabel: SITE_NAME,
     stylesheet: styleHref,
     content: `<h1>Not found</h1>\n<p>No page at this address. <a href="/">Back to the front page</a>.</p>`,
     footer: FOOTER,

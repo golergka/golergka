@@ -11,6 +11,7 @@ const allowed = new Set(data.filters.map(({ id }) => id));
 const aliases = data.topicAliases || {};
 const exportLink = document.querySelector("#cv-export");
 const generationNote = document.querySelector("#cv-generation-note");
+const expertiseNode = document.querySelector("#cv-expertise");
 const topicGraph = buildTopicGraph(data.filters, data.topicRelations);
 document.documentElement.style.setProperty("--cv-text-selection", `oklch(var(--cv-topic-lightness) var(--cv-topic-chroma) ${CV_TEXT_SELECTION_HUE} / 0.58)`);
 let highlightEpoch = 0;
@@ -166,7 +167,7 @@ function render() {
   document.querySelector("#cv-expertise-topics").textContent = expertiseLabels(data.filters, selected).join(" · ");
   const publicUrl = new URL(document.querySelector('link[rel="canonical"]').href);
   publicUrl.searchParams.set("tags", [...selected].join(","));
-  generationNote.innerHTML = `Generated ${topics ? `for ${escapeHtml(topics)}` : "overview"} · <a href="${escapeHtml(publicUrl.href)}">golergka.com/cv/</a>`;
+  generationNote.innerHTML = `Generated ${topics ? `for ${escapeHtml(topics)}` : "overview"} · <a href="${escapeHtml(publicUrl.href)}">Web version</a>`;
   generationNote.hidden = true;
   return applyTopicHighlights();
 }
@@ -312,6 +313,7 @@ window.addEventListener("beforeprint", () => {
     appNode.innerHTML = renderWork(data, selected, { staticView: true, compact: true });
   }
   generationNote.hidden = false;
+  expertiseNode.hidden = false;
 });
 window.addEventListener("afterprint", () => {
   if (beforePrintHtml !== null) {
@@ -319,6 +321,7 @@ window.addEventListener("afterprint", () => {
     beforePrintHtml = null;
   }
   generationNote.hidden = true;
+  expertiseNode.hidden = true;
   void applyTopicHighlights();
 });
 let pdfLibrary;
@@ -351,5 +354,6 @@ exportLink.addEventListener("click", async (event) => {
   } finally { button.disabled = false; }
 });
 render();
+expertiseNode.hidden = true;
 controls.hidden = false;
 document.querySelector(".cv-export-actions").hidden = false;

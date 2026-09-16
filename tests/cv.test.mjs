@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { defaultTags, expertiseLabels, partitionWork, renderCredentials, renderExpertise, renderTags, renderWork } from "../theme/cv-render.mjs";
+import { defaultTags, expertiseLabels, partitionWork, renderCredentials, renderExpertise, renderProfile, renderTags, renderWork } from "../theme/cv-render.mjs";
 import { createCvPdf } from "../theme/cv-pdf.mjs";
 import { createTopicColorDirectory, CV_TEXT_SELECTION_HUE } from "../theme/cv-colors.mjs";
 import { jsPDF } from "jspdf";
@@ -65,8 +65,21 @@ test("selected expertise and credentials are explicit text", () => {
   assert.deepEqual(expertiseLabels(data.filters, selected), ["Agent workflows", "LLM evaluation", "LiveKit / voice AI", "Knowledge graphs"]);
   assert.match(renderExpertise(data.filters, selected), /Selected expertise:[\s\S]*Agent workflows[\s\S]*Knowledge graphs/);
   const credentials = renderCredentials(data);
-  assert.match(credentials, /Education:[\s\S]*Moscow State University/);
-  assert.match(credentials, /Languages:[\s\S]*Spanish — intermediate[\s\S]*Ukrainian — beginner/);
+  assert.match(credentials, /<h2>Education<\/h2>[\s\S]*Moscow State University/);
+  assert.match(credentials, /<h2>Languages<\/h2>[\s\S]*Spanish — intermediate[\s\S]*Ukrainian — beginner/);
+});
+
+test("the interactive CV hides export-only expertise and uses human link labels", () => {
+  const script = readFileSync(new URL("../theme/cv.js", import.meta.url), "utf8");
+  const page = readFileSync(new URL("../pages/cv.md", import.meta.url), "utf8");
+  const profile = renderProfile(data.profile);
+  assert.match(script, /expertiseNode\.hidden = true/);
+  assert.match(script, /beforeprint[\s\S]*expertiseNode\.hidden = false/);
+  assert.match(profile, />GitHub<\/a>[\s\S]*>LinkedIn<\/a>[\s\S]*>Stack Overflow<\/a>/);
+  assert.doesNotMatch(profile, />github\.com|>linkedin\.com|>stackoverflow\.com/);
+  assert.match(page, /<legend>Topics <span class="cv-filter-hint">— click!<\/span><\/legend>/);
+  assert.match(page, /id="cv-clear">Clear<\/button>/);
+  assert.ok(page.indexOf("{{cvCredentials}}") > page.indexOf('id="cv-app"'));
 });
 
 test("the no-JavaScript CV contains the complete public timeline", () => {

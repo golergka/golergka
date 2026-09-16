@@ -22,7 +22,6 @@ export function pdfBlocks(root) {
     block(root.querySelector(".cv-global-lead"), 9, 3),
     block(root.querySelector(".cv-expertise"), 8, 2),
     block(root.querySelector(".cv-links"), 8, 7),
-    ...[...root.querySelectorAll(".cv-credentials p")].map((node) => block(node, 8, 2)),
   ]);
   groups.push([block(root.querySelector(".cv-section-heading h2"), 12, 5)]);
   for (const entry of root.querySelector("#cv-app").children) {
@@ -40,6 +39,11 @@ export function pdfBlocks(root) {
     blocks.push({ rule: true, after: 5 });
     groups.push(blocks);
   }
+  const credentials = [...root.querySelectorAll(".cv-credential-section")].flatMap((section) => [
+    block(section.querySelector("h2"), 10, 2),
+    block(section.querySelector("p"), 8, 4),
+  ]);
+  if (credentials.length) groups.push(credentials);
   return groups;
 }
 
