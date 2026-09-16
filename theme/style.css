@@ -1,9 +1,14 @@
-/* Still close to browser defaults — a readable column, a cleaner serif than
-   Times, and no link underlines. Colors are left to the browser. */
+/* A restrained ink-on-paper palette in both color schemes. */
 
 :root {
-  /* Let the browser flip its default colors in dark mode. */
   color-scheme: light dark;
+  --page: #fbfaf6;
+  --surface: #f2f0e9;
+  --text: #23221f;
+  --muted: #6f6c64;
+  --rule: #d9d5ca;
+  --link: #5c45b8;
+  --link-hover: #412c9d;
 }
 
 body {
@@ -15,10 +20,17 @@ body {
   font-family: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
   font-size: 1.0625rem;
   line-height: 1.6;
+  color: var(--text);
+  background: var(--page);
 }
 
 a {
+  color: var(--link);
   text-decoration: none;
+}
+
+a:hover {
+  color: var(--link-hover);
 }
 
 h1,
@@ -183,7 +195,7 @@ footer {
   padding: 1.2rem;
   border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
   border-radius: 0.7rem;
-  background: color-mix(in srgb, Canvas 94%, currentColor 6%);
+  background: var(--surface);
 }
 
 .project-card h3 {
@@ -200,7 +212,7 @@ footer {
 
 .eyebrow {
   margin: 0;
-  color: color-mix(in srgb, currentColor 65%, transparent);
+  color: var(--muted);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.72rem;
   font-weight: 600;
@@ -223,11 +235,23 @@ footer {
   }
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #171716;
+    --surface: #20201e;
+    --text: #e7e3da;
+    --muted: #aaa69d;
+    --rule: #3a3935;
+    --link: #b9a7ff;
+    --link-hover: #d1c6ff;
+  }
+}
+
 /* A CV with the same ink, paper, and serif as the rest of the site.
    Topic selection behaves like a reader's highlighter. */
 body:has(.cv-profile) {
-  --cv-muted: color-mix(in srgb, CanvasText 68%, Canvas);
-  --cv-rule: color-mix(in srgb, CanvasText 20%, Canvas);
+  --cv-muted: var(--muted);
+  --cv-rule: var(--rule);
   --cv-highlight: #fff0a6;
   /* OKLCH keeps every topic at the same perceived brightness across hues. */
   --cv-topic-lightness: 88%;
@@ -286,9 +310,9 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
 }
 .cv-topic-list > [data-depth="0"] > .cv-topic-select { font-weight: bold; }
 .cv-topic-select > .cv-topic-selector-mark { padding-inline: 0; }
-.cv-topic-select:focus-visible { outline: 2px solid LinkText; outline-offset: 3px; }
+.cv-topic-select:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
 .cv-topic-placeholder { color: var(--cv-muted); cursor: default; }
-#cv-clear { position: absolute; top: 1.15rem; right: 0; padding: 0; margin: 0; border: 0; color: LinkText; background: none; font: inherit; font-size: 0.9rem; text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
+#cv-clear { position: absolute; top: 1.15rem; right: 0; padding: 0; margin: 0; border: 0; color: var(--link); background: none; font: inherit; font-size: 0.9rem; text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
 #cv-clear:disabled { color: var(--cv-muted); text-decoration: none; cursor: default; }
 
 .cv-section-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.3rem 1rem; margin: 1.8rem 0 0; }
@@ -328,7 +352,7 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
 .cv-highlightable,
 .cv-topic-mark[data-highlightable-topics] { cursor: pointer; }
 .cv-highlightable:focus-visible,
-.cv-topic-mark[data-highlightable-topics]:focus-visible { outline: 2px solid LinkText; outline-offset: 2px; }
+.cv-topic-mark[data-highlightable-topics]:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
 .cv-highlightable:hover,
 .cv-topic-mark:hover {
   background: linear-gradient(178deg, transparent 10%, var(--topic-hover-color) 10% 91%, transparent 91%);
@@ -345,13 +369,13 @@ html.cv-scroll-lock #cv-app { overflow-anchor: none; }
 .cv-evidence { margin: 0.7rem 0 0; font-size: 0.95rem; }
 .cv-earlier { padding: 1.6rem 0; }
 .cv-archive { margin-top: 0.9rem; }
-.cv-archive > summary { width: fit-content; color: LinkText; cursor: pointer; }
-.cv-archive > summary:focus-visible { outline: 2px solid LinkText; outline-offset: 4px; }
+.cv-archive > summary { width: fit-content; color: var(--link); cursor: pointer; }
+.cv-archive > summary:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
 .cv-archive[open] > summary { margin-bottom: 0.5rem; }
 .cv-archive .cv-role:last-child { border-bottom: 0; padding-bottom: 0; }
 .cv-earlier + .cv-earlier { border-top: 1px solid var(--cv-rule); }
 .cv-export-actions { margin: -0.75rem 0 1.5rem; font-size: 0.95rem; }
-.cv-export-actions button { padding: 0; border: 0; background: none; color: LinkText; text-decoration: underline; font: inherit; cursor: pointer; }
+.cv-export-actions button { padding: 0; border: 0; background: none; color: var(--link); text-decoration: underline; font: inherit; cursor: pointer; }
 .cv-export-actions button:disabled { color: var(--cv-muted); cursor: wait; }
 #cv-pdf-status { margin-left: 0.6rem; color: var(--cv-muted); font-size: 0.85rem; }
 .cv-generation-note { margin: 0.25rem 0 0.75rem; color: var(--cv-muted); font-size: 0.85rem; }
@@ -379,7 +403,7 @@ html.cv-scroll-lock #cv-app { overflow-anchor: none; }
 
 @media print {
   @page { margin: 9mm; }
-  body:has(.cv-profile) { max-width: none; padding: 0; font-size: 8pt; line-height: 1.15; color: #000; background: #fff; color-scheme: light; --cv-muted: #555; --cv-rule: #ccc; --cv-highlight: #fff0a6; --cv-topic-lightness: 88%; }
+  body:has(.cv-profile) { max-width: none; padding: 0; font-size: 8pt; line-height: 1.15; color: #000; background: #fff; color-scheme: light; --page: #fff; --surface: #fff; --text: #000; --muted: #555; --rule: #ccc; --link: #000; --link-hover: #000; --cv-muted: #555; --cv-rule: #ccc; --cv-highlight: #fff0a6; --cv-topic-lightness: 88%; }
   body:has(.cv-profile) > header,
   body:has(.cv-profile) > footer,
   .cv-controls, #cv-status, .cv-export-actions { display: none; }
