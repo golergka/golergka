@@ -464,6 +464,8 @@ test("every experience topic and Coloph keyword exists in the global selector", 
 test("FAQ reveals confirmed career context and reuses impact evidence without duplication", () => {
   const moves = renderWork(data, new Set(["career-moves"]));
   assert.equal((moves.match(/The startup ran out of runway/g) || []).length, 3);
+  assert.doesNotMatch(moves.replace(/<[^>]+>/g, ""), /Career moves:/);
+  assert.equal((moves.match(/<mark[^>]*data-highlight-topics="career-moves"[^>]*>The startup ran out of runway\. I gravitate toward early-stage startups\.<\/mark>/g) || []).length, 3);
   assert.doesNotMatch(renderWork(data, new Set(defaultTags)), /The startup ran out of runway/);
   const impact = renderWork(data, new Set(["impact", "games"]));
   assert.equal((impact.replace(/<[^>]+>/g, "").match(/Built a tournament system from scratch/g) || []).length, 1);

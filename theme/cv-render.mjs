@@ -73,8 +73,12 @@ function workPoints(item, selected, filters) {
     const emphases = point.emphases || (point.emphasis ? [{text: point.emphasis, tags: point.emphasisTags || [...point.tags]}] : []);
     point.tags.push(tag);
     if (selected.has(tag)) {
-      point.text = `${label}: ${point.text}`;
-      point.emphases = [{text: label, tags: [tag]}, ...emphases];
+      if (tag === "career-moves") {
+        point.emphases = [{text: point.text, tags: [tag]}];
+      } else {
+        point.text = `${label}: ${point.text}`;
+        point.emphases = [{text: label, tags: [tag]}, ...emphases];
+      }
     }
     if (!Number.isInteger(answer.highlight)) points.push(point);
   }
