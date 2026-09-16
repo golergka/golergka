@@ -49,7 +49,7 @@ function loadMarkLibrary() {
   return markLibrary;
 }
 
-async function applyTopicHighlights() {
+async function applyTopicHighlights(animationTarget = null) {
   const epoch = ++highlightEpoch;
   for (const mark of tagsNode.querySelectorAll("mark.cv-topic-selector-mark")) {
     const parent = mark.parentElement;
@@ -130,6 +130,7 @@ async function applyTopicHighlights() {
   } catch (error) {
     console.warn("Enhanced topic highlighting unavailable; using native marks.", error);
   }
+  animateTriggeredHighlight(animationTarget);
   for (const element of appNode.querySelectorAll("[data-highlightable-topics]")) prepareHoverHighlight(element);
 }
 // Old export URLs now show the interactive CV; exporting never navigates away.
@@ -145,7 +146,7 @@ function readSelection() {
 
 let selected = readSelection();
 
-function render() {
+function render(animationTarget = null) {
   topicColors.ensureSelection(selected);
   if (!exportLink.disabled) document.querySelector("#cv-pdf-status").textContent = "";
   const openDetails = new Set([...appNode.querySelectorAll("details[open]")].map((node) => node.id));
@@ -172,16 +173,16 @@ function render() {
   publicUrl.searchParams.set("tags", [...selected].join(","));
   generationNote.innerHTML = `Generated ${topics ? `for ${escapeHtml(topics)}` : "overview"} · <a href="${escapeHtml(publicUrl.href)}">Web version</a>`;
   generationNote.hidden = true;
-  return applyTopicHighlights();
+  return applyTopicHighlights(animationTarget);
 }
 
-function update() {
+function update(animationTarget = null) {
   const next = new URL(location.href);
   next.searchParams.delete("focus");
   next.searchParams.delete("depth");
   next.searchParams.set("tags", [...selected].join(","));
   history.replaceState(null, "", next);
-  return render();
+  return render(animationTarget);
 }
 
 function rootTopic(tag) {
@@ -321,14 +322,38 @@ function captureScrollAnchor(control) {
   };
 }
 
+function describeHighlight(control) {
+  const evidence = control?.closest?.("[data-highlightable-topics]");
+  const role = evidence?.closest?.(".cv-role");
+  if (!evidence || !role?.id) return null;
+  const topics = evidence.dataset.highlightableTopics;
+  const text = evidence.textContent;
+  const index = [...role.querySelectorAll("[data-highlightable-topics]")]
+    .filter((candidate) => candidate.dataset.highlightableTopics === topics && candidate.textContent === text)
+    .indexOf(evidence);
+  return index < 0 ? null : { roleId: role.id, topics, text, index };
+}
+
+function animateTriggeredHighlight(target) {
+  if (!target || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const role = document.getElementById(target.roleId);
+  const candidates = role ? [...role.querySelectorAll(".cv-topic-mark[data-highlightable-topics]")]
+    .filter((candidate) => candidate.dataset.highlightableTopics === target.topics && candidate.textContent === target.text) : [];
+  const highlight = candidates[target.index];
+  if (!highlight) return;
+  highlight.classList.add("cv-topic-mark-entering");
+  highlight.addEventListener("animationend", () => highlight.classList.remove("cv-topic-mark-entering"), {once: true});
+}
+
 function updateWithAnchor(control, change, activatedTopic = null) {
   const restoreScroll = captureScrollAnchor(control);
+  const animationTarget = describeHighlight(control);
   const previousKeys = visibleContentKeys();
   const root = document.documentElement;
   root.classList.add("cv-scroll-lock");
   if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
   change();
-  const rendered = update();
+  const rendered = update(animationTarget);
   restoreScroll();
   const finish = () => requestAnimationFrame(() => {
     restoreScroll();
@@ -375,7 +400,6 @@ function toggleEvidenceTopic(evidence) {
   return true;
 }
 
-controls.addEventListener("mousedown", preventTopicTextSelection);
 controls.addEventListener("dblclick", preventTopicTextSelection);
 controls.addEventListener("click", (event) => {
   toggleTopic(event.target.closest?.("[data-select-tag]"));
@@ -387,7 +411,6 @@ controls.addEventListener("keydown", (event) => {
   event.preventDefault();
   toggleTopic(control);
 });
-appNode.addEventListener("mousedown", preventTopicTextSelection);
 appNode.addEventListener("dblclick", preventTopicTextSelection);
 appNode.addEventListener("pointerover", (event) => prepareHoverHighlight(event.target.closest?.("[data-highlightable-topics]")));
 appNode.addEventListener("click", (event) => {
