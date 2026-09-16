@@ -12,6 +12,9 @@
     "summary": "I build products around AI agents: the interfaces, tools, infrastructure, and safety systems that make them useful. My background spans full-stack and native engineering, developer tools, databases, games, and technical leadership."
   },
   "filters": [
+    { "id": "career-moves", "label": "Career moves", "kind": "faq" },
+    { "id": "impact", "label": "Impact", "kind": "faq" },
+    { "id": "challenges", "label": "Challenges", "kind": "faq" },
     { "id": "agents", "label": "AI & agents" },
     { "id": "automation", "label": "Agent workflows", "parent": "agents" },
     { "id": "evals", "label": "LLM evaluation", "parent": "agents" },
@@ -181,6 +184,7 @@
   "work": [
     {
       "organization": "Coloph",
+      "faq": {"career-moves":null,"impact":{"highlight":20},"challenges":{"highlight":6}},
       "role": "Founder & Product Engineer",
       "roleEmphases": [
         { "text": "Founder", "tags": ["founder"] },
@@ -305,6 +309,7 @@
     },
     {
       "organization": "Hotline (Gestalt Systems)",
+      "faq": {"career-moves":{"text":"The startup ran out of runway. I gravitate toward early-stage startups."},"impact":{"highlight":8},"challenges":{"highlight":2}},
       "role": "Founding Engineer",
       "roleEmphases": [{ "text": "Founding Engineer", "tags": ["leadership"] }],
       "start": "2025-07",
@@ -384,6 +389,7 @@
     },
     {
       "organization": "Jam.dev",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":3}},
       "role": "Senior Engineer",
       "start": "2024-06",
       "end": "2025-06",
@@ -424,6 +430,7 @@
     },
     {
       "organization": "PopSQL",
+      "faq": {"career-moves":{"text":"The startup ran out of runway. I gravitate toward early-stage startups."},"impact":{"highlight":0},"challenges":{"highlight":1}},
       "role": "Senior Software Engineer, full-stack",
       "start": "2023-08",
       "end": "2024-01",
@@ -454,6 +461,7 @@
     },
     {
       "organization": "International clients",
+      "faq": {"career-moves":null,"impact":{"highlight":1},"challenges":{"highlight":0}},
       "role": "Consultant, conversational AI",
       "start": "2023",
       "end": "2023",
@@ -473,6 +481,7 @@
     },
     {
       "organization": "Deep Channel",
+      "faq": {"career-moves":{"text":"The startup ran out of runway. I gravitate toward early-stage startups."},"impact":{"highlight":0},"challenges":{"highlight":1}},
       "role": "Senior Software Engineer, full-stack",
       "start": "2021",
       "end": "2023",
@@ -512,6 +521,7 @@
     },
     {
       "organization": "FastCup.net",
+      "faq": {"career-moves":null,"impact":{"highlight":1},"challenges":{"highlight":2}},
       "role": "Senior Software Engineer, backend",
       "start": "2020",
       "end": "2021",
@@ -535,6 +545,7 @@
     },
     {
       "organization": "Silly Penguin",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":0}},
       "role": "Contract Developer",
       "start": "2019-12",
       "end": "2020",
@@ -551,6 +562,7 @@
     },
     {
       "organization": "Sofq Games",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":0}},
       "role": "CTO",
       "roleEmphases": [{ "text": "CTO", "tags": ["cto"] }],
       "start": "2019",
@@ -581,6 +593,7 @@
     },
     {
       "organization": "Hypetrain Digital",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":1}},
       "role": "Lead Developer",
       "roleEmphases": [{ "text": "Lead Developer", "tags": ["team-lead"] }],
       "start": "2017-07",
@@ -611,6 +624,7 @@
     },
     {
       "organization": "Ilyon",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":0}},
       "role": "Developer",
       "start": "2017-02",
       "end": "2017-06",
@@ -631,6 +645,7 @@
     },
     {
       "organization": "Delos Technologies",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":1}},
       "role": "Co-Founder & CTO",
       "roleEmphases": [
         { "text": "Co-Founder", "tags": ["founder"] },
@@ -659,6 +674,7 @@
     },
     {
       "organization": "Innovision Labs",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":1}},
       "role": "Lead Developer",
       "roleEmphases": [{ "text": "Lead Developer", "tags": ["team-lead"] }],
       "start": "2015-11",
@@ -687,6 +703,7 @@
     },
     {
       "organization": "Jelly Button Games",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":1}},
       "role": "Senior Developer",
       "start": "2015-01",
       "end": "2015-08",
@@ -715,6 +732,7 @@
     },
     {
       "organization": "KamaGames",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":2}},
       "role": "Developer; previously Lead Game Designer",
       "roleEmphases": [{ "text": "Lead Game Designer", "tags": ["leadership"] }],
       "start": "2012",
@@ -733,6 +751,7 @@
     },
     {
       "organization": "Pixonic",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":0}},
       "role": "Producer",
       "roleEmphases": [{ "text": "Producer", "tags": ["leadership"] }],
       "start": "2011-02",
@@ -754,6 +773,7 @@
     },
     {
       "organization": "adOffer",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":0}},
       "role": "CEO & Founder",
       "roleEmphases": [
         { "text": "CEO", "tags": ["founder"] },
@@ -777,6 +797,7 @@
     },
     {
       "organization": "Playnatic Entertainment",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":0}},
       "role": "Lead Game Designer",
       "roleEmphases": [{ "text": "Lead Game Designer", "tags": ["leadership"] }],
       "start": "2009-10",
@@ -794,6 +815,7 @@
     },
     {
       "organization": "SKAZKA Studio",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":0}},
       "role": "Lead Game Designer",
       "roleEmphases": [{ "text": "Lead Game Designer", "tags": ["leadership"] }],
       "start": "2009-04",
@@ -812,6 +834,7 @@
     },
     {
       "organization": "IT Territory",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":0}},
       "role": "Game Designer & Developer",
       "start": "2008-01",
       "end": "2009-04",
@@ -830,6 +853,7 @@
     },
     {
       "organization": "2RealLife",
+      "faq": {"career-moves":null,"impact":{"highlight":0},"challenges":{"highlight":0}},
       "role": "Game Designer",
       "start": "2007-04",
       "end": "2008-01",

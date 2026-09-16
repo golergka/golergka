@@ -455,9 +455,25 @@ test("every experience topic and Coloph keyword exists in the global selector", 
       ancestors.add(parent);
       parent = data.filters.find(({id}) => id === parent)?.parent;
     }
-    const evidence = data.work.flatMap((item) => item.highlights)
+    const evidence = filter.kind === "faq" ? data.work.filter((item) => item.faq?.[filter.id]) : data.work.flatMap((item) => item.highlights)
       .filter((point) => point.tags.map(resolve).includes(filter.id));
     assert.ok(evidence.length, `${filter.id} has no supporting evidence`);
+  }
+});
+
+test("FAQ reveals confirmed career context and reuses impact evidence without duplication", () => {
+  const moves = renderWork(data, new Set(["career-moves"]));
+  assert.equal((moves.match(/The startup ran out of runway/g) || []).length, 3);
+  assert.doesNotMatch(renderWork(data, new Set(defaultTags)), /The startup ran out of runway/);
+  const impact = renderWork(data, new Set(["impact", "games"]));
+  assert.equal((impact.replace(/<[^>]+>/g, "").match(/Built a tournament system from scratch/g) || []).length, 1);
+  assert.match(impact, /data-highlight-topics="impact"/);
+  assert.deepEqual(expertiseLabels(data.filters, new Set(["impact", "python"])), ["Python"]);
+  for (const item of data.work) {
+    assert.deepEqual(Object.keys(item.faq), ["career-moves", "impact", "challenges"]);
+    for (const answer of Object.values(item.faq)) {
+      if (answer?.highlight !== undefined) assert.ok(item.highlights[answer.highlight], item.organization);
+    }
   }
 });
 

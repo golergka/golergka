@@ -1,9 +1,9 @@
-import { renderWork, defaultTags, expertiseLabels, partitionWork, escapeHtml, buildTopicGraph, sourceForTag, matchesTags } from "./cv-render.mjs";
+import { renderWork, defaultTags, expertiseLabels, partitionWork, escapeHtml, buildTopicGraph, sourceForTag, matchesTags, workTags } from "./cv-render.mjs";
 import { createTopicColorDirectory, CV_TEXT_SELECTION_HUE } from "./cv-colors.mjs";
 
 const data = JSON.parse(document.querySelector("#cv-data").textContent);
 const controls = document.querySelector(".cv-controls");
-const tagsNode = document.querySelector("#cv-tags");
+const tagsNode = controls;
 const appNode = document.querySelector("#cv-app");
 const statusNode = document.querySelector("#cv-status");
 const clearButton = document.querySelector("#cv-clear");
@@ -158,7 +158,7 @@ function render() {
     const implied = !isSelected && sourceForTag(tag, selected, aliases, topicGraph);
     if (!isSelected && !implied) continue;
   }
-  const matching = data.work.map((item, index) => ({item, index})).filter(({item}) => matchesTags(item.tags, selected, aliases, topicGraph));
+  const matching = data.work.map((item, index) => ({item, index})).filter(({item}) => matchesTags(workTags(item), selected, aliases, topicGraph));
   const { individual, grouped, recentGrouped } = partitionWork(data, selected);
   const groupedCount = grouped.length + recentGrouped.length;
   const groupedLabel = groupedCount ? ` · ${groupedCount} grouped` : "";
@@ -193,7 +193,7 @@ function rootTopic(tag) {
 for (const tag of selected) expandedTopicRoots.add(rootTopic(tag));
 
 function syncTopicExpansion(justExpanded = null) {
-  for (const branch of tagsNode.querySelectorAll(':scope > [data-depth="0"]')) {
+  for (const branch of tagsNode.querySelectorAll('#cv-tags > [data-depth="0"]')) {
     const children = branch.querySelector(':scope > .cv-topic-children');
     if (!children) continue;
     const expanded = expandedTopicRoots.has(branch.dataset.topicId);

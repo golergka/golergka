@@ -58,6 +58,29 @@ function matchSources(tags, selected, aliases, graph) {
 
 export const matchesTags = (tags, selected, aliases, graph) => matchSources(tags, selected, aliases, graph).length > 0;
 
+export function workTags(item) {
+  return [...item.tags, ...Object.entries(item.faq || {}).filter(([, answer]) => answer).map(([tag]) => tag)];
+}
+
+function workPoints(item, selected, filters) {
+  const points = item.highlights.map((point) => ({...point, tags: [...point.tags]}));
+  for (const [tag, answer] of Object.entries(item.faq || {})) {
+    if (!answer) continue;
+    const point = Number.isInteger(answer.highlight) ? points[answer.highlight]
+      : {text: answer.text, tags: [], faqOnly: true};
+    if (!point) continue;
+    const label = filters.find(({id}) => id === tag)?.label || tag;
+    const emphases = point.emphases || (point.emphasis ? [{text: point.emphasis, tags: point.emphasisTags || [...point.tags]}] : []);
+    point.tags.push(tag);
+    if (selected.has(tag)) {
+      point.text = `${label}: ${point.text}`;
+      point.emphases = [{text: label, tags: [tag]}, ...emphases];
+    }
+    if (!Number.isInteger(answer.highlight)) points.push(point);
+  }
+  return points;
+}
+
 function highlightText(point, selected, labels, aliases, graph) {
   const matching = matchSources(point.tags, selected, aliases, graph);
   const rawEmphases = point.emphases?.length ? point.emphases
@@ -108,7 +131,9 @@ export function renderProfile(profile) {
 }
 
 export function expertiseLabels(filters, selected = new Set()) {
-  const active = selected.size ? filters.filter(({id}) => selected.has(id)) : filters.filter(({parent}) => !parent);
+  filters = filters.filter(({kind}) => kind !== "faq");
+  const selectedFilters = filters.filter(({id}) => selected.has(id));
+  const active = selectedFilters.length ? selectedFilters : filters.filter(({parent}) => !parent);
   return active.map(({label}) => label);
 }
 
@@ -152,7 +177,7 @@ export function partitionWork(data, selected = new Set()) {
   data.work.forEach((item, index) => {
     if (data.cvStart && item.start < data.cvStart) return;
     const older = data.earlierWork && item.end !== "present" && item.end.slice(0, 4) < data.earlierWork.before;
-    const irrelevant = !matchesTags(item.tags, selected, data.topicAliases, graph);
+    const irrelevant = !matchesTags(workTags(item), selected, data.topicAliases, graph);
     const target = older && irrelevant ? grouped
       : selected.size && irrelevant && data.recentWork ? recentGrouped : individual;
     target.push({ item, index });
@@ -168,15 +193,15 @@ export function renderWork(data, selected = new Set(), { staticView = false, com
   const { individual, grouped, recentGrouped } = partitionWork(data, selected);
   // Individual entries and the expandable history each retain source chronology.
   function renderEntry({item, index}) {
-    const relevant = matchesTags(item.tags, selected, aliases, graph);
-    const points = item.highlights.map((point, order) => {
+    const relevant = matchesTags(workTags(item), selected, aliases, graph);
+    const points = workPoints(item, selected, data.filters).map((point, order) => {
       const tags = canonicalTags(point.tags, aliases);
       const matchedTopics = matchSources(tags, selected, aliases, graph).map(({topic}) => topic);
       return { ...point, tags, matchedTopics, order, score: matchedTopics.length };
     });
     const preview = [];
     const uncovered = new Set(selected);
-    const eligible = selected.size ? points.filter((point) => point.score) : [...points];
+    const eligible = selected.size ? points.filter((point) => point.score) : points.filter((point) => !point.faqOnly);
     // Default stays short; an explicit topic selection reveals all matching evidence.
     const previewLimit = complete ? eligible.length : selected.size ? eligible.length : 2;
     while (preview.length < previewLimit && eligible.length) {

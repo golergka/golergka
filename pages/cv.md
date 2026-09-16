@@ -11,6 +11,10 @@
     <legend>Topics <span class="cv-filter-hint">↓ click!</span></legend>
     <div id="cv-tags" class="cv-tags cv-topic-list">{{cvTags}}</div>
   </fieldset>
+  <fieldset class="cv-faq-controls">
+    <legend>FAQ <span class="cv-filter-hint">↓ click!</span></legend>
+    <div id="cv-faq" class="cv-topic-list">{{cvFaq}}</div>
+  </fieldset>
   <button type="button" id="cv-clear">Clear</button>
 </form>
 
