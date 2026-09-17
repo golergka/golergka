@@ -1,10 +1,15 @@
 const normalizeHue = (value) => ((Math.round(Number(value)) % 360) + 360) % 360;
-const hueDistance = (left, right) => Math.min(Math.abs(left - right), 360 - Math.abs(left - right));
+const hueDistance = (left, right) =>
+  Math.min(Math.abs(left - right), 360 - Math.abs(left - right));
 const MIN_SAVED_HUE_DISTANCE = 12;
 export const CV_TEXT_SELECTION_HUE = 210;
 const RESERVED_UI_HUES = [CV_TEXT_SELECTION_HUE];
 
-export function createTopicColorDirectory(topicIds, saved = {}, persist = () => {}) {
+export function createTopicColorDirectory(
+  topicIds,
+  saved = {},
+  persist = () => {},
+) {
   const allowed = new Set(topicIds);
   const hues = new Map();
   const used = new Set(RESERVED_UI_HUES);
@@ -18,7 +23,11 @@ export function createTopicColorDirectory(topicIds, saved = {}, persist = () => 
     }
     const hue = normalizeHue(saved[topic]);
     if (Number(saved[topic]) !== hue) repaired = true;
-    if ([...used].some((reserved) => hueDistance(reserved, hue) < MIN_SAVED_HUE_DISTANCE)) {
+    if (
+      [...used].some(
+        (reserved) => hueDistance(reserved, hue) < MIN_SAVED_HUE_DISTANCE,
+      )
+    ) {
       repaired = true;
       continue;
     }
@@ -78,3 +87,4 @@ export function createTopicColorDirectory(topicIds, saved = {}, persist = () => 
     },
   };
 }
+

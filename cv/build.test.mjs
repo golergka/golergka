@@ -1,0 +1,27 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { buildCv } from "./build.mjs";
+import { styleHref } from "../site/build-context.mjs";
+
+test("CV build prerenders usable HTML, shares CSS, and emits bundled modules", async (t) => {
+  const outDir = fs.mkdtempSync(path.join(os.tmpdir(), "cv-build-"));
+  t.after(() => fs.rmSync(outDir, { recursive: true, force: true }));
+  await buildCv({ outDir });
+  const html = fs.readFileSync(path.join(outDir, "cv/index.html"), "utf8");
+  assert.ok(html.includes(`href="${styleHref}"`));
+  assert.match(html, /<h1>Max Yankov<\/h1>/);
+  assert.match(html, /<details class="cv-fallback-details"/);
+  const formTag = html.slice(html.indexOf("<form"), html.indexOf("</form"));
+  assert.ok(formTag.includes(" hidden"));
+  assert.doesNotMatch(html, /\{\{\w+\}\}|dateNote|theme\/|cv-render/);
+  const scripts = [...html.matchAll(/<script type="module" src="([^"]+)"/g)];
+  assert.equal(scripts.length, 1);
+  assert.ok(fs.existsSync(path.join(outDir, scripts[0][1])));
+  const files = fs.readdirSync(path.join(outDir, "cv/assets"));
+  assert.ok(files.some((file) => file.startsWith("export-")));
+  assert.ok(files.every((file) => !file.endsWith(".css")));
+});
+

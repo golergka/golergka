@@ -1,257 +1,3 @@
-/* A restrained ink-on-paper palette in both color schemes. */
-
-:root {
-  color-scheme: light dark;
-  --page: #fbfaf6;
-  --surface: #f2f0e9;
-  --text: #23221f;
-  --muted: #6f6c64;
-  --rule: #d9d5ca;
-  --link: #5c45b8;
-  --link-hover: #412c9d;
-}
-
-body {
-  max-width: 44rem;
-  margin: 0 auto;
-  padding: 1rem 1.25rem 4rem;
-  /* Charter and its descendants: same shape as the default serif, better fitted
-     for screens. Falls back to the system serif, never to a downloaded font. */
-  font-family: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  color: var(--text);
-  background: var(--page);
-}
-
-a {
-  color: var(--link);
-  text-decoration: none;
-}
-
-a:hover {
-  color: var(--link-hover);
-}
-
-h1,
-h2,
-h3 {
-  line-height: 1.25;
-  margin-top: 2rem;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid;
-  opacity: 0.15;
-  margin: 2.5rem 0;
-}
-
-blockquote {
-  margin-left: 0;
-  padding-left: 1rem;
-  border-left: 2px solid;
-  opacity: 0.75;
-}
-
-code,
-pre {
-  font-size: 0.9em;
-}
-
-/* Same hairline as tables and <hr>, boxing the block rather than tinting it —
-   the background stays the page background. */
-pre {
-  border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
-  padding: 0.9rem 1rem;
-  margin: 1.5rem 0;
-}
-
-/* Shiki highlights at build time and emits both palettes as custom properties.
-   Picking one here means no client-side JavaScript and no theme flash. */
-.shiki,
-.shiki span {
-  color: var(--shiki-light);
-}
-
-@media (prefers-color-scheme: dark) {
-  .shiki,
-  .shiki span {
-    color: var(--shiki-dark);
-  }
-}
-
-/* Long content (code, ascii diagrams) scrolls itself instead of pushing the
-   page sideways. Tables get a wrapper for this — `display: block` on a table
-   would stop border-collapse from applying. */
-pre,
-.scroll {
-  overflow-x: auto;
-  max-width: 100%;
-}
-
-.scroll {
-  margin: 1.5rem 0;
-}
-
-/* Same hairline as <hr>: enough to separate rows, not a grid of boxes. */
-table {
-  border-collapse: collapse;
-}
-
-th,
-td {
-  text-align: left;
-  padding: 0.4rem 1rem 0.4rem 0;
-  border-bottom: 1px solid;
-}
-
-/* The border colour is the text colour, so it has to be quieted down
-   per element — opacity would fade the text with it. */
-th {
-  border-bottom-color: color-mix(in srgb, currentColor 35%, transparent);
-}
-
-td {
-  border-bottom-color: color-mix(in srgb, currentColor 15%, transparent);
-}
-
-table tr:last-child td {
-  border-bottom: none;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-header {
-  margin: 1.5rem 0 2.5rem;
-  font-weight: bold;
-}
-
-footer {
-  margin-top: 4rem;
-  font-size: 0.9em;
-  opacity: 0.7;
-}
-
-/* Dates: present but quiet, in the same color as the text. */
-.date {
-  font-size: 0.9em;
-  opacity: 0.6;
-  margin-top: 0.25rem;
-}
-
-/* Post list: title first, date underneath. No columns, no bullets. */
-.posts {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.posts li {
-  margin: 1.5rem 0;
-}
-
-.posts a {
-  font-size: 1.15em;
-}
-
-/* The site remains deliberately quiet, but project cards make the portfolio
-   easy to scan without turning it into a dashboard. */
-.home-columns {
-  display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(12rem, 1fr);
-  gap: 1.5rem 2rem;
-  align-items: start;
-}
-
-.home-columns h2,
-.contact-card h2 {
-  margin-top: 0;
-}
-
-.contact-card {
-  padding: 1rem 1.15rem;
-  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
-  border-radius: 0.7rem;
-}
-
-.contact-card ul {
-  margin-bottom: 0;
-  padding-left: 1.1rem;
-}
-
-.project-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  margin: 1.25rem 0 2rem;
-}
-
-.project-card {
-  box-sizing: border-box;
-  padding: 1.2rem;
-  border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
-  border-radius: 0.7rem;
-  background: var(--surface);
-}
-
-.project-card h3 {
-  margin: 0.15rem 0 0.5rem;
-}
-
-.project-card p:last-child {
-  margin-bottom: 0;
-}
-
-.project-card:hover {
-  border-color: color-mix(in srgb, currentColor 42%, transparent);
-}
-
-.eyebrow {
-  margin: 0;
-  color: var(--muted);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.section-link {
-  margin-top: -0.8rem;
-}
-
-.revival-card {
-  margin: 1.25rem 0 2rem;
-}
-
-@media (max-width: 36rem) {
-  .home-columns,
-  .project-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --page: #111110;
-    --surface: #191918;
-    --text: #e7e3da;
-    --muted: #aaa69d;
-    --rule: #33322f;
-    --link: #b9a7ff;
-    --link-hover: #d1c6ff;
-  }
-
-  body {
-    -webkit-text-stroke: 1px var(--page);
-    paint-order: stroke fill;
-  }
-}
-
 /* A CV with the same ink, paper, and serif as the rest of the site.
    Topic selection behaves like a reader's highlighter. */
 body:has(.cv-profile) {
@@ -320,8 +66,6 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
   line-height: 1.5;
   text-align: left;
   cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
 }
 .cv-topic-list > [data-depth="0"] > .cv-topic-select { font-weight: bold; }
 .cv-topic-select > .cv-topic-selector-mark { padding-inline: 0; }
@@ -350,10 +94,10 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
   box-shadow: inset 0 -0.11em var(--topic-color-2, transparent), inset 0 -0.22em var(--topic-color-3, transparent);
   background-repeat: no-repeat;
   background-position: left center;
-  animation: cv-highlight-in 170ms ease-out both;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
+.cv-topic-mark-entering { animation: cv-highlight-in 170ms ease-out both; }
 .cv-topic-mark[data-highlight-derived="true"] {
   background: linear-gradient(176deg,
     transparent 52%,
@@ -386,6 +130,10 @@ html.cv-scroll-lock #cv-app { overflow-anchor: none; }
 .cv-topic-suggestions-label::after { content: ": "; }
 .cv-suggestion-options { display: inline; }
 .cv-evidence { margin: 0.7rem 0 0; font-size: 0.95rem; }
+.cv-experience-disclosure { margin: 0.65rem 0 0; font-size: 0.85rem; color: var(--cv-muted); }
+.cv-experience-disclosure button { padding: 0; border: 0; background: none; font: inherit; color: var(--link); text-decoration: underline; cursor: pointer; user-select: none; }
+.cv-experience-disclosure[hidden] { display: none; }
+@media print { .cv-experience-disclosure { display: none; } }
 .cv-earlier { padding: 1.6rem 0; }
 .cv-archive { margin-top: 0.9rem; }
 .cv-archive > summary { width: fit-content; color: var(--link); cursor: pointer; }
@@ -423,7 +171,7 @@ html.cv-scroll-lock #cv-app { overflow-anchor: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cv-topic-mark,
+  .cv-topic-mark-entering,
   .cv-topic-children.cv-topic-children-entering,
   .cv-content-entering { animation: none; }
 }
@@ -466,4 +214,15 @@ html.cv-scroll-lock #cv-app { overflow-anchor: none; }
   .cv-role mark { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
   .cv-generation-note { display: block; break-inside: avoid; }
   .cv-generation-note a { overflow-wrap: anywhere; }
+}
+
+/* Native controls keep the shared typographic treatment. */
+.cv-topic-select { font-family: inherit; }
+.cv-topic-select:disabled { cursor: default; }
+.cv-topic-suggestions[hidden], .cv-fallback-details[hidden] { display: none; }
+body:has(.cv-profile) { --cv-text-selection: oklch(var(--cv-topic-lightness) var(--cv-topic-chroma) 210 / 0.58); }
+.cv-fallback-details { margin-top: 0.7rem; }
+
+@media print {
+  .cv-topic-suggestions, .cv-archive, .cv-fallback-details { display: none; }
 }

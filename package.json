@@ -4,15 +4,19 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "serve": "node build.mjs && cd dist && python3 -m http.server 8000"
+    "serve": "node build.mjs && cd dist && python3 -m http.server 8000",
+    "test": "node --test cv/*.test.mjs"
   },
   "dependencies": {
     "jspdf": "4.2.1",
-    "mark.js": "^8.11.1",
     "marked": "^15.0.6",
-    "shiki": "^4.4.2"
+    "preact": "^10.29.8",
+    "preact-render-to-string": "^6.7.0",
+    "shiki": "^4.4.2",
+    "yaml": "^2.9.1"
   },
   "devDependencies": {
+    "esbuild": "^0.28.2",
     "wrangler": "^4.119.0"
   }
 }
