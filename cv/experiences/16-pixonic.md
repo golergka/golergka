@@ -3,16 +3,11 @@ organization: Pixonic
 start: 2011-02
 end: 2011-11
 location: Russia
-tags:
-  - games
-  - product
-  - leadership
-role: "[Producer](topic:leadership)"
+role: "[Producer](leadership)"
 ---
 
-[Developed](topic:product) and [supervised](topic:leadership) original and localized [social and mobile games](topic:games,product). [](topic:games,product,leadership)
+[Developed](product) and [supervised](leadership) original and localized [social and mobile games](games,product).
 
 ## Experience
 
-- Created [design documentation](topic:product), [oversaw production](topic:product,leadership), and [evaluated titles](topic:product) for localization and business development. [](topic:product,leadership,impact,challenges)
-
+- [Created [design documentation](product), [oversaw production](product,leadership), and [evaluated titles](product) for localization and business development.](impact,challenges)

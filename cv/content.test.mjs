@@ -19,8 +19,15 @@ test("Markdown compiles all experiences and FAQ uses ordinary topic evidence", (
 
 test("topic links preserve phrase boundaries and validate topic names", () => {
   const allowed = new Set(["python", "impact"]);
-  const point = parseTopicText("Built a [Python](topic:python) service. [](topic:impact)", allowed);
+  const point = parseTopicText("[Built a [Python](python) service.](impact)", allowed);
   assert.equal(point.text, "Built a Python service.");
   assert.deepEqual(point.emphases, [{text:"Python",tags:["python"]},{text:point.text,tags:["impact"]}]);
-  assert.throws(() => parseTopicText("[typo](topic:pythno)", allowed), /Unknown topic/);
+  assert.throws(() => parseTopicText("[typo](pythno)", allowed), /Unknown topic/);
+  assert.throws(() => parseTopicText("[](impact)", allowed), /wrap visible text/);
+  const data = loadContent();
+  for (const item of data.work) {
+    assert.ok(!("keywords" in item));
+    const evidence = new Set([...item.summaryTags, ...item.roleEmphases.flatMap((e) => e.tags), ...item.highlights.flatMap((p) => p.tags)]);
+    assert.deepEqual(new Set(item.tags), evidence);
+  }
 });

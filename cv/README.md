@@ -11,18 +11,20 @@ strings, or `present`.
 Use ordinary Markdown link notation to associate words with topics:
 
 ```markdown
-- Built [voice agents](topic:livekit) with [background tools](topic:automation).
-- [The startup ran out of runway.](topic:career-moves)
-- [Shipped the first production release.](topic:impact,challenges)
+- Built [voice agents](livekit) with [background tools](automation).
+- [The startup ran out of runway.](career-moves)
+- [Shipped the first production release.](impact,challenges)
 ```
 
-An empty topic link at the end assigns topics to the whole bullet:
+Wrap a whole sentence to associate it with a topic. Links can nest when a phrase
+inside that sentence has its own topic:
 
 ```markdown
-- Built [voice agents](topic:livekit) with background tools. [](topic:impact)
+- [Built [voice agents](livekit) with background tools.](impact)
 ```
 
-If the topic already marks a phrase, an empty link does not widen that highlight.
+No tag or keyword lists are needed in the metadata. The build derives each
+experience's topics from its role, summary, and bullet links.
 FAQ topics use exactly the same syntax and rendering. `kind: faq` in the topic
 configuration only controls which selector displays them.
 

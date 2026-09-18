@@ -4,26 +4,15 @@ start: "2020"
 end: "2021"
 location: Russia / remote
 url: https://fastcup.net
-tags:
-  - backend
-  - sql
-  - postgres
-  - product
-  - typescript
-  - type-systems
-  - developer-tools
-  - production-engineering
-  - games
 role: Senior Software Engineer, backend
 ---
 
-Took ownership of a [TypeScript and PostgreSQL backend](topic:typescript,postgres,backend) for a high-load competition platform. [](topic:typescript,postgres,backend)
+Took ownership of a [TypeScript and PostgreSQL backend](typescript,postgres,backend) for a high-load competition platform.
 
 ## Experience
 
-- Introduced [pgtyped](topic:developer-tools,type-systems) and [advanced PostgreSQL](topic:postgres,sql) using recursive CTEs, triggers, stored functions, and [typed SQL queries](topic:type-systems,sql); [refactored application logic](topic:backend) and added unit and integration tests. [](topic:backend,sql,postgres,type-systems,developer-tools)
+- Introduced [pgtyped](developer-tools,type-systems) and [advanced PostgreSQL](postgres,sql) using recursive CTEs, triggers, stored functions, and [typed SQL queries](type-systems,sql); [refactored application logic](backend) and added unit and integration tests.
 
-- Built a [tournament system from scratch](topic:product,games). [](topic:product,games,impact)
+- [Built a [tournament system from scratch](product,games).](impact)
 
-- Improved high-load performance through [query-plan analysis, indexing, and deliberate denormalization](topic:sql,postgres,production-engineering). [](topic:sql,postgres,production-engineering,challenges)
-
+- [Improved high-load performance through [query-plan analysis, indexing, and deliberate denormalization](sql,postgres,production-engineering).](challenges)

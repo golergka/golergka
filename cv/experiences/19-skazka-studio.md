@@ -3,16 +3,11 @@ organization: SKAZKA Studio
 start: 2009-04
 end: 2009-12
 location: Russia
-tags:
-  - games
-  - product
-  - leadership
-role: "[Lead Game Designer](topic:leadership)"
+role: "[Lead Game Designer](leadership)"
 ---
 
-[Led](topic:leadership) a major redesign of the [live game The Kingdom](topic:games,product). [](topic:leadership)
+[Led](leadership) a major redesign of the [live game The Kingdom](games,product).
 
 ## Experience
 
-- Reworked [combat, content, and economy](topic:games,product) as part of the product relaunch. [](topic:games,product,impact,challenges)
-
+- [Reworked [combat, content, and economy](games,product) as part of the product relaunch.](impact,challenges)

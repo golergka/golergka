@@ -7,53 +7,29 @@ url: https://hotline.net
 links:
   - label: LinkedIn company
     url: https://www.linkedin.com/company/102483250/
-tags:
-  - leadership
-  - agents
-  - livekit
-  - model-infrastructure
-  - product
-  - backend
-  - platform
-  - twilio
-  - quo
-  - automation
-  - safety
-  - evals
-  - braintrust
-  - betterstack
-  - observability
-  - production-engineering
-  - developer-tools
-  - postgres
-  - typescript
-  - frontend
-  - autonomous-development
-  - opentelemetry
-role: "[Founding Engineer](topic:leadership)"
+role: "[Founding Engineer](leadership)"
 ---
 
-The [only founding engineer](topic:leadership) on an AI voice and messaging platform, from agent behavior to production infrastructure. [](topic:leadership)
+The [only founding engineer](leadership) on an AI voice and messaging platform, from agent behavior to production infrastructure.
 
 ## Experience
 
-- Built a real-time [LiveKit](topic:livekit) [voice-agent pipeline](topic:agents,product,backend) using Deepgram streaming speech recognition, Silero VAD, [Gemini](topic:model-infrastructure) and [OpenAI](topic:model-infrastructure) tool-calling, and ElevenLabs streaming speech synthesis. [](topic:agents,livekit,model-infrastructure,product,backend)
+- Built a real-time [LiveKit](livekit) [voice-agent pipeline](agents,product,backend) using Deepgram streaming speech recognition, Silero VAD, [Gemini](model-infrastructure) and [OpenAI](model-infrastructure) tool-calling, and ElevenLabs streaming speech synthesis.
 
-- Built [inbound and outbound voice](topic:product), [SMS](topic:product,twilio), and [email communication](topic:product) with [Twilio](topic:twilio), [LiveKit SIP/PSTN](topic:livekit,backend,platform), [AWS](topic:platform), and [Quo (formerly OpenPhone)](topic:quo). [](topic:product,backend,platform,twilio,livekit,quo)
+- Built [inbound and outbound voice](product), [SMS](product,twilio), and [email communication](product) with [Twilio](twilio), [LiveKit SIP/PSTN](livekit,backend,platform), [AWS](platform), and [Quo (formerly OpenPhone)](quo).
 
-- Built [background and specialist agents](topic:agents,automation,product) with [shared tools, persistent context, scheduled execution](topic:automation,backend), [transactional side effects](topic:backend,safety), progress reporting, and [guarded completion](topic:safety). [](topic:agents,automation,backend,product,safety,challenges)
+- [Built [background and specialist agents](agents,automation,product) with [shared tools, persistent context, scheduled execution](automation,backend), [transactional side effects](backend,safety), progress reporting, and [guarded completion](safety).](challenges)
 
-- Built [LLM evaluation](topic:evals) and [debugging infrastructure](topic:developer-tools) using [Braintrust](topic:braintrust) traces and experiments, [real-model agent behavioral tests](topic:evals,agents), [token and cost tracking](topic:evals,observability), and correlation with [Better Stack](topic:betterstack) [production traces](topic:observability,production-engineering). [](topic:agents,evals,braintrust,betterstack,observability,production-engineering,developer-tools)
+- Built [LLM evaluation](evals) and [debugging infrastructure](developer-tools) using [Braintrust](braintrust) traces and experiments, [real-model agent behavioral tests](evals,agents), [token and cost tracking](evals,observability), and correlation with [Better Stack](betterstack) [production traces](observability,production-engineering).
 
-- Developed [scheduled agent execution](topic:agents,automation), [assistant provisioning](topic:platform), [PostgreSQL/PGMQ queues with durable retries](topic:postgres,backend,platform), [Redis caching](topic:backend), [database migrations](topic:postgres,platform), and [remote production tests](topic:developer-tools,production-engineering) across [SMS, email, and voice](topic:product). [](topic:agents,automation,backend,platform,postgres,developer-tools,production-engineering,product)
+- Developed [scheduled agent execution](agents,automation), [assistant provisioning](platform), [PostgreSQL/PGMQ queues with durable retries](postgres,backend,platform), [Redis caching](backend), [database migrations](postgres,platform), and [remote production tests](developer-tools,production-engineering) across [SMS, email, and voice](product).
 
-- Worked across a [TypeScript](topic:typescript) monorepo: [Next.js admin tools](topic:frontend,product,developer-tools), [API services, asynchronous workers, shared domain logic](topic:backend), and [remote environment tests](topic:developer-tools,production-engineering). [](topic:typescript,frontend,product,developer-tools,backend,production-engineering)
+- Worked across a [TypeScript](typescript) monorepo: [Next.js admin tools](frontend,product,developer-tools), [API services, asynchronous workers, shared domain logic](backend), and [remote environment tests](developer-tools,production-engineering).
 
-- Built end-to-end [agent-driven development pipelines](topic:agents,autonomous-development,developer-tools) for autonomous implementation, [specialized review agents](topic:autonomous-development,developer-tools), [testing, integration](topic:developer-tools), and [production delivery](topic:production-engineering). [](topic:agents,autonomous-development,developer-tools,production-engineering)
+- Built end-to-end [agent-driven development pipelines](agents,autonomous-development,developer-tools) for autonomous implementation, [specialized review agents](autonomous-development,developer-tools), [testing, integration](developer-tools), and [production delivery](production-engineering).
 
-- [Instrumented and investigated production](topic:production-engineering,observability) with [OpenTelemetry](topic:opentelemetry), [Better Stack](topic:betterstack), [Braintrust](topic:braintrust), Sentry, and [voice metrics](topic:observability,livekit) covering speech-to-text (STT), large language models (LLMs), text-to-speech (TTS), voice activity detection (VAD), silence, latency, and usage. [](topic:observability,betterstack,braintrust,opentelemetry,production-engineering,livekit)
+- [Instrumented and investigated production](production-engineering,observability) with [OpenTelemetry](opentelemetry), [Better Stack](betterstack), [Braintrust](braintrust), Sentry, and [voice metrics](observability,livekit) covering speech-to-text (STT), large language models (LLMs), text-to-speech (TTS), voice activity detection (VAD), silence, latency, and usage.
 
-- Kept agent responses highly responsive at [roughly 200–500 ms](topic:livekit,production-engineering) while [tool calls and longer-running work continued in the background](topic:automation,backend). [](topic:livekit,production-engineering,automation,backend,impact)
+- [Kept agent responses highly responsive at [roughly 200–500 ms](livekit,production-engineering) while [tool calls and longer-running work continued in the background](automation,backend).](impact)
 
-- The startup ran out of runway. I gravitate toward early-stage startups. [](topic:career-moves)
-
+- [The startup ran out of runway. I gravitate toward early-stage startups.](career-moves)
