@@ -11,4 +11,4 @@ Built an offer-based monetization [startup from concept to launch](founder,produ
 
 ## Experience
 
-- [As [founder](founder) and [CEO](founder), [raised seed investment, attracted the first advertisers](founder), and [developed and launched the offer system](product).](impact,challenges)
+- As [founder](founder) and [CEO](founder), [raised seed investment, attracted the first advertisers](founder), and [developed and launched the offer system](product).

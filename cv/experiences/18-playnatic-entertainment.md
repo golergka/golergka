@@ -10,4 +10,4 @@ role: "[Lead Game Designer](leadership)"
 
 ## Experience
 
-- [[Designed the adaptation](product) of conventional [multiplayer shooters to session-based free-to-play MMO systems](multiplayer).](impact,challenges)
+- [Designed the adaptation](product) of conventional [multiplayer shooters to session-based free-to-play MMO systems](multiplayer).

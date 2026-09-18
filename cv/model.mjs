@@ -1,5 +1,4 @@
 export const defaultTags = [
-  "automation",
   "evals",
   "livekit",
   "knowledge-graphs",

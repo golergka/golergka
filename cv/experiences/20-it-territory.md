@@ -10,4 +10,4 @@ Worked on the [PvP title Mortalia](multiplayer) and [live games](games) includin
 
 ## Experience
 
-- [[Built client-server systems](backend,native), coordinated outsourced art, co-wrote an art bible, and [balanced live content](games,product).](impact,challenges)
+- [Built client-server systems](backend,native), coordinated outsourced art, co-wrote an art bible, and [balanced live content](games,product).

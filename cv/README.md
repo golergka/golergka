@@ -11,16 +11,16 @@ strings, or `present`.
 Use ordinary Markdown link notation to associate words with topics:
 
 ```markdown
-- Built [voice agents](livekit) with [background tools](automation).
+- Built [voice agents](livekit) with [background tools](agent-harness).
 - [The startup ran out of runway.](career-moves)
-- [Shipped the first production release.](impact,challenges)
+- [Shipped the first production release.](product)
 ```
 
 Wrap a whole sentence to associate it with a topic. Links can nest when a phrase
 inside that sentence has its own topic:
 
 ```markdown
-- [Built [voice agents](livekit) with background tools.](impact)
+- [Built [voice agents](livekit) with background tools.](product)
 ```
 
 No tag or keyword lists are needed in the metadata. The build derives each

@@ -10,4 +10,5 @@ Developed [client](native) and [server components](backend) for [casual match-3 
 
 ## Experience
 
-- [Worked with [Cocos2d-x, SpiderMonkey](games,native), [Node.js, Sequelize, and MySQL](backend); advocated [TypeScript adoption](typescript).](impact,challenges)
+- Developed client-server free-to-play games with node/sequelize/mysql/rest backend and cocos2d-x/spidermonkey/javascript frontend. 
+- Spearheaded Typescript adoption for legacy Javascript codebase.

@@ -18,10 +18,7 @@ Worked across frontend, services, data infrastructure, and product delivery for 
 
 ## Experience
 
-- [Built and operated [SQL-document linting](ides,sql,product) as a standalone [Python service](python,backend).](impact)
-
-- [Developed a [SQLFluff wrapper](developer-tools,sql) and integrated [Kafka-based processing and infrastructure](data,backend,platform).](challenges)
-
-- Delivered related work in [Ruby on Rails, Node.js](backend), and [React](react); initiated [dbt scheduling](data) work.
-
-- [The startup ran out of runway. I gravitate toward early-stage startups.](career-moves)
+- Built and operated [SQL-document linting](ides,sql,product) as a standalone kafka-based [Python service](python,backend) with a self-implmented sqlfluff wrapper.
+- Delivered feature and maintenance work with in ruby on rails, nodejs background applications and react frontend.
+- Spearheaded development of cloud-based dbt job orchestrator.
+- [Left the startup as it ran out of runway and was acquired by Timescale with a skeleton team](career-moves)

@@ -6,10 +6,10 @@ location: Israel
 role: Senior Developer
 ---
 
-Developed [game prototypes](games,product) and improved [engineering workflow](developer-tools) on [Pirate Kings](games).
+Developed [game prototypes](games,product) and improved engineering workflow on [Pirate Kings](games).
 
 ## Experience
 
-- [Migrated the [Pirate Kings](games) [Unity](unity) project from [SVN to Git](developer-tools) and [improved team workflow](developer-tools).](impact)
-
-- [Built [Unity](unity) [artist tools](developer-tools) and introduced [unit and integration testing](developer-tools) with backward compatibility.](challenges)
+- Migrated the [Pirate Kings](games) [Unity](unity) project from SVN to Git and improved team workflow.
+- Built [Unity](unity) artist tools and introduced unit and integration testing with backward compatibility.
+- Developed original prototypes of new company products.

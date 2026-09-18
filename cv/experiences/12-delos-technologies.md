@@ -10,6 +10,6 @@ Created [VR escape-room prototypes](native,games) while [leading technical work,
 
 ## Experience
 
-- [[Co-founded the company](founder) as [CTO](cto), [leading technical work, business development, and fundraising](leadership).](impact)
-
-- [Built [Unity](unity) rendering and PBR asset workflows using Substance tools, Quixel Suite, and Houdini.](challenges)
+- [Co-founded the company](founder) as [CTO](cto), [leading technical work, business development, and fundraising](leadership).
+- Built [Unity](unity) rendering and PBR asset workflows using Substance tools, Quixel Suite, and Houdini.
+- Prototyped and iterated on VR gameplay mechanics together with escape-room operators.

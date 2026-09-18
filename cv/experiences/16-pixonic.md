@@ -10,4 +10,4 @@ role: "[Producer](leadership)"
 
 ## Experience
 
-- [Created [design documentation](product), [oversaw production](product,leadership), and [evaluated titles](product) for localization and business development.](impact,challenges)
+- Created [design documentation](product), [oversaw production](product,leadership), and [evaluated titles](product) for localization and business development.

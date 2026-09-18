@@ -10,6 +10,5 @@ Developed [specialized chatbot products](agents,product) including a virtual som
 
 ## Experience
 
-- [Applied [OpenAI APIs](model-infrastructure), LlamaIndex, and LangChain to [product-specific conversational flows](agents,product).](challenges)
-
-- [Owned implementation across [product behavior and delivery](product).](impact)
+- Applied [OpenAI APIs](llms), LlamaIndex, and LangChain to [product-specific conversational flows](agents,product).
+- Owned implementation across [product behavior and delivery](product).

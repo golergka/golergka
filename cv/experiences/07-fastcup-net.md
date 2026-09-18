@@ -11,8 +11,7 @@ Took ownership of a [TypeScript and PostgreSQL backend](typescript,postgres,back
 
 ## Experience
 
-- Introduced [pgtyped](developer-tools,type-systems) and [advanced PostgreSQL](postgres,sql) using recursive CTEs, triggers, stored functions, and [typed SQL queries](type-systems,sql); [refactored application logic](backend) and added unit and integration tests.
-
-- [Built a [tournament system from scratch](product,games).](impact)
-
-- [Improved high-load performance through [query-plan analysis, indexing, and deliberate denormalization](sql,postgres,production-engineering).](challenges)
+- Introduced pgtyped and utilised raw sql queries to achieve high perfomnce, worked with recursive CTEs, triggers, stored procedures solved issues spanning different postgresql transaction isolation levels.
+- Built from scratch a highly customizable, player-driven, resilient tournament system with auditable logs and automatic execution.
+- Integrated advanced and data-dense frontend with GrahQL API and Hasura backend, as well as Counter-Striker server software and client-based anti-cheat utility.
+- Improved high-load performance through [query-plan analysis, indexing, and deliberate denormalization](sql,postgres).

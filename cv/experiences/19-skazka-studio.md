@@ -10,4 +10,4 @@ role: "[Lead Game Designer](leadership)"
 
 ## Experience
 
-- [Reworked [combat, content, and economy](games,product) as part of the product relaunch.](impact,challenges)
+- Reworked [combat, content, and economy](games,product) as part of the product relaunch.

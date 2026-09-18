@@ -10,6 +10,6 @@ role: "[Lead Developer](team-lead)"
 
 ## Experience
 
-- [[Led the client-development team](leadership,team-lead), including [hiring](hiring) and day-to-day engineering operations.](impact)
-
-- [Implemented [continuous integration, test-driven development](developer-tools), [native integrations](native), and improved [Unity test tooling](developer-tools,unity).](challenges)
+- Maintained original game and developed a new vision-improving app from scratch.
+- [Led the client-development team](leadership,team-lead), including [hiring](hiring) and day-to-day engineering operations.
+- Implemented continuous integration, test-driven development, [native integrations](native), and improved [Unity test tooling](developer-tools,unity).

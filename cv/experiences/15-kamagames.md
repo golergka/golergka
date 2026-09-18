@@ -10,8 +10,10 @@ Worked on [Pokerist, Roulettist, and an iOS city-building game](games) across de
 
 ## Experience
 
-- [Implemented engine features including [dynamic texture packing, threading](native), platform support, and localization.](impact)
-
+- Deep technical work on dynamic texture atlases, UI and text rendering, unicode, emoji and RTL processing.
+- Implemented engine features including native threading, advanced platform support and localization.
+- Maintained render quality at 60fps on iPhone 4 device target.
+- Debugged shader issues on exotic video processing units.
+- Implemented engine features including [dynamic texture packing, threading](native), platform support, and localization.
 - Worked in [C#, Unity, Java, JavaScript, C, and Objective-C](unity,native).
-
-- [Designed mechanics and balance; [analyzed product data](games,data,product) with SQL, Excel, and R.](challenges)
+- Designed mechanics and balance; [analyzed product data](games,data,product) with SQL, Excel and R.

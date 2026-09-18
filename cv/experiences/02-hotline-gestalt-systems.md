@@ -10,26 +10,14 @@ links:
 role: "[Founding Engineer](leadership)"
 ---
 
-The [only founding engineer](leadership) on an AI voice and messaging platform, from agent behavior to production infrastructure.
+The [only founding engineer](leadership) for sms/email/call-based AI avent.
 
 ## Experience
 
-- Built a real-time [LiveKit](livekit) [voice-agent pipeline](agents,product,backend) using Deepgram streaming speech recognition, Silero VAD, [Gemini](model-infrastructure) and [OpenAI](model-infrastructure) tool-calling, and ElevenLabs streaming speech synthesis.
-
-- Built [inbound and outbound voice](product), [SMS](product,twilio), and [email communication](product) with [Twilio](twilio), [LiveKit SIP/PSTN](livekit,backend,platform), [AWS](platform), and [Quo (formerly OpenPhone)](quo).
-
-- [Built [background and specialist agents](agents,automation,product) with [shared tools, persistent context, scheduled execution](automation,backend), [transactional side effects](backend,safety), progress reporting, and [guarded completion](safety).](challenges)
-
-- Built [LLM evaluation](evals) and [debugging infrastructure](developer-tools) using [Braintrust](braintrust) traces and experiments, [real-model agent behavioral tests](evals,agents), [token and cost tracking](evals,observability), and correlation with [Better Stack](betterstack) [production traces](observability,production-engineering).
-
-- Developed [scheduled agent execution](agents,automation), [assistant provisioning](platform), [PostgreSQL/PGMQ queues with durable retries](postgres,backend,platform), [Redis caching](backend), [database migrations](postgres,platform), and [remote production tests](developer-tools,production-engineering) across [SMS, email, and voice](product).
-
-- Worked across a [TypeScript](typescript) monorepo: [Next.js admin tools](frontend,product,developer-tools), [API services, asynchronous workers, shared domain logic](backend), and [remote environment tests](developer-tools,production-engineering).
-
-- Built end-to-end [agent-driven development pipelines](agents,autonomous-development,developer-tools) for autonomous implementation, [specialized review agents](autonomous-development,developer-tools), [testing, integration](developer-tools), and [production delivery](production-engineering).
-
-- [Instrumented and investigated production](production-engineering,observability) with [OpenTelemetry](opentelemetry), [Better Stack](betterstack), [Braintrust](braintrust), Sentry, and [voice metrics](observability,livekit) covering speech-to-text (STT), large language models (LLMs), text-to-speech (TTS), voice activity detection (VAD), silence, latency, and usage.
-
-- [Kept agent responses highly responsive at [roughly 200–500 ms](livekit,production-engineering) while [tool calls and longer-running work continued in the background](automation,backend).](impact)
-
-- [The startup ran out of runway. I gravitate toward early-stage startups.](career-moves)
+- Real-time [LiveKit](livekit) [voice-agent pipeline](agents,product,backend) using Deepgram streaming speech recognition, Silero VAD, [Gemini](llms) and [OpenAI](llms) tool-calling, and ElevenLabs streaming speech synthesis. In and outbound calls (Quo - formerly OpenPhone), [SMS](twilio), and email communication. Used STT, TTS and VAD to achieve highly responsive voice agent with 200-500ms latency and delegating tool calls to a background agent (feature implemented by ChatGPT voice only in July 2026).
+- Agent harness based on vercel's ai sdk, with shared tools, persisted context, memory system. Scheduled execution and work queues (pgmq), resilient agent orchestration and provisioning, and transactional side effects, redis caching.
+- Built LLM evaluation, debugging and observability infrastructure using Braintrust for traces and experiments, token and cost tracking, connected with Better Stack and Sentry production traces, integrating together several OpenTelemetry-based SDKs.
+- Achieved highly responsive li
+- Built an AI-based software development system with recursive agent review.
+- Developed [scheduled agent execution](agents), [assistant provisioning](devops), [PostgreSQL/PGMQ queues with durable retries](postgres,backend,devops), [Redis caching](backend), [database migrations](postgres,devops), and remote production tests across [SMS, email, and voice](product).
+- [Unfortunately, startup didn't hit a product-market fit and ran out of runway](career-moves).

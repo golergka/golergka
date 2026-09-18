@@ -16,17 +16,8 @@ filters:
   - id: career-moves
     label: Career moves
     kind: faq
-  - id: impact
-    label: Impact
-    kind: faq
-  - id: challenges
-    label: Challenges
-    kind: faq
   - id: agents
     label: AI & agents
-  - id: automation
-    label: Agent workflows
-    parent: agents
   - id: evals
     label: LLM evaluation
     parent: agents
@@ -36,8 +27,14 @@ filters:
   - id: pydantic-ai
     label: Pydantic AI
     parent: agents
-  - id: model-infrastructure
-    label: Model APIs & inference
+  - id: agent-harness
+    label: Agent harness
+    parent: agents
+  - id: ml-ops
+    label: MLOps
+    parent: agents
+  - id: llms
+    label: LLMs
     parent: agents
   - id: livekit
     label: LiveKit / voice AI
@@ -55,7 +52,7 @@ filters:
     parent: developer-tools
   - id: claude-code
     label: Claude Code
-    parent: developer-tools
+    parent: agents
   - id: product
     label: Product engineering
   - id: frontend
@@ -93,12 +90,6 @@ filters:
   - id: knowledge-graphs
     label: Knowledge graphs
     parent: data
-  - id: structured-data
-    label: Structured data
-    parent: data
-  - id: ingestion
-    label: Data ingestion
-    parent: data
   - id: search
     label: Search & retrieval
     parent: data
@@ -108,29 +99,26 @@ filters:
   - id: pgvector
     label: pgvector
     parent: data
-  - id: production-engineering
-    label: Reliability & operations
-  - id: platform
-    label: Infrastructure & deployment
-    parent: production-engineering
+  - id: devops
+    label: DevOps
   - id: observability
     label: Observability
-    parent: production-engineering
+    parent: devops
   - id: betterstack
     label: Better Stack
-    parent: production-engineering
+    parent: devops
   - id: datadog
     label: Datadog
-    parent: production-engineering
+    parent: devops
   - id: opentelemetry
     label: OpenTelemetry
-    parent: production-engineering
+    parent: devops
   - id: safety
     label: Security & safety
-    parent: production-engineering
+    parent: devops
   - id: kubernetes
     label: Kubernetes / k3s
-    parent: production-engineering
+    parent: devops
   - id: leadership
     label: Technical leadership
   - id: founder
@@ -156,8 +144,6 @@ filters:
 topicRelations:
   - from: evals
     to: braintrust
-  - from: automation
-    to: pydantic-ai
   - from: pydantic-ai
     to: python
   - from: livekit
@@ -168,7 +154,7 @@ topicRelations:
     to: fastapi
   - from: postgres
     to: pgvector
-  - from: platform
+  - from: devops
     to: kubernetes
   - from: observability
     to: betterstack
@@ -182,12 +168,12 @@ topicAliases:
   ai: agents
   database: sql
   networking: multiplayer
-  infrastructure: platform
+  infrastructure: devops
   access-control: safety
   delivery: product
   consulting: product
-  openai: model-infrastructure
-  litellm: model-infrastructure
+  openai: llms
+  litellm: llms
   voice-ai: livekit
   preact: react
   ceo: founder
@@ -212,20 +198,25 @@ recentWork:
         - Jam.dev
         - PopSQL
         - Deep Channel
-      text: Remote full-stack product engineering for American startups.
+      text: Full-stack development for American startups, remotely. Delivered
+        features and maintenance across frontend, services and background applications.
     - organizations:
         - Hotline (Gestalt Systems)
-      text: The only founding engineer on an AI voice and messaging platform.
+      text: The only founding engineer for an sms/email/call-based AI agent.
+        Built the voice pipeline, agent harness, evaluation and observability infrastructure.
     - organizations:
         - Coloph
-      text: An independent graph-based knowledge system and its open-source
-        foundations.
+      text: Founded and built a graph-based knowledge system for messy,
+        self-contradictory company data. Custom agent tools and orchestration,
+        self-operated models and autonomous software development.
     - organizations:
         - International clients
-      text: Conversational AI consulting for international clients.
+      text: Developed specialized chatbot products for international clients,
+        including a virtual sommelier, counselor and salesperson.
     - organizations:
         - FastCup.net
-      text: Backend engineering for a competitive gaming platform.
+      text: Took ownership of a high-load competition backend. Built a player-driven
+        tournament system from scratch and worked on PostgreSQL performance.
 earlierWork:
   before: "2021"
   title: Earlier work & projects
@@ -239,27 +230,30 @@ earlierWork:
         - Innovision Labs
         - Jelly Button Games
         - KamaGames
-      text: Game and application development, from prototypes to live products.
+      text: Developed game prototypes, maintained live games and built client-server
+        mobile titles. Worked across gameplay, backend and rendering.
     - organizations:
         - Delos Technologies
-      text: VR prototypes and business development.
+      text: Co-founded a VR company. Built escape-room prototypes and iterated
+        on gameplay together with escape-room operators.
     - organizations:
         - Sofq Games
         - Hypetrain Digital
         - Innovision Labs
-      text: Engineering leadership, hiring and development processes.
+      text: Hired and led teams, established development processes and took
+        over existing codebases.
     - organizations:
         - Pixonic
         - Playnatic Entertainment
         - SKAZKA Studio
         - IT Territory
         - 2RealLife
-      text: "Game design and production: mechanics, economies, live content and art
-        coordination."
+      text: Designed game mechanics and economies, reworked live content,
+        wrote design documentation and coordinated art production.
     - organizations:
         - adOffer
-      text: Founded and launched an adtech startup, raising seed investment and
-        attracting its first advertisers.
+      text: Founded adOffer, raised seed investment, attracted the first
+        advertisers and developed and launched the offer system.
 artifacts:
   - name: Coloph
     featured: true
@@ -272,7 +266,7 @@ artifacts:
       - product
       - data
       - database
-      - platform
+      - devops
   - name: Coloph Works
     url: https://github.com/golergka/coloph-works
     period: 2026–present
@@ -283,7 +277,7 @@ artifacts:
       - agents
       - developer-tools
       - product
-      - platform
+      - devops
       - safety
       - backend
   - name: Hotline
@@ -295,7 +289,7 @@ artifacts:
       - agents
       - ai
       - product
-      - platform
+      - devops
       - backend
       - data
       - leadership
@@ -308,7 +302,7 @@ artifacts:
       - agents
       - safety
       - developer-tools
-      - platform
+      - devops
   - name: Agent History
     url: https://github.com/golergka/agent-history
     period: "2026"
@@ -349,7 +343,7 @@ artifacts:
     tags:
       - agents
       - developer-tools
-      - platform
+      - devops
   - name: Diskscope
     url: https://github.com/golergka/diskscope
     period: "2026"
@@ -359,7 +353,6 @@ artifacts:
       - native
       - rust
       - product
-      - developer-tools
 skills:
   productAndLeadership:
     - Product discovery
@@ -420,4 +413,3 @@ editorialNotes:
     without confirmation.
   - Validate historical install counts, conversion claims, and client survey
     percentages before restoring them.
-

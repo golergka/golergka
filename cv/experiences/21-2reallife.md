@@ -10,4 +10,4 @@ Worked on [browser-game](games,frontend) [pre-production and production](product
 
 ## Experience
 
-- [Contributed to [concepts, mechanics](games,product), [interfaces](frontend,product), documentation, and external art coordination.](impact,challenges)
+- Contributed to [concepts, mechanics](games,product), [interfaces](frontend,product), documentation, and external art coordination.

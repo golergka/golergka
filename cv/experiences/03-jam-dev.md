@@ -18,10 +18,9 @@ role: Senior Engineer
 
 ## Experience
 
-- [Contributed to a [TypeScript](typescript) [developer tool](developer-tools,product) spanning a [browser extension](frontend), recording applications, dashboard, [GraphQL API](backend), and [Cloudflare workers](platform).](impact)
-
-- Worked on [product](product) and [reliability changes](production-engineering) across [frontend](frontend), [backend](backend), [infrastructure](platform), billing, integrations, and [developer tooling](developer-tools).
-
-- Joined as the company’s seventeenth team member.
-
-- [Used [Datadog](datadog) for [deep production investigations](observability,production-engineering) across the [browser extension, recording applications, dashboard](frontend), [APIs, workers](backend), and [supporting infrastructure](platform).](challenges)
+- Contributed and stabilized a full-stack application spanning a browser extension, recording applications, web dashboard, grpahql api, billing, external integrations and asyncronous media processing.
+- Spearheaded migration to Chrome extension manifest v3, which required changing the codebase to adopt an event-driven, async approach and built in much more resilience and fault tolerance.
+- Maintained and improved pipelines handling enormous amount of data in the browser, solved issues and improved resilience of handling video and audio recording and data in extension environment.
+- Implemented features from PRD to rollout and maintenance.
+- Contributed to a [TypeScript](typescript) [developer tool](developer-tools,product) spanning a [browser extension](frontend), recording applications, dashboard, [GraphQL API](backend), and [Cloudflare workers](devops).
+- Used [Datadog](datadog) for [deep production investigations](observability) across the [browser extension, recording applications, dashboard](frontend), [APIs, workers](backend), and [supporting infrastructure](devops).
