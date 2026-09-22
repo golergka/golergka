@@ -3,9 +3,6 @@ organization: Hypetrain Digital
 start: 2017-07
 end: "2019"
 location: Russia
-links:
-  - label: The Wild Eight
-    url: https://store.steampowered.com/app/526160/The_Wild_Eight/
 role: "[Lead Developer](team-lead)"
 ---
 

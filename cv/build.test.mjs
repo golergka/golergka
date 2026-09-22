@@ -17,8 +17,7 @@ test("CV build prerenders usable HTML, shares CSS, and emits bundled modules", a
   assert.match(html, /href="https:\/\/github\.com\/golergka\/coloph-toolset">coloph-toolset<\/a>/);
   assert.match(html, /href="https:\/\/github\.com\/golergka\/coloph-sync"[^>]*>ship loop<\/a>/);
   assert.doesNotMatch(html, /linkedin\.com\/company|<h3[^>]*>\s*<a /);
-  assert.match(html, /<details(?=[^>]*class="[^"]*cv-experience-details")(?=[^>]*open)[^>]*>/);
-  assert.match(html, /<details(?=[^>]*class="cv-archive")(?=[^>]*open)[^>]*>/);
+  assert.doesNotMatch(html, /<details[^>]*\bopen\b/);
   const formTag = html.slice(html.indexOf("<form"), html.indexOf("</form"));
   assert.ok(formTag.includes(" hidden"));
   assert.match(html, /<meta property="og:title" content="Experience — Max Yankov">/);

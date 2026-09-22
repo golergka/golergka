@@ -20,7 +20,7 @@ function DateLabel({ value }) {
 }
 
 function Experience({ item, index, data, context, compact }) {
-  const { selected, aliases, graph, ready } = context;
+  const { selected, aliases, graph } = context;
   const points = workPoints(item, selected, data.filters).map(
     (point, order) => {
       const tags = canonicalTags(point.tags, aliases);
@@ -97,10 +97,7 @@ function Experience({ item, index, data, context, compact }) {
       </p>
       {preview.length > 0 && pointList(preview)}
       {!compact && remaining.length > 0 && (
-        <details
-          class="cv-archive cv-experience-details"
-          open={!ready}
-        >
+        <details class="cv-archive cv-experience-details">
           <summary>
             <span class="cv-experience-show-full">Show full experience</span>
             <span class="cv-experience-show-highlights">Show highlights</span>
@@ -167,7 +164,7 @@ function ExperienceGroup({ members, config, id, data, context, compact }) {
         ))}
       </p>
       {!compact && (
-        <details class="cv-archive" id={`${id}-details`} open>
+        <details class="cv-archive" id={`${id}-details`}>
           <summary>
             Explore{" "}
             {members.length === 1
