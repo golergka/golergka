@@ -12,5 +12,6 @@ Be concise.
 - Always add durable user-provided project workflow directions to this `AGENTS.md` file, especially directions containing words such as “always” and “never”.
 - Never add regression checks. Delete regression checks when instructed.
 - Always commit and deploy requested changes.
+- Deploy this site with `npm run build`, then source `./.env` and run `npx wrangler pages deploy dist --project-name golergka --branch main`. Do not use `wrangler whoami` to determine whether deployment is available: this token deploys to the named project but cannot list accounts.
 - Never show or send `pages.dev` URLs. Link only to the production domain.
 - For exhaustive audits, split independent categories among subagents and reconcile the results.
