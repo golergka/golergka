@@ -9,4 +9,5 @@ Be concise.
 - Surface unresolved content warnings clearly; never hide them.
 - Treat commit and deploy instructions literally.
 - Do not add regression checks. When a requested change needs a commit and deployment, commit and deploy it.
+- Never show or send `pages.dev` URLs. Link only to the production domain.
 - For exhaustive audits, split independent categories among subagents and reconcile the results.
