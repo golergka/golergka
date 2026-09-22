@@ -8,6 +8,8 @@ Be concise.
 - Treat the PDF as first-class output for every CV change.
 - Surface unresolved content warnings clearly; never hide them.
 - Treat commit and deploy instructions literally.
-- Do not add regression checks. When a requested change needs a commit and deployment, commit and deploy it.
+- Always add durable user-provided project workflow directions to this `AGENTS.md` file.
+- Never add regression checks. Delete regression checks when instructed.
+- Always commit and deploy requested changes.
 - Never show or send `pages.dev` URLs. Link only to the production domain.
 - For exhaustive audits, split independent categories among subagents and reconcile the results.
