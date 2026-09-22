@@ -1,8 +1,8 @@
 # Editing the CV
 
-Edit `experiences/*.md` for experience descriptions and `config.yaml` for the
-profile, topics, selector placement, topic relationships, education, and languages.
-The numbered filenames define the timeline order. All CV code and styles live here.
+Edit `experiences/*.md` for individual roles and `groups/*.md` for multi-role
+summaries. The numbered filenames define the timeline order. `config.mjs` contains
+only selector definitions and topic relationships. All CV code and styles live here.
 
 Each experience starts with YAML metadata between `---` lines, followed by its
 summary and an `## Experience` list. Keep dates as quoted year or year-month

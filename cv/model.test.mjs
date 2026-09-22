@@ -9,6 +9,7 @@ import {
   selectedExpertiseLabels,
   sourceForTag,
   partitionWork,
+  workGroupAnchors,
   workPoints,
 } from "./model.mjs";
 
@@ -117,6 +118,14 @@ test("overview retains every eligible experience exactly once across groups", ()
     indices.sort((a, b) => a - b),
     data.work.map((_, index) => index),
   );
+});
+test("collapsed groups keep their place before overlapping visible work", () => {
+  assert.deepEqual(workGroupAnchors(data), { recent: 0, earlier: 7 });
+  const contractor = partitionWork(data, new Set(["contractor"]));
+  assert.equal(contractor.grouped[0].index, 8);
+  // The earlier-work heading still belongs at its fixed boundary, index 7,
+  // before the now-visible Silly Penguin entry at that index.
+  assert.equal(workGroupAnchors(data).earlier, 7);
 });
 test("FAQ selection does not mutate editorial content", () => {
   const before = JSON.stringify(data);

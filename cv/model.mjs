@@ -147,6 +147,21 @@ export function partitionWork(data, selected = new Set()) {
   return { individual, grouped, recentGrouped };
 }
 
+// Group headings have a fixed timeline position. Their members change with the
+// selected topics, but a collapsed group must not move behind a now-visible
+// experience from the same period.
+export function workGroupAnchors(data) {
+  const eligible = (item) => !data.cvStart || item.start >= data.cvStart;
+  const older = (item) =>
+    data.earlierWork &&
+    item.end !== "present" &&
+    item.end.slice(0, 4) < data.earlierWork.before;
+  return {
+    recent: data.work.findIndex((item) => eligible(item) && !older(item)),
+    earlier: data.work.findIndex((item) => eligible(item) && older(item)),
+  };
+}
+
 export function highlightRanges(point, selected, labels, aliases, graph) {
   const matching = matchSources(point.tags, selected, aliases, graph);
   const rawEmphases = point.emphases?.length

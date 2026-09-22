@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import YAML from "yaml";
+import config from "./config.mjs";
 
 function matchingDelimiter(input, start, open, close) {
   let depth = 1;
@@ -102,16 +103,47 @@ export function warnFiltersWithoutEvidence(data, warn = console.warn) {
   return ids;
 }
 
-export function loadContent(directory = new URL("./", import.meta.url)) {
-  const config = YAML.parse(fs.readFileSync(new URL("config.yaml", directory), "utf8"));
-  const allowed = new Set(config.filters.map(({id}) => id));
-  for (const group of [config.recentWork, config.earlierWork]) {
-    if (!group?.themes) continue;
-    group.themes = group.themes.map((theme) => ({
-      ...theme,
-      ...parseTopicText(theme.text, allowed),
-    }));
+function section(source, heading) {
+  const marker = `## ${heading}`;
+  const start = source.indexOf(marker);
+  if (start < 0) return "";
+  const after = source.slice(start + marker.length).replace(/^\r?\n/, "");
+  const next = after.search(/^## /m);
+  return (next < 0 ? after : after.slice(0, next)).trim();
+}
+
+function parseThemes(source, allowed, file) {
+  if (!source) return [];
+  const parts = source.split(/^### (.+)$/m);
+  if (parts[0].trim()) throw new Error(`${file}: expected a theme heading`);
+  const themes = [];
+  for (let index = 1; index < parts.length; index += 2) {
+    const organizations = parts[index].split("|").map((name) => name.trim());
+    const text = parts[index + 1]?.trim();
+    if (!text || organizations.some((name) => !name))
+      throw new Error(`${file}: invalid theme`);
+    themes.push({ organizations, ...parseTopicText(text, allowed) });
   }
+  return themes;
+}
+
+function loadGroup(file, allowed) {
+  const source = fs.readFileSync(file, "utf8");
+  const title = source.match(/^# (.+)$/m)?.[1];
+  if (!title) throw new Error(`${file.pathname}: missing title`);
+  const before = source.match(/^Before:\s*(\d{4})\s*$/m)?.[1];
+  const tagSource = source.match(/^Tags:\s*(.+)$/m)?.[1];
+  return {
+    title,
+    ...(before ? { before } : {}),
+    ...(tagSource ? { tags: parseTopicText(tagSource, allowed).tags } : {}),
+    titleThemes: parseThemes(section(source, "Title themes"), allowed, file.pathname),
+    themes: parseThemes(section(source, "Summary themes"), allowed, file.pathname),
+  };
+}
+
+export function loadContent(directory = new URL("./", import.meta.url)) {
+  const allowed = new Set(config.filters.map(({id}) => id));
   const experienceDir = new URL("experiences/", directory);
   const work = fs.readdirSync(experienceDir).filter((name) => name.endsWith(".md")).sort().map((name) => {
     const source = fs.readFileSync(new URL(name, experienceDir), "utf8");
@@ -144,5 +176,13 @@ export function loadContent(directory = new URL("./", import.meta.url)) {
       tags,
     };
   });
-  return {...config, work};
+  const recentWork = loadGroup(new URL("groups/recent-work.md", directory), allowed);
+  const earlierWork = loadGroup(new URL("groups/earlier-work.md", directory), allowed);
+  const organizations = new Set(work.map(({ organization }) => organization));
+  for (const group of [recentWork, earlierWork])
+    for (const theme of [...group.titleThemes, ...group.themes])
+      for (const organization of theme.organizations)
+        if (!organizations.has(organization))
+          throw new Error(`${organization}: referenced by a group but has no Markdown experience`);
+  return {...config, recentWork, earlierWork, work};
 }

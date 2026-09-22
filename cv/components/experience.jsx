@@ -3,6 +3,7 @@ import {
   matchSources,
   matchesTags,
   partitionWork,
+  workGroupAnchors,
   workPoints,
   workTags,
 } from "../model.mjs";
@@ -198,6 +199,7 @@ function ExperienceGroup({ members, config, id, data, context, compact }) {
 
 export function Work({ data, context, compact = false }) {
   const { individual, grouped, recentGrouped } = partitionWork(data, context.selected);
+  const anchors = workGroupAnchors(data);
   const timeline = individual.map((entry) => ({
     index: entry.index,
     node: (
@@ -210,13 +212,13 @@ export function Work({ data, context, compact = false }) {
       />
     ),
   }));
-  for (const [members, config, id] of [
-    [recentGrouped, data.recentWork, "recent-work"],
-    [grouped, data.earlierWork, "earlier-work"],
+  for (const [members, config, id, index] of [
+    [recentGrouped, data.recentWork, "recent-work", anchors.recent],
+    [grouped, data.earlierWork, "earlier-work", anchors.earlier],
   ]) {
     if (members.length)
       timeline.push({
-        index: members[0].index,
+        index,
         node: (
           <ExperienceGroup
             key={id}
