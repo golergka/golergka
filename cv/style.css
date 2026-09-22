@@ -44,7 +44,7 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
 .cv-controls legend { padding: 0; margin-bottom: 0.5rem; font-weight: bold; font-size: 1.05rem; }
 .cv-filter-hint { color: var(--cv-muted); font-size: 0.95rem; font-weight: normal; }
 .cv-tag-instruction { grid-column: 1 / -1; margin: 0; padding-right: 3.5rem; color: var(--cv-muted); font-size: 0.95rem; }
-.cv-topic-list { display: inline; line-height: 1.75; }
+.cv-topic-list { display: block; line-height: 1.5; }
 .cv-filter-node { min-width: 0; }
 .cv-filter-node[data-depth="0"] { padding: 0.15rem 0; }
 .cv-topic-children { display: inline; margin: 0; }
@@ -64,7 +64,6 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
   font: inherit;
   font-size: 0.95rem;
   line-height: 1.5;
-  text-align: left;
   cursor: pointer;
 }
 .cv-topic-list > [data-depth="0"] > .cv-topic-select { font-weight: bold; }
