@@ -17,4 +17,4 @@ role: "[Lead Developer](team-lead)"
 - [Built and hired the replacement team](leadership,team-lead,hiring), then established [daily builds and a steady Kanban-like delivery process](product).
 - Designed a [distributed authority peer-to-peer multiplayer architecture](multiplayer,devops,product) for an [open-world co-op game](games,multiplayer,product) without separate dedicated servers. Network stack work involved such work as implementing distributed transactions, adopting zstd compression, tuning data transmitted through UDP and TCP channels and NAT punchthrough.
 - Led a monumentous bug-bashing effort, cleaning up and polishing game content and legacy codebase.
-- Drastically improved performance, converting game to a deferred-pass rendering and overhauling shader infrastructure while maintaining original look.
+- [Drastically improved performance, converting game to a deferred-pass rendering and overhauling shader infrastructure while maintaining original look.](games,desktop,native,rendering)

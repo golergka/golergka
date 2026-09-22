@@ -11,4 +11,5 @@ Supported pre-release development of a [free-to-play mobile game](games).
 ## Experience
 
 - Unity-based match-three game with advanced mechanics and user-created content.
+- [Improved mobile rendering performance.](games,mobile,rendering)
 - Developed an [iOS version](native), a Jenkins CI pipeline, features, and bug fixes.

@@ -138,6 +138,9 @@ filters:
   - id: unity
     label: Unity
     parent: games
+  - id: rendering
+    label: Rendering
+    parent: games
   - id: multiplayer
     label: Multiplayer & netcode
     parent: games
@@ -231,7 +234,7 @@ earlierWork:
         - Jelly Button Games
         - KamaGames
       text: Developed game prototypes, maintained live games and built client-server
-        mobile titles. Worked across gameplay, backend and rendering.
+        mobile titles. Worked across gameplay, backend and [rendering](rendering).
     - organizations:
         - Delos Technologies
       text: Co-founded a VR company. Built escape-room prototypes and iterated
