@@ -108,18 +108,23 @@ export function filtersWithEvidence(filters, work, aliases = {}) {
 
 export const workPoints = (item) => item.highlights;
 
-export function expertiseLabels(filters, selected = new Set()) {
+export function expertiseTopics(filters, selected = new Set()) {
   filters = filters.filter(({ kind }) => kind !== "faq");
   const selectedFilters = filters.filter(({ id }) => selected.has(id));
-  const active = selectedFilters.length
+  return selectedFilters.length
     ? selectedFilters
     : filters.filter(({ parent }) => !parent);
-  return active.map(({ label }) => label);
 }
 
+export const expertiseLabels = (filters, selected = new Set()) =>
+  expertiseTopics(filters, selected).map(({ label }) => label);
+
 // The PDF records the explicit selection, rather than the expanded selector.
+export const selectedExpertiseTopics = (filters, selected = new Set()) =>
+  filters.filter(({ id }) => selected.has(id));
+
 export const selectedExpertiseLabels = (filters, selected = new Set()) =>
-  filters.filter(({ id }) => selected.has(id)).map(({ label }) => label);
+  selectedExpertiseTopics(filters, selected).map(({ label }) => label);
 
 export function partitionWork(data, selected = new Set()) {
   const individual = [],
@@ -148,8 +153,8 @@ export function partitionWork(data, selected = new Set()) {
 }
 
 // Group headings have a fixed timeline position. Their members change with the
-// selected topics, but a collapsed group must not move behind a now-visible
-// experience from the same period.
+// selected topics, but a collapsed group must stay after visible experiences
+// from the same period.
 export function workGroupAnchors(data) {
   const eligible = (item) => !data.cvStart || item.start >= data.cvStart;
   const older = (item) =>
@@ -157,8 +162,14 @@ export function workGroupAnchors(data) {
     item.end !== "present" &&
     item.end.slice(0, 4) < data.earlierWork.before;
   return {
-    recent: data.work.findIndex((item) => eligible(item) && !older(item)),
-    earlier: data.work.findIndex((item) => eligible(item) && older(item)),
+    recent: data.work.reduce(
+      (index, item, current) => eligible(item) && !older(item) ? current + 1 : index,
+      -1,
+    ),
+    earlier: data.work.reduce(
+      (index, item, current) => eligible(item) && older(item) ? current + 1 : index,
+      -1,
+    ),
   };
 }
 

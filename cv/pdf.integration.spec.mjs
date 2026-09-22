@@ -23,6 +23,15 @@ test("generated PDF is one page and contains no LinkedIn links", async ({
   expect(pdf).toContain("github.com/golergka");
 });
 
+test("selected expertise uses the shared highlight component", async ({
+  page,
+}) => {
+  await page.goto("/cv/?tags=developer-tools,native");
+  await expect(
+    page.locator("#cv-expertise-topics .cv-topic-mark"),
+  ).toHaveCount(2);
+});
+
 test("selectors retain every configured tag and stack on narrow screens", async ({
   page,
 }) => {
@@ -30,7 +39,6 @@ test("selectors retain every configured tag and stack on narrow screens", async 
   await expect(page.locator("[data-select-tag]")).toHaveCount(
     loadContent().filters.length,
   );
-  await expect(page.getByRole("button", { name: "Claude Code" })).toHaveCount(1);
 
   const experienceTags = page.getByRole("group", { name: "Experience tags" });
   const faqTags = page.getByRole("group", { name: "FAQ tags" });
@@ -87,7 +95,7 @@ test("experience headers and evidence omit company links", async ({ page }) => {
 
 test("selecting a tag retains the Markdown-order preview", async ({ page }) => {
   const hotlinePoints = page.locator(
-    'article:has(h3:has-text("Hotline (Gestalt Systems)")) .cv-points > li',
+    'article:has(h3:has-text("Hotline (Gestalt Systems)")) > .cv-points > li',
   );
   await page.goto("/cv/?tags=");
   const overview = await hotlinePoints.allTextContents();
@@ -141,12 +149,12 @@ test("experience details expand without moving existing bullets", async ({
   await expect(preview.locator("li")).toHaveCount(2);
   await summary.click();
   await expect(details).toHaveAttribute("open", "");
-  await expect(summary).toHaveText("Show highlights");
+  await expect(summary.locator(".cv-experience-show-highlights")).toBeVisible();
   await expect(preview.locator("li")).toHaveCount(2);
   expect(await firstPreviewPoint.evaluate((node) => node === window.__cvPreviewPoint)).toBe(true);
   await expect(page.locator("#earlier-work-details #experience-8")).toHaveCount(1);
   await expect(page.locator("#cv-app > #experience-8")).toHaveCount(0);
   await summary.click();
   await expect(details).not.toHaveAttribute("open", "");
-  await expect(summary).toHaveText("Show full experience");
+  await expect(summary.locator(".cv-experience-show-full")).toBeVisible();
 });

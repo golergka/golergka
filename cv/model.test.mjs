@@ -119,13 +119,12 @@ test("overview retains every eligible experience exactly once across groups", ()
     data.work.map((_, index) => index),
   );
 });
-test("collapsed groups keep their place before overlapping visible work", () => {
-  assert.deepEqual(workGroupAnchors(data), { recent: 0, earlier: 7 });
+test("collapsed groups stay after overlapping visible work", () => {
+  assert.deepEqual(workGroupAnchors(data), { recent: 7, earlier: 21 });
   const contractor = partitionWork(data, new Set(["contractor"]));
   assert.equal(contractor.grouped[0].index, 8);
-  // The earlier-work heading still belongs at its fixed boundary, index 7,
-  // before the now-visible Silly Penguin entry at that index.
-  assert.equal(workGroupAnchors(data).earlier, 7);
+  // Silly Penguin becomes visible at index 7, ahead of the fixed group anchor.
+  assert.equal(workGroupAnchors(data).earlier, 21);
 });
 test("FAQ selection does not mutate editorial content", () => {
   const before = JSON.stringify(data);

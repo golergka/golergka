@@ -180,9 +180,12 @@ export function loadContent(directory = new URL("./", import.meta.url)) {
   const earlierWork = loadGroup(new URL("groups/earlier-work.md", directory), allowed);
   const organizations = new Set(work.map(({ organization }) => organization));
   for (const group of [recentWork, earlierWork])
-    for (const theme of [...group.titleThemes, ...group.themes])
+    for (const theme of [...group.titleThemes, ...group.themes]) {
+      if (group.themes.includes(theme) && theme.organizations.length < 2)
+        throw new Error(`${group.title}: a one-role summary belongs in that role's Markdown file`);
       for (const organization of theme.organizations)
         if (!organizations.has(organization))
           throw new Error(`${organization}: referenced by a group but has no Markdown experience`);
+    }
   return {...config, recentWork, earlierWork, work};
 }

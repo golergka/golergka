@@ -10,15 +10,15 @@ import {
   buildTopicGraph,
   defaultTags,
   expandedRoots,
-  expertiseLabels,
+  expertiseTopics,
   filtersWithEvidence,
   matchesTags,
   partitionWork,
-  selectedExpertiseLabels,
+  selectedExpertiseTopics,
   workTags,
 } from "./model.mjs";
 import { createTopicColorDirectory } from "./colors.mjs";
-import { TopicTree } from "./components/topics.jsx";
+import { Highlight, TopicTree } from "./components/topics.jsx";
 import { Work } from "./components/experience.jsx";
 import { PDF_ERROR_STATUS } from "./constants.mjs";
 
@@ -69,8 +69,8 @@ export function App({ data, exportSelection, createPdf }) {
     [data],
   );
   const expertise = exportSelection
-    ? selectedExpertiseLabels(data.filters, selected)
-    : expertiseLabels(data.filters, selected);
+    ? selectedExpertiseTopics(data.filters, selected)
+    : expertiseTopics(data.filters, selected);
 
   useEffect(() => {
     let saved = {};
@@ -255,7 +255,15 @@ export function App({ data, exportSelection, createPdf }) {
         <p id="cv-expertise" class="cv-expertise" hidden={ready && !printing}>
           <strong>Selected expertise:</strong>{" "}
           <span id="cv-expertise-topics">
-            {expertise.join(" · ")}
+            {expertise.map(({ id, label }, index) => (
+              <span key={id}>
+                {index > 0 && " · "}
+                <Highlight
+                  point={{ text: label, tags: [id] }}
+                  context={context}
+                />
+              </span>
+            ))}
           </span>
         </p>
       </div>

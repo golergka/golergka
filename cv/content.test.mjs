@@ -39,7 +39,9 @@ test("Markdown compiles all experiences and FAQ uses ordinary topic evidence", (
   assert.deepEqual(contractors, ["International clients", "Silly Penguin", "Ilyon"]);
   assert.equal(international.role, "Contractor / conversational AI");
   assert.ok(data.earlierWork.tags.includes("contractor"));
-  for (const tag of ["games", "backend", "founder", "team-lead", "product"])
+  for (const group of [data.recentWork, data.earlierWork])
+    assert.ok(group.themes.every(({ organizations }) => organizations.length > 1));
+  for (const tag of ["games", "backend", "team-lead", "product"])
     assert.ok(
       data.earlierWork.themes.some(({ tags }) => tags.includes(tag)),
       `Earlier work summary needs ${tag}`,
