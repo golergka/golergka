@@ -10,7 +10,7 @@ role: Senior Software Engineer, full-stack
 
 ## Experience
 
-- Delivered features and maintenance across the whole IDE, from a [highly responsive, stable 60fps React frontend](frontend,react) to [cloud services](backend).
+- Delivered features and maintenance across the whole IDE, from a [highly responsive, stable 60fps React frontend](frontend,react) to [cloud services](backend,node-bun).
 - Worked on a [React, TypeScript, and Redux codebase based on fp-ts and io-ts](frontend,react,typescript,type-systems).
 - Built [automatic type checking for dbt projects using Jinja-parametrized SQL, including project-wide background analysis and error display](developer-tools,ides,data,sql,type-systems).
 - Delivered [project-wide error display](developer-tools,ides,frontend,product), [automatic SQL compilation](developer-tools,ides,data,sql), [result preview](developer-tools,ides,data,frontend,product), and [PostgreSQL-backed internal job services](backend,postgres).

@@ -128,16 +128,22 @@ test("group descriptions use the same topic highlights as experiences", async ({
   ).toHaveText(/game prototypes/);
 });
 
-test("experience details use the same native disclosure behavior as archives", async ({
+test("experience details expand without moving existing bullets", async ({
   page,
 }) => {
   await page.goto("/cv/");
   const details = page.locator("#experience-8 .cv-experience-details");
   const summary = details.locator("summary");
+  const preview = page.locator("#experience-8 > .cv-points");
+  const firstPreviewPoint = preview.locator("li").first();
+  await firstPreviewPoint.evaluate((node) => { window.__cvPreviewPoint = node; });
   await expect(details).not.toHaveAttribute("open", "");
+  await expect(preview.locator("li")).toHaveCount(2);
   await summary.click();
   await expect(details).toHaveAttribute("open", "");
   await expect(summary).toHaveText("Show highlights");
+  await expect(preview.locator("li")).toHaveCount(2);
+  expect(await firstPreviewPoint.evaluate((node) => node === window.__cvPreviewPoint)).toBe(true);
   await expect(page.locator("#earlier-work-details #experience-8")).toHaveCount(1);
   await expect(page.locator("#cv-app > #experience-8")).toHaveCount(0);
   await summary.click();

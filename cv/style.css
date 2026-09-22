@@ -139,6 +139,9 @@ html.cv-scroll-lock #cv-app { overflow-anchor: none; }
 .cv-archive > summary { width: fit-content; color: var(--link); cursor: pointer; }
 .cv-archive > summary:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
 .cv-archive[open] > summary { margin-bottom: 0.5rem; }
+.cv-experience-show-highlights { display: none; }
+.cv-experience-details[open] .cv-experience-show-full { display: none; }
+.cv-experience-details[open] .cv-experience-show-highlights { display: inline; }
 .cv-archive > .cv-role {
   margin-left: 1rem;
   padding-left: 1rem;

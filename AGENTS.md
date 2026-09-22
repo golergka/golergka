@@ -1,6 +1,6 @@
 Be concise.
 
-- Never run Google Chrome. Use WebKit for browser QA.
+- NEVER open, run, launch, or automate Google Chrome. This is a hard constraint; use terminal-only checks unless the user explicitly authorizes another browser.
 - Follow the requested scope exactly. Preserve unrelated behavior.
 - Inspect user-visible output, including generated files, visually and structurally. Tests alone are not verification.
 - Keep tests only when they protect meaningful behavior.

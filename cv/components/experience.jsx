@@ -18,7 +18,6 @@ function DateLabel({ value }) {
 
 function Experience({ item, index, data, context, compact }) {
   const { selected, aliases, graph, ready } = context;
-  const expanded = !compact && context.expandedExperiences?.has(index);
   const points = workPoints(item, selected, data.filters).map(
     (point, order) => {
       const tags = canonicalTags(point.tags, aliases);
@@ -94,18 +93,17 @@ function Experience({ item, index, data, context, compact }) {
           context={context}
         />
       </p>
-      {!expanded && preview.length > 0 && pointList(preview)}
+      {preview.length > 0 && pointList(preview)}
       {!compact && remaining.length > 0 && (
         <details
           class="cv-archive cv-experience-details"
-          open={expanded || !ready}
-          onToggle={(event) => {
-            if (ready && event.currentTarget.open !== expanded)
-              context.toggleExperience(index, event.currentTarget);
-          }}
+          open={!ready}
         >
-          <summary>{expanded ? "Show highlights" : "Show full experience"}</summary>
-          {(expanded || !ready) && pointList(expanded ? points : remaining)}
+          <summary>
+            <span class="cv-experience-show-full">Show full experience</span>
+            <span class="cv-experience-show-highlights">Show highlights</span>
+          </summary>
+          {pointList(remaining)}
         </details>
       )}
       {links.length > 0 && (

@@ -6,7 +6,7 @@ location: Russia / remote
 role: Senior Software Engineer, backend
 ---
 
-Took ownership of a [TypeScript and PostgreSQL backend](typescript,postgres,backend) for a high-load [desktop cybersport platform](games,desktop).
+Took ownership of a [TypeScript and PostgreSQL backend](typescript,postgres,backend,node-bun) for a high-load [desktop cybersport platform](games,desktop).
 
 ## Experience
 

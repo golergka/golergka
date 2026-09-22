@@ -52,7 +52,12 @@ test("Markdown compiles all experiences and FAQ uses ordinary topic evidence", (
       .filter(({ tags }) => tags.includes("node-bun"))
     .map(({ organization }) => organization),
     [
+      "Hotline (Gestalt Systems)",
+      "Jam.dev",
       "PopSQL",
+      "International clients",
+      "Deep Channel",
+      "FastCup.net",
       "Sofq Games",
       "Ilyon",
     ],

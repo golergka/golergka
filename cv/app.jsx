@@ -50,7 +50,6 @@ export function App({ data, exportSelection, createPdf }) {
   const [ready, setReady] = useState(false);
   const [printing, setPrinting] = useState(Boolean(exportSelection));
   const [expanded, setExpanded] = useState(new Set());
-  const [expandedExperiences, setExpandedExperiences] = useState(new Set());
   const [pdfStatus, setPdfStatus] = useState("");
   const [exporting, setExporting] = useState(false);
   const scrollAnchor = useRef(null);
@@ -156,23 +155,7 @@ export function App({ data, exportSelection, createPdf }) {
         });
       }
     }
-  }, [selected, expandedExperiences]);
-
-  function toggleExperience(index, node) {
-    scrollAnchor.current = {
-      node,
-      experienceIndex: index,
-      top: node.getBoundingClientRect().top,
-      previousNodes: new Set(document.querySelectorAll(".cv-role[id], .cv-earlier")),
-    };
-    document.documentElement.classList.add("cv-scroll-lock");
-    setExpandedExperiences((previous) => {
-      const next = new Set(previous);
-      if (next.has(index)) next.delete(index);
-      else next.add(index);
-      return next;
-    });
-  }
+  }, [selected]);
 
   function changeSelection(next, node, topic) {
     if (node) {
@@ -208,8 +191,6 @@ export function App({ data, exportSelection, createPdf }) {
   const context = {
     selected,
     expanded,
-    expandedExperiences,
-    toggleExperience,
     graph,
     labels,
     aliases: data.topicAliases || {},
