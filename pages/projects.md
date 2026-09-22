@@ -5,49 +5,46 @@ I have written over the years.
 
 ## Current work
 
-<div class="project-grid">
-<article class="project-card">
-<p class="eyebrow">macOS app</p>
-<h3><a href="https://github.com/golergka/diskscope">Diskscope</a></h3>
-<p>A modern disk-usage analyzer. The shared Rust core powers a CLI, an egui desktop app, and a native macOS interface.</p>
-</article>
-<article class="project-card">
-<p class="eyebrow">agent tooling</p>
-<h3><a href="https://github.com/golergka/command-guard">command-guard</a></h3>
-<p>A plugin for Claude Code and Codex that applies project-specific safety guardrails to commands and files.</p>
-</article>
-<article class="project-card">
-<p class="eyebrow">PostgreSQL</p>
-<h3><a href="https://github.com/golergka/coloph-migrations">Coloph Migrations</a></h3>
-<p>An opinionated migration CLI built for inspectable schema state, immutable applied migrations, and safe compatibility checks.</p>
-</article>
-<article class="project-card">
-<p class="eyebrow">agent tooling</p>
-<h3><a href="https://github.com/golergka/clx">clx</a></h3>
-<p>An experiment in turning APIs into native CLIs, so agents can use help text, shell composition, and predictable commands.</p>
-</article>
-</div>
+### [Diskscope](https://github.com/golergka/diskscope)
+
+**macOS app** — A modern disk-usage analyzer. The shared Rust core powers a
+CLI, an egui desktop app, and a native macOS interface.
+
+### [command-guard](https://github.com/golergka/command-guard)
+
+**Agent tooling** — A plugin for Claude Code and Codex that applies
+project-specific safety guardrails to commands and files.
+
+### [Coloph Migrations](https://github.com/golergka/coloph-migrations)
+
+**PostgreSQL** — An opinionated migration CLI built for inspectable schema
+state, immutable applied migrations, and safe compatibility checks.
+
+### [clx](https://github.com/golergka/clx)
+
+**Agent tooling** — An experiment in turning APIs into native CLIs, so agents
+can use help text, shell composition, and predictable commands.
 
 ## Open-source work
 
-<div class="project-grid">
-<article class="project-card compact">
-<h3><a href="https://github.com/golergka/pg-tx">pg-tx</a></h3>
-<p>Nested PostgreSQL transactions for Node, made after tracing a subtle production bug in common transaction advice.</p>
-</article>
-<article class="project-card compact">
-<h3><a href="https://github.com/golergka/gcf-typescript-template">Google Cloud Functions TypeScript template</a></h3>
-<p>A minimal serverless starter with 29 GitHub stars, from when TypeScript support in Cloud Functions was much less straightforward.</p>
-</article>
-</div>
+### [pg-tx](https://github.com/golergka/pg-tx)
+
+Nested PostgreSQL transactions for Node, made after tracing a subtle production
+bug in common transaction advice.
+
+### [Google Cloud Functions TypeScript template](https://github.com/golergka/gcf-typescript-template)
+
+A minimal serverless starter with 29 GitHub stars, from when TypeScript support
+in Cloud Functions was much less straightforward.
 
 ## Worth bringing back
 
-<article class="project-card revival-card">
-<p class="eyebrow">planned revival</p>
-<h3><a href="https://github.com/golergka/hn-comment-bot">HN Comment Bot</a></h3>
-<p>A Telegram bot that notifies Hacker News users about replies. I want to put it back online, then give it a home on a subdomain.</p>
-</article>
+### [HN Comment Bot](https://github.com/golergka/hn-comment-bot)
+
+A Telegram bot that notifies Hacker News users about replies. I want to put it
+back online, then give it a home on a subdomain.
+
+---
 
 ## Repository notes
 As any other developer, I have some small utilities and libraries that I developed, and a lot more unfinished projects and random repositories. Here's the full list with my comments — why I started them, why I abandoned them, and what I learned from them.

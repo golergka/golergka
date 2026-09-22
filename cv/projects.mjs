@@ -8,7 +8,8 @@ export function loadProjects(filters) {
   const source = fs.readFileSync(new URL("../pages/projects.md", import.meta.url), "utf8");
   const metadata = JSON.parse(fs.readFileSync(new URL("../pages/projects-cv.json", import.meta.url), "utf8"));
   const allowed = new Set(filters.map(({ id }) => id));
-  return [...source.matchAll(/<h3><a href="(https:\/\/github\.com\/golergka\/([^"/]+))">([^<]+)<\/a><\/h3>/g)].map(([, url, id, name]) => {
+  const [featured] = source.split(/^## Repository notes\s*$/m);
+  return [...featured.matchAll(/^### \[([^\]]+)\]\((https:\/\/github\.com\/golergka\/([^/)]+))\)$/gm)].map(([, name, url, id]) => {
     const meta = metadata[id];
     if (!meta?.description) throw new Error(`Invalid project metadata: ${id}`);
     const point = parseTopicText(meta.description, allowed);
