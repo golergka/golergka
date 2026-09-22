@@ -6,7 +6,7 @@ location: Russia
 role: "[Producer](leadership)"
 ---
 
-[Developed](product) and [supervised](leadership) original and localized [social and mobile games](games,product).
+[Developed](product) and [supervised](leadership) original and localized [social and mobile games](games,mobile,product).
 
 ## Experience
 

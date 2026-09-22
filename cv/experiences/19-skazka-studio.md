@@ -6,8 +6,4 @@ location: Russia
 role: "[Lead Game Designer](leadership)"
 ---
 
-[Led](leadership) a major redesign of the [live game The Kingdom](games,product).
-
-## Experience
-
-- Reworked [combat, content, and economy](games,product) as part of the product relaunch.
+[Led](leadership) a major redesign of the [desktop live game The Kingdom](games,desktop,product). Reworked [combat, content, and economy](games,product) as part of the product relaunch.

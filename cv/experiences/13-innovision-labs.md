@@ -6,10 +6,10 @@ location: Israel
 role: "[Lead Developer](team-lead)"
 ---
 
-[Managed and hired](leadership,team-lead,hiring) for a client development team while [shipping and starting Unity products](product,unity,games).
+[Managed and hired](leadership,team-lead) for a client development team while [shipping and starting mobile Unity products](product,unity,games,mobile).
 
 ## Experience
 
-- Maintained original game and developed a new vision-improving app from scratch.
-- [Led the client-development team](leadership,team-lead), including [hiring](hiring) and day-to-day engineering operations.
-- Implemented continuous integration, test-driven development, [native integrations](native), and improved [Unity test tooling](developer-tools,unity).
+- [Maintained an original game and developed a new vision-improving mobile Unity app from scratch](games,mobile,unity,product).
+- [Led the client-development team](leadership,team-lead), including hiring and day-to-day engineering operations.
+- Implemented [continuous integration](devops), test-driven development, [native integrations](native), and improved [Unity test tooling](developer-tools,unity).

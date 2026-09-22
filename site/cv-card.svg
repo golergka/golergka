@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Max Yankov</title>
+  <desc id="description">A card for Max Yankov's experience and CV.</desc>
+  <rect width="1200" height="630" fill="#f8f6f0"/>
+  <rect x="70" y="70" width="14" height="490" fill="#1b1b1b"/>
+  <text x="125" y="158" fill="#1b1b1b" font-family="Georgia, serif" font-size="70" font-weight="700">Max Yankov</text>
+  <line x1="125" y1="218" x2="1060" y2="218" stroke="#aaa69d" stroke-width="2"/>
+  <text x="125" y="325" fill="#34322e" font-family="Georgia, serif" font-size="35">Product engineer for agent-related software</text>
+  <text x="125" y="390" fill="#6b6861" font-family="Arial, sans-serif" font-size="25">AI agents · developer tools · full-stack &amp; native engineering</text>
+  <text x="125" y="520" fill="#6b6861" font-family="Arial, sans-serif" font-size="24">golergka.com/cv</text>
+</svg>

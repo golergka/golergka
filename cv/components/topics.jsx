@@ -21,35 +21,34 @@ export function Highlight({ point, context }) {
   const children = ranges.flatMap((range) => {
     const prefix = point.text.slice(cursor, range.start);
     cursor = range.end;
-    const Tag = range.selected ? "mark" : "span";
+    const Tag = range.href ? "a" : range.selected ? "mark" : "span";
     const topic =
       range.tags.find((tag) => selected.has(tag)) || range.hoverTags[0];
+    const topics = range.selected ? range.tags : range.hoverTags;
     return [
       prefix,
       <Tag
-        key={range.start}
+        key={`${range.start}-${range.end}`}
         class={
           range.selected
             ? "cv-topic-mark"
-            : ready
+            : !range.href && ready
               ? "cv-highlightable"
               : undefined
         }
-        style={topicStyle(
-          range.selected ? range.tags : range.hoverTags,
-          colors,
-          range.derived,
-        )}
+        href={range.href}
+        style={topics.length ? topicStyle(topics, colors, range.derived) : undefined}
         data-highlight-topics={
           range.selected ? range.tags.join(",") : undefined
         }
-        data-highlightable-topics={range.hoverTags.join(",")}
+        data-highlightable-topics={topics.length ? range.hoverTags.join(",") : undefined}
         data-highlight-derived={range.derived ? "true" : undefined}
-        role={ready ? "button" : undefined}
-        tabIndex={ready ? 0 : undefined}
-        title={range.hoverTags.map((tag) => labels.get(tag)).join(", ")}
-        onClick={(event) => toggle(topic, event.currentTarget)}
+        role={!range.href && ready ? "button" : undefined}
+        tabIndex={!range.href && ready ? 0 : undefined}
+        title={topics.length ? range.hoverTags.map((tag) => labels.get(tag)).join(", ") : undefined}
+        onClick={range.href ? undefined : (event) => toggle(topic, event.currentTarget)}
         onKeyDown={(event) => {
+          if (range.href) return;
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             toggle(topic, event.currentTarget);
@@ -131,4 +130,3 @@ export function TopicTree({
     .filter(({ parent }) => !ids.has(parent))
     .map((filter) => branch(filter));
 }
-

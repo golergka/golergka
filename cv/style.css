@@ -30,20 +30,20 @@ body:has(.cv-profile) > header { margin-bottom: 1.75rem; }
 
 .cv-controls {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem 2rem;
   position: relative;
   padding: 1rem 0;
   border-block: 1px solid var(--cv-rule);
 }
 .cv-controls[hidden] { display: none; }
-.cv-faq-controls { padding-right: 3.5rem !important; }
 @media (max-width: 700px) {
   .cv-controls { grid-template-columns: 1fr; }
 }
 .cv-controls fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
 .cv-controls legend { padding: 0; margin-bottom: 0.5rem; font-weight: bold; font-size: 1.05rem; }
 .cv-filter-hint { color: var(--cv-muted); font-size: 0.95rem; font-weight: normal; }
+.cv-tag-instruction { grid-column: 1 / -1; margin: 0; padding-right: 3.5rem; color: var(--cv-muted); font-size: 0.95rem; }
 .cv-topic-list { display: inline; line-height: 1.75; }
 .cv-filter-node { min-width: 0; }
 .cv-filter-node[data-depth="0"] { padding: 0.15rem 0; }
@@ -139,6 +139,12 @@ html.cv-scroll-lock #cv-app { overflow-anchor: none; }
 .cv-archive > summary { width: fit-content; color: var(--link); cursor: pointer; }
 .cv-archive > summary:focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
 .cv-archive[open] > summary { margin-bottom: 0.5rem; }
+.cv-archive > .cv-role {
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--cv-rule);
+}
+.cv-archive > .cv-role .cv-role-title { font-size: 1.15rem; }
 .cv-archive .cv-role:last-child { border-bottom: 0; padding-bottom: 0; }
 .cv-earlier + .cv-earlier { border-top: 1px solid var(--cv-rule); }
 .cv-export-actions { margin: -0.75rem 0 1.5rem; font-size: 0.95rem; }

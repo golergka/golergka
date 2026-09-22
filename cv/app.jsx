@@ -9,15 +9,17 @@ import {
 import {
   buildTopicGraph,
   defaultTags,
+  expandedRoots,
   expertiseLabels,
   matchesTags,
   partitionWork,
-  topicParents,
+  selectedExpertiseLabels,
   workTags,
 } from "./model.mjs";
 import { createTopicColorDirectory } from "./colors.mjs";
 import { TopicTree } from "./components/topics.jsx";
 import { Work } from "./components/experience.jsx";
+import { PDF_ERROR_STATUS } from "./constants.mjs";
 
 const colorStorageKey = "cv-topic-color-directory-v1";
 export function readSelection(data, search) {
@@ -30,16 +32,15 @@ export function readSelection(data, search) {
   );
 }
 function rootsFor(data, selection) {
-  const parents = topicParents(data.filters);
-  return new Set(
-    [...selection].map((tag) => {
-      while (parents.has(tag)) tag = parents.get(tag);
-      return tag;
-    }),
+  return expandedRoots(
+    data.filters,
+    selection,
+    data.topicAliases,
+    data.topicRelations,
   );
 }
 
-export function App({ data, exportSelection }) {
+export function App({ data, exportSelection, createPdf }) {
   const [selected, setSelected] = useState(() => exportSelection || new Set());
   const [ready, setReady] = useState(false);
   const [printing, setPrinting] = useState(Boolean(exportSelection));
@@ -59,6 +60,9 @@ export function App({ data, exportSelection }) {
     () => new Map(data.filters.map(({ id, label }) => [id, label])),
     [data],
   );
+  const expertise = exportSelection
+    ? selectedExpertiseLabels(data.filters, selected)
+    : expertiseLabels(data.filters, selected);
 
   useEffect(() => {
     let saved = {};
@@ -79,7 +83,9 @@ export function App({ data, exportSelection }) {
     const syncUrl = () => {
       const selection = readSelection(data, location.search);
       setSelected(selection);
-      setExpanded(rootsFor(data, selection));
+      setExpanded((previous) =>
+        new Set([...previous, ...rootsFor(data, selection)]),
+      );
     };
     syncUrl();
     setReady(true);
@@ -103,7 +109,7 @@ export function App({ data, exportSelection }) {
     if (!anchor) return;
     scrollAnchor.current = null;
     if (anchor.experienceIndex !== undefined) {
-      anchor.node = document.querySelector(`#experience-${anchor.experienceIndex} .cv-experience-disclosure button`) || anchor.node;
+      anchor.node = document.querySelector(`#experience-${anchor.experienceIndex} .cv-experience-details summary`) || anchor.node;
     }
     if (anchor.node.isConnected)
       window.scrollBy(0, anchor.node.getBoundingClientRect().top - anchor.top);
@@ -174,7 +180,9 @@ export function App({ data, exportSelection }) {
     colors.ensureSelection(next);
     setSelected(next);
     setPdfStatus("");
-    setExpanded((previous) => new Set([...previous, ...rootsFor(data, next)]));
+    setExpanded((previous) =>
+      new Set([...previous, ...rootsFor(data, next)]),
+    );
     const url = new URL(location.href);
     ["focus", "depth", "view"].forEach((key) => url.searchParams.delete(key));
     url.searchParams.set("tags", [...next].join(","));
@@ -201,7 +209,7 @@ export function App({ data, exportSelection }) {
     toggle,
   };
   colors.ensureSelection(selected);
-  const { individual, grouped, recentGrouped } = partitionWork(data, selected, expandedExperiences);
+  const { individual, grouped, recentGrouped } = partitionWork(data, selected);
   const matching = data.work
     .map((item, index) => ({ item, index }))
     .filter(
@@ -210,25 +218,17 @@ export function App({ data, exportSelection }) {
         matchesTags(workTags(item), selected, context.aliases, graph),
     );
   const groupedCount = grouped.length + recentGrouped.length;
-  const publicUrl = `https://golergka.com/cv/?tags=${encodeURIComponent([...selected].join(","))}`;
-  const topics = data.filters
-    .filter(({ id }) => selected.has(id))
-    .map(({ label }) => label)
-    .join(", ");
 
   async function downloadPdf() {
     const selection = new Set(selected);
     setExporting(true);
     setPdfStatus("Generating PDF…");
     try {
-      const { downloadCvPdf } = await import("./export.jsx");
-      const pages = await downloadCvPdf(data, selection);
+      const pages = await createPdf(data, selection);
       setPdfStatus(`Downloaded · ${pages} ${pages === 1 ? "page" : "pages"}`);
     } catch (error) {
       console.error(error);
-      setPdfStatus(
-        "PDF generation failed. Retry or use your browser’s Print command.",
-      );
+      setPdfStatus(PDF_ERROR_STATUS);
     } finally {
       setExporting(false);
     }
@@ -238,28 +238,35 @@ export function App({ data, exportSelection }) {
   return (
     <>
       <h1>{profile.name}</h1>
-      <p id="cv-generation-note" class="cv-generation-note" hidden={!printing}>
-        Generated {topics ? `for ${topics}` : "overview"} ·{" "}
-        <a href={publicUrl}>Web version</a>
-      </p>
       <div id="cv-profile" class="cv-profile">
         <p class="cv-headline">{profile.headline}</p>
         <p class="cv-global-lead">{profile.summary}</p>
         <p class="cv-links">
           <a href={`mailto:${profile.email}`}>{profile.email}</a> ·{" "}
           <a href={profile.github}>GitHub</a>
-          {profile.linkedin && (
+          {profile.linkedin && !printing && (
             <>
               {" "}
               · <a href={profile.linkedin}>LinkedIn</a>
             </>
+          )}
+          {profile.twitter && (
+            <>
+              {" "}
+              · <a href={profile.twitter}>Twitter</a>
+            </>
           )}{" "}
           · <a href={profile.stackoverflow}>Stack Overflow</a>
+        </p>
+        <p id="cv-generation-note" class="cv-generation-note" hidden={!printing}>
+          Compiled to these tags. Visit{" "}
+          <a href="https://golergka.com/cv/">golergka.com/cv</a> to get another
+          personalized version
         </p>
         <p id="cv-expertise" class="cv-expertise" hidden={ready && !printing}>
           <strong>Selected expertise:</strong>{" "}
           <span id="cv-expertise-topics">
-            {expertiseLabels(data.filters, selected).join(" · ")}
+            {expertise.join(" · ")}
           </span>
         </p>
       </div>
@@ -270,7 +277,7 @@ export function App({ data, exportSelection }) {
           disabled={exporting}
           onClick={downloadPdf}
         >
-          Download PDF
+          Generate PDF
         </button>{" "}
         <span id="cv-pdf-status" role="status">
           {pdfStatus}
@@ -282,14 +289,18 @@ export function App({ data, exportSelection }) {
         hidden={!ready || printing}
         onSubmit={(event) => event.preventDefault()}
       >
+        <p class="cv-tag-instruction">
+          <strong>Click</strong> to expand relevant experience
+        </p>
         {[
-          ["Topics", "cv-tags", false],
-          ["FAQ", "cv-faq", true],
-        ].map(([title, id, faq]) => (
-          <fieldset key={id} class={faq ? "cv-faq-controls" : undefined}>
-            <legend>
-              {title} <span class="cv-filter-hint">↓ click!</span>
-            </legend>
+          ["cv-tags", false],
+          ["cv-faq", true],
+        ].map(([id, faq]) => (
+          <fieldset
+            key={id}
+            class={faq ? "cv-faq-controls" : undefined}
+            aria-label={faq ? "FAQ tags" : "Experience tags"}
+          >
             <div id={id} class="cv-topic-list">
               <TopicTree
                 filters={data.filters.filter(
@@ -340,4 +351,3 @@ export function App({ data, exportSelection }) {
     </>
   );
 }
-

@@ -17,7 +17,7 @@ thinking in public about how AI changes the work.
 
 ## Find me
 
-- [Experience / CV](/cv/)
+- [CV](/cv/)
 - [GitHub](https://github.com/golergka)
 - [Telegram](http://t.me/golergka)
 - [Email](mailto:golergka@gmail.com)

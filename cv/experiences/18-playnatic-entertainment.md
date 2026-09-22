@@ -6,8 +6,4 @@ location: Russia
 role: "[Lead Game Designer](leadership)"
 ---
 
-[Directed design](leadership) of Cyber-Sport Online and consulted on other projects.
-
-## Experience
-
-- [Designed the adaptation](product) of conventional [multiplayer shooters to session-based free-to-play MMO systems](multiplayer).
+[Directed design](leadership) of the [desktop game Cyber-Sport Online](games,desktop) and consulted on other projects. [Designed the adaptation](product) of conventional [multiplayer shooters (starting with Counter-Strike) to session-based free-to-play MMO systems](multiplayer).

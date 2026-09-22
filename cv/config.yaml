@@ -7,6 +7,7 @@ profile:
   email: golergka@gmail.com
   github: https://github.com/golergka
   linkedin: https://www.linkedin.com/in/maxyankov/
+  twitter: https://x.com/GolerGkA
   stackoverflow: https://stackoverflow.com/users/312725/max-yankov
   summary: "I build products around AI agents: the interfaces, tools,
     infrastructure, and safety systems that make them useful. My background
@@ -15,6 +16,9 @@ profile:
 filters:
   - id: career-moves
     label: Career moves
+    kind: faq
+  - id: contractor
+    label: Contractor
     kind: faq
   - id: agents
     label: AI & agents
@@ -27,11 +31,17 @@ filters:
   - id: pydantic-ai
     label: Pydantic AI
     parent: agents
+  - id: llamaindex
+    label: LlamaIndex
+    parent: agents
+  - id: langchain
+    label: LangChain
+    parent: agents
   - id: agent-harness
     label: Agent harness
     parent: agents
-  - id: ml-ops
-    label: MLOps
+  - id: vercel-ai-sdk
+    label: Vercel AI SDK
     parent: agents
   - id: llms
     label: LLMs
@@ -70,6 +80,9 @@ filters:
   - id: typescript
     label: TypeScript
     parent: product
+  - id: node-bun
+    label: Node.js / Bun
+    parent: product
   - id: react
     label: React / Preact
     parent: product
@@ -107,6 +120,9 @@ filters:
   - id: betterstack
     label: Better Stack
     parent: devops
+  - id: sentry
+    label: Sentry
+    parent: devops
   - id: datadog
     label: Datadog
     parent: devops
@@ -114,27 +130,33 @@ filters:
     label: OpenTelemetry
     parent: devops
   - id: safety
-    label: Security & safety
+    label: Security and safety
     parent: devops
   - id: kubernetes
-    label: Kubernetes / k3s
+    label: Kubernetes
+    parent: devops
+  - id: docker
+    label: Docker
     parent: devops
   - id: leadership
     label: Technical leadership
+    kind: faq
   - id: founder
-    label: Founder / CEO
+    label: Founder/CTO
     parent: leadership
-  - id: cto
-    label: CTO
-    parent: leadership
+    kind: faq
   - id: team-lead
     label: Team lead
     parent: leadership
-  - id: hiring
-    label: Hiring
-    parent: leadership
+    kind: faq
   - id: games
-    label: Games
+    label: Gamedev
+  - id: desktop
+    label: Desktop
+    parent: games
+  - id: mobile
+    label: Mobile (iOS/Android)
+    parent: games
   - id: unity
     label: Unity
     parent: games
@@ -201,28 +223,32 @@ recentWork:
         - Jam.dev
         - PopSQL
         - Deep Channel
-      text: Full-stack development for American startups, remotely. Delivered
-        features and maintenance across frontend, services and background applications.
+      text: "[Full-stack development](frontend,backend,product) for American startups,
+        remotely. Delivered features and maintenance across [frontend, services,
+        and background applications](frontend,backend)."
     - organizations:
         - Hotline (Gestalt Systems)
-      text: The only founding engineer for an sms/email/call-based AI agent.
-        Built the voice pipeline, agent harness, evaluation and observability infrastructure.
+      text: "The only founding engineer for an [sms/email/call-based AI agent](agents).
+        Built the [voice pipeline](livekit,product), [agent harness](agent-harness),
+        [evaluation](evals), and [observability infrastructure](observability)."
     - organizations:
         - Coloph
-      text: Founded and built a graph-based knowledge system for messy,
-        self-contradictory company data. Custom agent tools and orchestration,
-        self-operated models and autonomous software development.
+      text: "Founded and built a [graph-based knowledge system](knowledge-graphs,search)
+        for messy, self-contradictory company data. [Custom agent tools and orchestration](developer-tools,agent-harness),
+        [self-operated models](llms), and [autonomous software development](autonomous-development)."
     - organizations:
         - International clients
-      text: Developed specialized chatbot products for international clients,
-        including a virtual sommelier, counselor and salesperson.
+      text: "Developed [specialized chatbot products](agents,product) for international clients,
+        including a virtual sommelier, counselor and salesperson."
     - organizations:
         - FastCup.net
-      text: Took ownership of a high-load competition backend. Built a player-driven
-        tournament system from scratch and worked on PostgreSQL performance.
+      text: "Took ownership of a [high-load competition backend](backend,postgres). Built a
+        [player-driven tournament system](backend,product) and worked on PostgreSQL performance."
 earlierWork:
   before: "2021"
   title: Earlier work & projects
+  tags:
+    - contractor
   source: https://docs.google.com/document/d/1_ZboSPR2aB-fLOwXuxBdvTKoFEhkiE8TL9GPIqNF2r4/edit
   themes:
     - organizations:
@@ -233,30 +259,30 @@ earlierWork:
         - Innovision Labs
         - Jelly Button Games
         - KamaGames
-      text: Developed game prototypes, maintained live games and built client-server
-        mobile titles. Worked across gameplay, backend and [rendering](rendering).
+      text: "Developed [game prototypes, live games, and client-server mobile titles](games,mobile,backend).
+        Worked across gameplay, backend, and [rendering](rendering)."
     - organizations:
         - Delos Technologies
-      text: Co-founded a VR company. Built escape-room prototypes and iterated
-        on gameplay together with escape-room operators.
+      text: "[Co-founded a VR company](founder). Built [escape-room prototypes](games,unity,native)
+        and iterated on gameplay together with escape-room operators."
     - organizations:
         - Sofq Games
         - Hypetrain Digital
         - Innovision Labs
-      text: Hired and led teams, established development processes and took
-        over existing codebases.
+      text: "[Hired and led teams](leadership,team-lead), established development processes,
+        and took over existing codebases."
     - organizations:
         - Pixonic
         - Playnatic Entertainment
         - SKAZKA Studio
         - IT Territory
         - 2RealLife
-      text: Designed game mechanics and economies, reworked live content,
-        wrote design documentation and coordinated art production.
+      text: "[Designed game mechanics and economies, reworked live content, wrote design documentation,
+        and coordinated art production](games,product)."
     - organizations:
         - adOffer
-      text: Founded adOffer, raised seed investment, attracted the first
-        advertisers and developed and launched the offer system.
+      text: "[Founded adOffer, raised seed investment, and attracted the first advertisers](founder).
+        [Developed and launched the offer system](product)."
 artifacts:
   - name: Coloph
     featured: true

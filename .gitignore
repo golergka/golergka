@@ -4,3 +4,7 @@ dist/
 .env
 .env.*
 .wrangler/
+.DS_Store
+.playwright-cli/
+output/
+test-results/

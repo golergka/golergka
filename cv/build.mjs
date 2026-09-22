@@ -10,6 +10,7 @@ import {
   FOOTER,
   layout,
   render,
+  socialMetadata,
   writePage,
   styleHref,
 } from "../site/build-context.mjs";
@@ -101,6 +102,13 @@ export async function buildCv({ outDir = dist } = {}) {
       homeLabel: "Writing &amp; projects",
       stylesheet: styleHref,
       canonical: `<link rel="canonical" href="${SITE_URL}/cv/">`,
+      metadata: socialMetadata({
+        title: `Experience — ${SITE_NAME}`,
+        description: profile.summary,
+        pathname: "/cv/",
+        image: `${SITE_URL}/cv-card.png`,
+        imageAlt: "Max Yankov",
+      }),
       content,
       footer: FOOTER,
       scripts,

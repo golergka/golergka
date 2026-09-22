@@ -8,29 +8,11 @@ import {
 } from "../model.mjs";
 import { Highlight } from "./topics.jsx";
 
-const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
 function DateLabel({ value }) {
   return value === "present" ? (
     "present"
   ) : (
-    <time dateTime={value}>
-      {value.includes("-")
-        ? `${months[Number(value.slice(5)) - 1]} ${value.slice(0, 4)}`
-        : value}
-    </time>
+    <time dateTime={value}>{value.slice(0, 4)}</time>
   );
 }
 
@@ -52,23 +34,11 @@ function Experience({ item, index, data, context, compact }) {
       };
     },
   );
-  const preview = [],
-    uncovered = new Set(selected);
-  const eligible = selected.size
-    ? points.filter((point) => point.score)
-    : [...points];
-  const limit = selected.size ? eligible.length : 2;
-  while (preview.length < limit && eligible.length) {
-    eligible.sort(
-      (a, b) =>
-        b.matchedTopics.filter((tag) => uncovered.has(tag)).length -
-          a.matchedTopics.filter((tag) => uncovered.has(tag)).length ||
-        a.order - b.order,
-    );
-    const point = eligible.shift();
-    preview.push(point);
-    point.matchedTopics.forEach((tag) => uncovered.delete(tag));
-  }
+  // Keep the first two Markdown bullets visible in every view. A selection
+  // can add relevant evidence, but must never hide the overview preview.
+  const preview = points.filter(
+    (point) => point.order < 2 || (selected.size && point.score),
+  );
   const remaining = points.filter((point) => !preview.includes(point));
   const links = [
     ...(item.links || []),
@@ -92,11 +62,7 @@ function Experience({ item, index, data, context, compact }) {
       id={`experience-${index}`}
     >
       <h3 class="cv-role-title">
-        {item.url ? (
-          <a href={item.url}>{item.organization}</a>
-        ) : (
-          item.organization
-        )}{" "}
+        {item.organization}{" "}
         <span class="cv-role-separator">/</span>{" "}
         <span class="cv-role-name">
           <Highlight
@@ -104,6 +70,7 @@ function Experience({ item, index, data, context, compact }) {
               text: item.role,
               tags: item.tags,
               emphases: item.roleEmphases || [],
+              links: item.roleLinks || [],
             }}
             context={context}
           />
@@ -127,28 +94,25 @@ function Experience({ item, index, data, context, compact }) {
             emphasis: item.summaryEmphasis,
             emphasisTags: item.summaryEmphasisTags,
             emphases: item.summaryEmphases,
+            links: item.summaryLinks,
             tags: item.summaryTags || [],
           }}
           context={context}
         />
       </p>
-      {(expanded ? points : preview).length > 0 && pointList(expanded ? points : preview)}
+      {!expanded && preview.length > 0 && pointList(preview)}
       {!compact && remaining.length > 0 && (
-        <details class="cv-fallback-details" hidden={ready}>
-          <summary>More experience</summary>
-          {pointList(remaining)}
+        <details
+          class="cv-archive cv-experience-details"
+          open={expanded || !ready}
+          onToggle={(event) => {
+            if (ready && event.currentTarget.open !== expanded)
+              context.toggleExperience(index, event.currentTarget);
+          }}
+        >
+          <summary>{expanded ? "Show highlights" : "Show full experience"}</summary>
+          {(expanded || !ready) && pointList(expanded ? points : remaining)}
         </details>
-      )}
-      {!compact && (expanded || remaining.length > 0) && (
-        <p class="cv-experience-disclosure" hidden={!ready}>
-          <span>{expanded ? "Showing full experience" : "Showing highlights"}</span>
-          {" · "}
-          <button type="button" aria-expanded={Boolean(expanded)}
-            onMouseDown={(event) => event.preventDefault()}
-            onClick={(event) => context.toggleExperience(index, event.currentTarget)}>
-            {expanded ? "Show highlights" : "Show full experience"}
-          </button>
-        </p>
       )}
       {links.length > 0 && (
         <p class="cv-evidence">
@@ -171,8 +135,11 @@ function ExperienceGroup({ members, config, id, data, context, compact }) {
       .filter((theme) =>
         theme.organizations.some((name) => organizations.has(name)),
       )
-      .map(({ text }) => text);
-  const title = themes(config.titleThemes || []).join(" & ");
+  const title = themes(config.titleThemes || []).map(({ text }) => text).join(" & ");
+  const summaryThemes = themes(config.themes);
+  const tagLabel = (config.tags || [])
+    .map((tag) => context.labels.get(tag) || tag)
+    .join(" · ");
   const years = members
     .flatMap(({ item }) => [
       item.start.slice(0, 4),
@@ -182,7 +149,19 @@ function ExperienceGroup({ members, config, id, data, context, compact }) {
   return (
     <section class="cv-earlier" aria-labelledby={`${id}-heading`}>
       <h3 class="cv-role-title" id={`${id}-heading`}>
-        {config.title}
+        <Highlight
+          point={{ text: config.title, tags: config.tags || [] }}
+          context={context}
+        />
+        {tagLabel && (
+          <>
+            {" "}
+            <span class="cv-role-separator">/</span>{" "}
+            <span class="cv-role-name">
+              <Highlight point={{ text: tagLabel, tags: config.tags }} context={context} />
+            </span>
+          </>
+        )}
         {title && (
           <>
             {" "}
@@ -196,9 +175,15 @@ function ExperienceGroup({ members, config, id, data, context, compact }) {
         {years[0] !== years.at(-1) && `–${years.at(-1)}`} · {members.length}{" "}
         experiences
       </p>
-      <p class="cv-summary">{themes(config.themes).join(" ")}</p>
+      <p class="cv-summary">
+        {summaryThemes.map((theme) => (
+          <span key={theme.text}>
+            <Highlight point={theme} context={context} />{" "}
+          </span>
+        ))}
+      </p>
       {!compact && (
-        <details class="cv-archive" id={`${id}-details`}>
+        <details class="cv-archive" id={`${id}-details`} open>
           <summary>
             Explore{" "}
             {members.length === 1
@@ -220,11 +205,7 @@ function ExperienceGroup({ members, config, id, data, context, compact }) {
 }
 
 export function Work({ data, context, compact = false }) {
-  const { individual, grouped, recentGrouped } = partitionWork(
-    data,
-    context.selected,
-    compact ? new Set() : context.expandedExperiences,
-  );
+  const { individual, grouped, recentGrouped } = partitionWork(data, context.selected);
   const timeline = individual.map((entry) => ({
     index: entry.index,
     node: (

@@ -8,12 +8,14 @@ Each experience starts with YAML metadata between `---` lines, followed by its
 summary and an `## Experience` list. Keep dates as quoted year or year-month
 strings, or `present`.
 
-Use ordinary Markdown link notation to associate words with topics:
+Use ordinary Markdown link notation to associate words with topics. A target
+that is an `http` or `https` URL is an inline external link instead:
 
 ```markdown
 - Built [voice agents](livekit) with [background tools](agent-harness).
 - [The startup ran out of runway.](career-moves)
 - [Shipped the first production release.](product)
+- Read [coloph-toolset](https://github.com/golergka/coloph-toolset).
 ```
 
 Wrap a whole sentence to associate it with a topic. Links can nest when a phrase
@@ -29,8 +31,8 @@ FAQ topics use exactly the same syntax and rendering. `kind: faq` in the topic
 configuration only controls which selector displays them.
 
 The compiler supports metadata, a summary paragraph, the Experience heading,
-bullet paragraphs, and topic links. Use the metadata `links` list for external
-links. It is a small Markdown dialect, not a general Markdown page renderer.
+bullet paragraphs, topic links, and inline HTTP(S) links. It is a small Markdown
+dialect, not a general Markdown page renderer.
 
 Run `npm run build` from the repository root to generate the site. Unknown
 topics, missing required metadata, and malformed dates stop the build.

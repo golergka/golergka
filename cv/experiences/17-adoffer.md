@@ -3,11 +3,10 @@ organization: adOffer
 start: 2010-07
 end: 2011-02
 location: Russia
-url: https://www.linkedin.com/company/1090659/
 role: "[CEO](founder) & [Founder](founder)"
 ---
 
-Built an offer-based monetization [startup from concept to launch](founder,product).
+Built an offer-based monetization [startup for mobile games from concept to launch](founder,product,games,mobile).
 
 ## Experience
 

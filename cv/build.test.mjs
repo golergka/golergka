@@ -13,15 +13,21 @@ test("CV build prerenders usable HTML, shares CSS, and emits bundled modules", a
   const html = fs.readFileSync(path.join(outDir, "cv/index.html"), "utf8");
   assert.ok(html.includes(`href="${styleHref}"`));
   assert.match(html, /<h1>Max Yankov<\/h1>/);
-  assert.match(html, /<details class="cv-fallback-details"/);
+  assert.match(html, /href="https:\/\/x\.com\/GolerGkA">Twitter<\/a>/);
+  assert.match(html, /href="https:\/\/github\.com\/golergka\/coloph-toolset">coloph-toolset<\/a>/);
+  assert.match(html, /href="https:\/\/github\.com\/golergka\/coloph-sync"[^>]*>ship loop<\/a>/);
+  assert.doesNotMatch(html, /linkedin\.com\/company|<h3[^>]*>\s*<a /);
+  assert.match(html, /<details(?=[^>]*class="[^"]*cv-experience-details")(?=[^>]*open)[^>]*>/);
+  assert.match(html, /<details(?=[^>]*class="cv-archive")(?=[^>]*open)[^>]*>/);
   const formTag = html.slice(html.indexOf("<form"), html.indexOf("</form"));
   assert.ok(formTag.includes(" hidden"));
+  assert.match(html, /<meta property="og:title" content="Experience — Max Yankov">/);
+  assert.match(html, /<meta name="twitter:card" content="summary_large_image">/);
   assert.doesNotMatch(html, /\{\{\w+\}\}|dateNote|theme\/|cv-render/);
   const scripts = [...html.matchAll(/<script type="module" src="([^"]+)"/g)];
   assert.equal(scripts.length, 1);
   assert.ok(fs.existsSync(path.join(outDir, scripts[0][1])));
   const files = fs.readdirSync(path.join(outDir, "cv/assets"));
-  assert.ok(files.some((file) => file.startsWith("export-")));
+  assert.ok(files.some((file) => file.endsWith(".js")));
   assert.ok(files.every((file) => !file.endsWith(".css")));
 });
-

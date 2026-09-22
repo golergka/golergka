@@ -21,6 +21,7 @@ import {
   FOOTER,
   layout,
   render,
+  socialMetadata,
   writePage,
   styleHref,
 } from "../site/build-context.mjs";
@@ -146,7 +147,10 @@ export async function buildMarkdown() {
 
   const postFiles = fs
     .readdirSync(root)
-    .filter((name) => name.endsWith(".md") && name !== HOMEPAGE)
+    .filter(
+      (name) =>
+        name.endsWith(".md") && name !== HOMEPAGE && name !== "AGENTS.md",
+    )
     .sort()
     .map((name) => ({ kind: "post", file: name }));
 
@@ -242,6 +246,10 @@ export async function buildMarkdown() {
         homeLabel: SITE_NAME,
         stylesheet: styleHref,
         canonical: canonicalTag(`/${page.slug}/`),
+        metadata: socialMetadata({
+          title: `${page.title} — ${SITE_NAME}`,
+          pathname: `/${page.slug}/`,
+        }),
         content: body,
         footer: FOOTER,
       }),
@@ -277,6 +285,7 @@ export async function buildMarkdown() {
       homeLabel: SITE_NAME,
       stylesheet: styleHref,
       canonical: canonicalTag("/"),
+      metadata: socialMetadata({ title: SITE_NAME }),
       content:
         wrapTables(rewriteLinks(marked.parse(readme))) +
         `\n<h2>Writing</h2>\n<ul class="posts">\n${list}\n</ul>`,
@@ -320,6 +329,10 @@ export async function buildMarkdown() {
       sitename: SITE_NAME,
       homeLabel: SITE_NAME,
       stylesheet: styleHref,
+      metadata: socialMetadata({
+        title: `Not found — ${SITE_NAME}`,
+        pathname: "/404.html",
+      }),
       content: `<h1>Not found</h1>\n<p>No page at this address. <a href="/">Back to the front page</a>.</p>`,
       footer: FOOTER,
     }),

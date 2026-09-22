@@ -5,10 +5,11 @@ export function pdfBlocks(root) {
     if (node.nodeType === 3)
       return [{ text: node.textContent.replace(/\s+/g, " "), ...style }];
     if (node.nodeType !== 1 || node.classList.contains("cv-sr-only")) return [];
+    if (node.matches('a[href*="linkedin.com"]')) return [];
     const next = { ...style };
     if (node.matches("h1,h2,h3,strong,b")) next.bold = true;
     if (node.matches(".cv-role-name,.cv-role-separator")) next.bold = false;
-    if (node.matches("mark")) next.mark = true;
+    if (node.matches("mark,.cv-topic-mark")) next.mark = true;
     if (node.matches("a")) next.href = node.href;
     return [...node.childNodes].flatMap((child) => runs(child, next));
   }
@@ -18,11 +19,11 @@ export function pdfBlocks(root) {
   const groups = [];
   groups.push([
     block(root.querySelector("h1"), 18, 2),
-    block(root.querySelector(".cv-generation-note"), 8, 5, { color: 85 }),
     block(root.querySelector(".cv-headline"), 11, 3),
     block(root.querySelector(".cv-global-lead"), 9, 3),
-    block(root.querySelector(".cv-expertise"), 8, 2),
     block(root.querySelector(".cv-links"), 8, 7),
+    block(root.querySelector(".cv-generation-note"), 8, 2, { color: 85 }),
+    block(root.querySelector(".cv-expertise"), 8, 2),
   ]);
   groups.push([block(root.querySelector(".cv-section-heading h2"), 12, 5)]);
   for (const entry of root.querySelector("#cv-app").children) {
@@ -114,15 +115,24 @@ export function createCvPdf(jsPDF, groups, title) {
         return { ...block, lines: block.rule ? [] : wrap(block) };
       }),
     );
-  // Match the compact one-page reference, but never shrink body text below 7pt.
+  // Treat the existing type scale as the floor, then maximize it for one page.
   let laidOutGroups = layout(1);
-  for (
-    let scale = 0.98;
-    laidOutGroups.flat().reduce((sum, block) => sum + blockHeight(block), 0) >
-      bottom - margin && scale >= 7 / 9;
-    scale -= 0.02
-  ) {
-    laidOutGroups = layout(scale);
+  const fitsOnePage = (groups) =>
+    groups.flat().reduce((sum, block) => sum + blockHeight(block), 0) <=
+    bottom - margin;
+  if (fitsOnePage(laidOutGroups)) {
+    let lower = 1,
+      upper = 2;
+    while (fitsOnePage(layout(upper))) {
+      lower = upper;
+      upper *= 2;
+    }
+    for (let iteration = 0; iteration < 12; iteration++) {
+      const middle = (lower + upper) / 2;
+      if (fitsOnePage(layout(middle))) lower = middle;
+      else upper = middle;
+    }
+    laidOutGroups = layout(lower);
   }
   for (const laidOut of laidOutGroups) {
     const height = laidOut.reduce((sum, block) => sum + blockHeight(block), 0);
@@ -187,4 +197,3 @@ export function createCvPdf(jsPDF, groups, title) {
   }
   return pdf;
 }
-
