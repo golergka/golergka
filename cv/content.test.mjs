@@ -1,6 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {loadContent, parseTopicText} from "./content.mjs";
+import {
+  filtersWithoutEvidence,
+  loadContent,
+  parseTopicText,
+  warnFiltersWithoutEvidence,
+} from "./content.mjs";
 import {buildTopicGraph, highlightRanges} from "./model.mjs";
 
 test("Markdown compiles all experiences and FAQ uses ordinary topic evidence", () => {
@@ -29,7 +34,7 @@ test("Markdown compiles all experiences and FAQ uses ordinary topic evidence", (
     "search",
   ])
     assert.ok(hotline.tags.includes(tag));
-  for (const tag of ["search", "docker", "kubernetes", "agent-harness"])
+  for (const tag of ["search", "docker", "kubernetes", "agent-harness", "pydantic-ai"])
     assert.ok(coloph.tags.includes(tag));
   assert.deepEqual(contractors, ["International clients", "Silly Penguin", "Ilyon"]);
   assert.equal(international.role, "Contractor / conversational AI");
@@ -45,14 +50,9 @@ test("Markdown compiles all experiences and FAQ uses ordinary topic evidence", (
   assert.deepEqual(
     data.work
       .filter(({ tags }) => tags.includes("node-bun"))
-      .map(({ organization }) => organization),
+    .map(({ organization }) => organization),
     [
-      "Hotline (Gestalt Systems)",
-      "Jam.dev",
       "PopSQL",
-      "International clients",
-      "Deep Channel",
-      "FastCup.net",
       "Sofq Games",
       "Ilyon",
     ],
@@ -63,6 +63,7 @@ test("Markdown compiles all experiences and FAQ uses ordinary topic evidence", (
     ),
   );
   assert.ok(!data.filters.some(({ id }) => ["cto", "hiring"].includes(id)));
+  assert.ok(!data.filters.some(({ id }) => ["claude-code", "fastapi"].includes(id)));
   for (const tag of ["agents", "llamaindex", "langchain"])
     assert.ok(international.tags.includes(tag));
   for (const organization of [
@@ -89,6 +90,17 @@ test("Markdown compiles all experiences and FAQ uses ordinary topic evidence", (
   assert.equal(coloph.start, "2026");
   assert.ok(!data.filters.some(({ id }) => id === "ml-ops"));
   assert.ok(data.work.every((item) => !item.faq));
+});
+
+test("build warns when a configured tag has no individual experience evidence", () => {
+  const data = {
+    filters: [{ id: "used" }, { id: "unused" }],
+    work: [{ tags: ["used"] }],
+  };
+  assert.deepEqual(filtersWithoutEvidence(data), ["unused"]);
+  const warnings = [];
+  assert.deepEqual(warnFiltersWithoutEvidence(data, (message) => warnings.push(message)), ["unused"]);
+  assert.match(warnings[0], /unused/);
 });
 
 test("topic links preserve phrase boundaries and validate topic names", () => {

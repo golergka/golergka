@@ -11,6 +11,7 @@ import {
   defaultTags,
   expandedRoots,
   expertiseLabels,
+  filtersWithEvidence,
   matchesTags,
   partitionWork,
   selectedExpertiseLabels,
@@ -24,7 +25,11 @@ import { PDF_ERROR_STATUS } from "./constants.mjs";
 const colorStorageKey = "cv-topic-color-directory-v1";
 export function readSelection(data, search) {
   const params = new URLSearchParams(search),
-    allowed = new Set(data.filters.map(({ id }) => id));
+    allowed = new Set(
+      filtersWithEvidence(data.filters, data.work, data.topicAliases).map(
+        ({ id }) => id,
+      ),
+    );
   return new Set(
     (params.has("tags") ? params.get("tags").split(",") : defaultTags)
       .map((tag) => data.topicAliases?.[tag] || tag)
@@ -58,6 +63,10 @@ export function App({ data, exportSelection, createPdf }) {
   );
   const labels = useMemo(
     () => new Map(data.filters.map(({ id, label }) => [id, label])),
+    [data],
+  );
+  const visibleFilters = useMemo(
+    () => filtersWithEvidence(data.filters, data.work, data.topicAliases),
     [data],
   );
   const expertise = exportSelection
@@ -214,7 +223,6 @@ export function App({ data, exportSelection, createPdf }) {
     .map((item, index) => ({ item, index }))
     .filter(
       ({ item }) =>
-        (!data.cvStart || item.start >= data.cvStart) &&
         matchesTags(workTags(item), selected, context.aliases, graph),
     );
   const groupedCount = grouped.length + recentGrouped.length;
@@ -303,7 +311,7 @@ export function App({ data, exportSelection, createPdf }) {
           >
             <div id={id} class="cv-topic-list">
               <TopicTree
-                filters={data.filters.filter(
+                filters={visibleFilters.filter(
                   ({ kind }) => (kind === "faq") === faq,
                 )}
                 context={context}

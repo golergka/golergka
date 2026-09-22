@@ -90,9 +90,21 @@ export function parseTopicText(source, allowed) {
   };
 }
 
+export function filtersWithoutEvidence({ filters, work }) {
+  const evidence = new Set(work.flatMap(({ tags }) => tags));
+  return filters.filter(({ id }) => !evidence.has(id)).map(({ id }) => id);
+}
+
+export function warnFiltersWithoutEvidence(data, warn = console.warn) {
+  const ids = filtersWithoutEvidence(data);
+  if (ids.length)
+    warn(`CV warning: configured tags without individual experience evidence: ${ids.join(", ")}`);
+  return ids;
+}
+
 export function loadContent(directory = new URL("./", import.meta.url)) {
   const config = YAML.parse(fs.readFileSync(new URL("config.yaml", directory), "utf8"));
-  const allowed = new Set([...config.filters.map(({id}) => id), ...Object.keys(config.topicAliases || {})]);
+  const allowed = new Set(config.filters.map(({id}) => id));
   for (const group of [config.recentWork, config.earlierWork]) {
     if (!group?.themes) continue;
     group.themes = group.themes.map((theme) => ({

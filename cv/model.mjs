@@ -45,7 +45,7 @@ export function buildTopicGraph(filters, relations = []) {
   return graph;
 }
 
-export function sourceForTag(tag, selected, aliases, graph) {
+export function sourceForTag(tag, selected, aliases = {}, graph) {
   const target = aliases[tag] || tag;
   const queue = [...selected].map((topic) => ({
     node: aliases[topic] || topic,
@@ -74,7 +74,7 @@ export function sourceForTag(tag, selected, aliases, graph) {
   return null;
 }
 
-export function matchSources(tags, selected, aliases, graph) {
+export function matchSources(tags, selected, aliases = {}, graph) {
   const sources = new Map();
   for (const tag of canonicalTags(tags, aliases)) {
     const source = sourceForTag(tag, selected, aliases, graph);
@@ -90,6 +90,21 @@ export const matchesTags = (tags, selected, aliases, graph) =>
   matchSources(tags, selected, aliases, graph).length > 0;
 
 export const workTags = (item) => item.tags;
+
+export function filtersWithEvidence(filters, work, aliases = {}) {
+  const evidence = new Set(
+    work.flatMap((item) => canonicalTags(workTags(item), aliases)),
+  );
+  const parents = topicParents(filters);
+  for (const tag of [...evidence]) {
+    let parent = parents.get(tag);
+    while (parent) {
+      evidence.add(parent);
+      parent = parents.get(parent);
+    }
+  }
+  return filters.filter(({ id }) => evidence.has(id));
+}
 
 export const workPoints = (item) => item.highlights;
 
@@ -112,7 +127,6 @@ export function partitionWork(data, selected = new Set()) {
     recentGrouped = [];
   const graph = buildTopicGraph(data.filters, data.topicRelations);
   data.work.forEach((item, index) => {
-    if (data.cvStart && item.start < data.cvStart) return;
     const older =
       data.earlierWork &&
       item.end !== "present" &&

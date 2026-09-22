@@ -1,6 +1,5 @@
 schemaVersion: 2
 updated: 2026-09-15
-cvStart: 2010-07
 profile:
   name: Max Yankov
   headline: Product engineer for agent-related software
@@ -60,9 +59,6 @@ filters:
   - id: type-systems
     label: Type systems
     parent: developer-tools
-  - id: claude-code
-    label: Claude Code
-    parent: agents
   - id: product
     label: Product engineering
   - id: frontend
@@ -85,9 +81,6 @@ filters:
     parent: product
   - id: react
     label: React / Preact
-    parent: product
-  - id: fastapi
-    label: FastAPI / Starlette
     parent: product
   - id: twilio
     label: Twilio
@@ -175,8 +168,6 @@ topicRelations:
     to: quo
   - from: frontend
     to: react
-  - from: backend
-    to: fastapi
   - from: postgres
     to: pgvector
   - from: devops
@@ -189,19 +180,6 @@ topicRelations:
     to: opentelemetry
   - from: observability
     to: braintrust
-topicAliases:
-  ai: agents
-  database: sql
-  networking: multiplayer
-  infrastructure: devops
-  access-control: safety
-  delivery: product
-  consulting: product
-  openai: llms
-  litellm: llms
-  voice-ai: livekit
-  preact: react
-  ceo: founder
 recentWork:
   title: Other recent work
   titleThemes:
@@ -249,7 +227,6 @@ earlierWork:
   title: Earlier work & projects
   tags:
     - contractor
-  source: https://docs.google.com/document/d/1_ZboSPR2aB-fLOwXuxBdvTKoFEhkiE8TL9GPIqNF2r4/edit
   themes:
     - organizations:
         - Silly Penguin
@@ -283,148 +260,6 @@ earlierWork:
         - adOffer
       text: "[Founded adOffer, raised seed investment, and attracted the first advertisers](founder).
         [Developed and launched the offer system](product)."
-artifacts:
-  - name: Coloph
-    featured: true
-    period: 2025–2026
-    description: "My graph-based knowledge system: an agent product built around
-      persistent, connected knowledge rather than isolated chat history."
-    tags:
-      - agents
-      - ai
-      - product
-      - data
-      - database
-      - devops
-  - name: Coloph Works
-    url: https://github.com/golergka/coloph-works
-    period: 2026–present
-    description: "Finishing Coloph in public by extracting and completing its
-      reusable agent-native foundations: workflows, migrations, environment
-      handling, skills, and delivery coordination."
-    tags:
-      - agents
-      - developer-tools
-      - product
-      - devops
-      - safety
-      - backend
-  - name: Hotline
-    period: 2025–2026
-    description: An AI telephony and messaging product spanning real-time voice
-      agents, agentic workflows, SMS, email, operational tooling, and production
-      infrastructure.
-    tags:
-      - agents
-      - ai
-      - product
-      - devops
-      - backend
-      - data
-      - leadership
-  - name: command-guard
-    url: https://github.com/golergka/command-guard
-    period: "2026"
-    description: Configurable guardrails for Claude Code and Codex that block risky
-      commands, protect files, and enforce project workflows.
-    tags:
-      - agents
-      - safety
-      - developer-tools
-      - devops
-  - name: Agent History
-    url: https://github.com/golergka/agent-history
-    period: "2026"
-    description: A macOS utility for inspecting local coding-agent work and its history.
-    tags:
-      - agents
-      - developer-tools
-      - native
-      - product
-  - name: Coloph Migrations
-    url: https://github.com/golergka/coloph-migrations
-    period: "2026"
-    description: An agent-friendly PostgreSQL migration CLI that makes schema state,
-      compatibility, and dangerous deployment states explicit.
-    tags:
-      - agents
-      - database
-      - developer-tools
-      - safety
-      - backend
-  - name: Coloph Sync
-    url: https://github.com/golergka/coloph-sync
-    period: 2026–present
-    description: "Open-source coordination for agent-driven development: reviewed
-      commits, worktree integration, project-defined checks, resilient
-      deployment, and evidence-backed delivery state."
-    tags:
-      - agents
-      - autonomous-development
-      - developer-tools
-      - delivery
-      - safety
-  - name: clx
-    url: https://github.com/golergka/clx
-    period: "2026"
-    description: An experiment in exposing APIs as discoverable and composable
-      native CLIs for AI agents.
-    tags:
-      - agents
-      - developer-tools
-      - devops
-  - name: Diskscope
-    url: https://github.com/golergka/diskscope
-    period: "2026"
-    description: A disk-usage analyzer with a shared Rust scan core, command-line
-      interface, and native macOS interfaces.
-    tags:
-      - native
-      - rust
-      - product
-skills:
-  productAndLeadership:
-    - Product discovery
-    - Technical leadership
-    - Hiring
-    - Mentoring
-    - Stakeholder communication
-    - Delivery systems
-  application:
-    - TypeScript
-    - JavaScript
-    - Python
-    - Ruby
-    - React
-    - Redux
-    - Node.js
-    - GraphQL
-    - Electron
-  platformAndData:
-    - PostgreSQL
-    - MySQL
-    - MongoDB
-    - Kafka
-    - Terraform
-    - AWS
-    - Hasura
-    - dbt
-    - SQLFluff
-    - OpenTelemetry
-    - CI/CD
-  nativeAndGames:
-    - Rust
-    - Go
-    - C
-    - C++
-    - C#
-    - Objective-C
-    - Java
-    - Unity
-    - Cocos2d-x
-    - iOS
-    - Android
-    - macOS
 education:
   - Mathematics class, Moscow State School 57
   - Studied Bioengineering and Bioinformatics at Moscow State University
@@ -436,8 +271,6 @@ languages:
   - Ukrainian — beginner
 editorialNotes:
   - This is the source record, not a single application-ready CV.
-  - Verify conflicting end dates for Sofq Games and Hypetrain Digital before
-    external use.
   - Do not publish stale phone, citizenship, residence, or availability details
     without confirmation.
   - Validate historical install counts, conversion claims, and client survey

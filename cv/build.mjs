@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { build } from "esbuild";
-import { loadContent } from "./content.mjs";
+import { loadContent, warnFiltersWithoutEvidence } from "./content.mjs";
 import {
   root,
   dist,
@@ -17,29 +17,22 @@ import {
 
 export async function buildCv({ outDir = dist } = {}) {
   const source = loadContent();
+  warnFiltersWithoutEvidence(source);
   const {
-    cvStart,
     profile,
     filters,
     topicRelations,
-    topicAliases,
     earlierWork,
     recentWork,
-    artifacts,
-    skills,
     education,
     languages,
   } = source;
   const data = {
-    cvStart,
     profile,
     filters,
     topicRelations,
-    topicAliases,
     earlierWork,
     recentWork,
-    artifacts,
-    skills,
     education,
     languages,
     work: source.work.map(({ dateNote, ...work }) => work),

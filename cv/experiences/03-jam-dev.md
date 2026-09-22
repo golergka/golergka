@@ -18,5 +18,5 @@ role: Senior Engineer
 - Spearheaded [Chrome extension manifest v3 migration](frontend,developer-tools), adopting an event-driven async approach with improved resilience and fault tolerance.
 - Maintained and improved [in-browser data-heavy pipelines for events, video and audio recording](frontend,product,data), improving resilience in the extension environment.
 - Implemented [features from PRD to rollout and maintenance](product).
-- Contributed to a [TypeScript](typescript) [developer tool](developer-tools,product) spanning a [browser extension](frontend), recording applications, dashboard, [backend with GraphQL API](node-bun,backend), and [Cloudflare workers](devops).
+- Contributed to a [TypeScript](typescript) [developer tool](developer-tools,product) spanning a [browser extension](frontend), recording applications, dashboard, [backend with GraphQL API](backend), and [Cloudflare workers](devops).
 - Used [Datadog](datadog) for [deep production investigations](observability) across the [browser extension, recording applications, dashboard](frontend), [APIs, workers](backend), and [supporting infrastructure](devops).

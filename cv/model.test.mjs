@@ -4,6 +4,7 @@ import { loadContent, parseTopicText } from "./content.mjs";
 import {
   buildTopicGraph,
   expandedRoots,
+  filtersWithEvidence,
   highlightRanges,
   selectedExpertiseLabels,
   sourceForTag,
@@ -114,9 +115,7 @@ test("overview retains every eligible experience exactly once across groups", ()
   assert.equal(new Set(indices).size, indices.length);
   assert.deepEqual(
     indices.sort((a, b) => a - b),
-    data.work.flatMap((item, index) =>
-      item.start >= data.cvStart ? [index] : [],
-    ),
+    data.work.map((_, index) => index),
   );
 });
 test("FAQ selection does not mutate editorial content", () => {
@@ -124,6 +123,17 @@ test("FAQ selection does not mutate editorial content", () => {
   for (const item of data.work)
     workPoints(item, new Set(data.filters.map(({ id }) => id)), data.filters);
   assert.equal(JSON.stringify(data), before);
+});
+test("topic selectors omit tags without matching content", () => {
+  const visible = filtersWithEvidence(
+    [
+      { id: "agents" },
+      { id: "agent-harness", parent: "agents" },
+      { id: "unused" },
+    ],
+    [{ tags: ["agent-harness"] }],
+  ).map(({ id }) => id);
+  assert.deepEqual(visible, ["agents", "agent-harness"]);
 });
 test("PDF expertise contains every direct selection, including FAQ tags", () => {
   const labels = selectedExpertiseLabels(

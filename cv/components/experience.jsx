@@ -40,13 +40,7 @@ function Experience({ item, index, data, context, compact }) {
     (point) => point.order < 2 || (selected.size && point.score),
   );
   const remaining = points.filter((point) => !preview.includes(point));
-  const links = [
-    ...(item.links || []),
-    ...(item.artifacts || [])
-      .map((name) => data.artifacts.find((artifact) => artifact.name === name))
-      .filter((artifact) => artifact?.url)
-      .map(({ name, url }) => ({ label: name, url })),
-  ];
+  const links = item.links || [];
   const pointList = (items) => (
     <ul class="cv-points">
       {items.map((point) => (
