@@ -235,3 +235,29 @@ body:has(.cv-profile) { --cv-text-selection: oklch(var(--cv-topic-lightness) var
 @media print {
   .cv-topic-suggestions, .cv-archive, .cv-fallback-details { display: none; }
 }
+
+/* Local design alternatives: ?projects=inset or ?projects=margin. */
+.cv-design-options { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--cv-muted); }
+.cv-design-options a { text-decoration: underline; text-underline-offset: 0.2em; }
+.cv-design-options a[aria-current] { color: var(--text); font-weight: bold; text-decoration: none; }
+.cv-project-insert { margin: 1.2rem 0 0.2rem; }
+.cv-project-notes { display: grid; grid-template-columns: repeat(var(--cv-project-columns), minmax(0, 1fr)); gap: 0.85rem 1.5rem; }
+.cv-project-note { margin: 0; padding: 0.65rem 0.8rem; border: 1px solid var(--cv-rule); font-size: 0.88rem; line-height: 1.45; break-inside: avoid; }
+.cv-project-note a { font-weight: bold; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
+.cv-project-description { display: block; color: var(--text); margin-top: 0.25rem; }
+@media screen and (min-width: 90rem) {
+  .cv-projects-margin .cv-project-insert { position: relative; margin: 0; height: 0; }
+  .cv-projects-margin .cv-project-notes { position: absolute; top: 0.4rem; left: calc(100% + 2.5rem); width: 17rem; grid-template-columns: 1fr; gap: 0.85rem; }
+}
+@media (max-width: 38rem) {
+  .cv-project-notes { grid-template-columns: 1fr; }
+  .cv-projects-margin .cv-project-insert { margin-inline: 0; }
+}
+@media print {
+  .cv-design-options { display: none; }
+  .cv-project-insert, .cv-projects-margin .cv-project-insert { position: static; height: auto; margin: 4pt 0; }
+  .cv-project-notes, .cv-projects-margin .cv-project-notes { position: static; width: auto; display: grid; grid-template-columns: repeat(var(--cv-project-columns), minmax(0, 1fr)); gap: 5pt 8pt; }
+  .cv-project-note { font-size: 7pt; padding: 5pt 6pt; margin: 0; }
+  .cv-project-description { display: block; margin-top: 2pt; }
+  .cv-project-note mark { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}

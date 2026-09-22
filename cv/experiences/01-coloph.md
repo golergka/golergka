@@ -3,13 +3,6 @@ organization: Coloph
 start: "2026"
 end: present
 location: Independent
-links:
-  - label: Coloph Works
-    url: https://github.com/golergka/coloph-works
-  - label: Coloph Migrations
-    url: https://github.com/golergka/coloph-migrations
-  - label: Coloph Sync
-    url: https://github.com/golergka/coloph-sync
 role: "[Founder](founder) & [Product Engineer](product)"
 ---
 

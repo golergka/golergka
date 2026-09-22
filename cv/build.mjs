@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { build } from "esbuild";
 import { loadContent, warnFiltersWithoutEvidence } from "./content.mjs";
+import { loadProjects } from "./projects.mjs";
 import {
   root,
   dist,
@@ -35,6 +36,7 @@ export async function buildCv({ outDir = dist } = {}) {
     recentWork,
     education,
     languages,
+    projects: loadProjects(filters),
     work: source.work.map(({ dateNote, ...work }) => work),
   };
   const common = {

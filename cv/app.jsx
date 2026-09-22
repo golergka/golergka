@@ -45,7 +45,8 @@ function rootsFor(data, selection) {
   );
 }
 
-export function App({ data, exportSelection, createPdf }) {
+export function App({ data, exportSelection, exportProjectLayout, exportColors, createPdf }) {
+  const [projectLayout, setProjectLayout] = useState(exportProjectLayout || "");
   const [selected, setSelected] = useState(() => exportSelection || new Set());
   const [ready, setReady] = useState(false);
   const [printing, setPrinting] = useState(Boolean(exportSelection));
@@ -54,7 +55,7 @@ export function App({ data, exportSelection, createPdf }) {
   const [exporting, setExporting] = useState(false);
   const scrollAnchor = useRef(null);
   const [colors, setColors] = useState(() =>
-    createTopicColorDirectory(data.filters.map(({ id }) => id)),
+    createTopicColorDirectory(data.filters.map(({ id }) => id), exportColors),
   );
   const graph = useMemo(
     () => buildTopicGraph(data.filters, data.topicRelations),
@@ -90,6 +91,8 @@ export function App({ data, exportSelection, createPdf }) {
     );
     const syncUrl = () => {
       const selection = readSelection(data, location.search);
+      const layout = new URLSearchParams(location.search).get("projects");
+      setProjectLayout(["inset", "margin"].includes(layout) ? layout : "");
       setSelected(selection);
       setExpanded((previous) =>
         new Set([...previous, ...rootsFor(data, selection)]),
@@ -190,6 +193,7 @@ export function App({ data, exportSelection, createPdf }) {
   }
   const context = {
     selected,
+    projectLayout,
     expanded,
     graph,
     labels,
@@ -213,7 +217,7 @@ export function App({ data, exportSelection, createPdf }) {
     setExporting(true);
     setPdfStatus("Generating PDF…");
     try {
-      const pages = await createPdf(data, selection);
+      const pages = await createPdf(data, selection, projectLayout, colors.snapshot());
       setPdfStatus(`Downloaded · ${pages} ${pages === 1 ? "page" : "pages"}`);
     } catch (error) {
       console.error(error);
@@ -226,6 +230,15 @@ export function App({ data, exportSelection, createPdf }) {
   const profile = data.profile;
   return (
     <>
+      {projectLayout && !printing && (
+        <nav class="cv-design-options" aria-label="Project layout alternatives">
+          <span>Project layout: </span>
+          {[ ["inset", "A · Insets"], ["margin", "B · Margin notes"] ].map(([value, label]) => (
+            <a href={`?projects=${value}&tags=${encodeURIComponent([...selected].join(","))}`}
+              aria-current={projectLayout === value ? "page" : undefined}>{label}</a>
+          ))}
+        </nav>
+      )}
       <h1>{profile.name}</h1>
       <div id="cv-profile" class="cv-profile">
         <p class="cv-headline">{profile.headline}</p>
