@@ -1,6 +1,20 @@
 // Text-based PDF layout: the same serif hierarchy, rules, links and highlights
 // as the HTML. No screenshot rasterization or server-side generation.
 export function pdfBlocks(root) {
+  // Resolve the same inline topic color against the light PDF paper.
+  const canvas = root.ownerDocument.createElement("canvas");
+  canvas.width = canvas.height = 1;
+  const paint = canvas.getContext("2d", { willReadFrequently: true });
+  function highlightColor(node) {
+    const color = node.style.getPropertyValue("--topic-color")
+      .replace("var(--cv-topic-lightness)", "88%")
+      .replace("var(--cv-topic-chroma)", "0.145");
+    paint.fillStyle = "white";
+    paint.fillRect(0, 0, 1, 1);
+    paint.fillStyle = color || "#fff0a6";
+    paint.fillRect(0, 0, 1, 1);
+    return [...paint.getImageData(0, 0, 1, 1).data].slice(0, 3);
+  }
   function runs(node, style = {}) {
     if (node.nodeType === 3)
       return [{ text: node.textContent.replace(/\s+/g, " "), ...style }];
@@ -9,7 +23,7 @@ export function pdfBlocks(root) {
     const next = { ...style };
     if (node.matches("h1,h2,h3,strong,b")) next.bold = true;
     if (node.matches(".cv-role-name,.cv-role-separator")) next.bold = false;
-    if (node.matches("mark,.cv-topic-mark")) next.mark = true;
+    if (node.matches("mark,.cv-topic-mark")) next.markColor = highlightColor(node);
     if (node.matches("a")) next.href = node.href;
     return [...node.childNodes].flatMap((child) => runs(child, next));
   }
@@ -27,6 +41,21 @@ export function pdfBlocks(root) {
   ]);
   groups.push([block(root.querySelector(".cv-section-heading h2"), 12, 5)]);
   for (const entry of root.querySelector("#cv-app").children) {
+    if (entry.matches(".cv-project-insert")) {
+      const notes = [...entry.querySelectorAll(".cv-project-note")];
+      const columnCount = Number(entry.querySelector(".cv-project-notes").dataset.projectColumns);
+      for (let index = 0; index < notes.length; index += columnCount) {
+        groups.push([{
+          columnCount,
+          columns: notes.slice(index, index + columnCount).map((note) => [
+            block(note.querySelector("a"), 9, 3, { runs: runs(note.querySelector("a"), { bold: true }) }),
+            block(note.querySelector(".cv-project-description"), 9, 0),
+          ]),
+          padding: 7, gap: 8, after: 6,
+        }]);
+      }
+      continue;
+    }
     const blocks = [];
     for (const child of entry.children) {
       if (child.matches("h3")) blocks.push(block(child, 10, 2));
@@ -69,7 +98,7 @@ export function createCvPdf(jsPDF, groups, title) {
   const bottom = pdf.internal.pageSize.getHeight() - margin;
   let y = margin;
 
-  function wrap(block) {
+  function wrap(block, width) {
     const lines = [[]];
     let used = 0;
     const available = width - (block.bullet ? 13 : 0);
@@ -101,20 +130,26 @@ export function createCvPdf(jsPDF, groups, title) {
   }
 
   const leadingRatio = 1.15;
-  const blockHeight = (block) =>
-    (block.rule ? 3 : block.lines.length * block.size * leadingRatio) +
-    block.after;
-  const layout = (scale) =>
-    groups.map((group) =>
-      group.map((source) => {
-        const block = {
-          ...source,
-          size: source.size * scale,
-          after: source.after * scale,
-        };
-        return { ...block, lines: block.rule ? [] : wrap(block) };
-      }),
-    );
+  const blockHeight = (block) => block.height + block.after;
+  function layoutBlock(source, scale, available) {
+    const block = { ...source, after: source.after * scale };
+    if (source.columns) {
+      block.padding = source.padding * scale;
+      block.gap = source.gap * scale;
+      block.columnWidth = (available - block.gap * (source.columnCount - 1)) / source.columnCount;
+      block.columns = source.columns.map((column) => column.map((child) =>
+        layoutBlock(child, scale, block.columnWidth - block.padding * 2)));
+      block.height = Math.max(...block.columns.map((column) =>
+        column.reduce((sum, child) => sum + blockHeight(child), 0))) + block.padding * 2;
+    } else {
+      block.size = source.size * scale;
+      block.lines = source.rule ? [] : wrap(block, available);
+      block.height = source.rule ? 3 : block.lines.length * block.size * leadingRatio;
+    }
+    return block;
+  }
+  const layout = (scale) => groups.map((group) =>
+    group.map((source) => layoutBlock(source, scale, width)));
   // Treat the existing type scale as the floor, then maximize it for one page.
   let laidOutGroups = layout(1);
   const fitsOnePage = (groups) =>
@@ -134,50 +169,65 @@ export function createCvPdf(jsPDF, groups, title) {
     }
     laidOutGroups = layout(lower);
   }
+
+  function draw(block, left = margin, available = width) {
+    if (block.columns) {
+      // Each row is measured and paginated as a unit, with independent text
+      // wrapping inside equal-width, fully bordered cells.
+      const top = y;
+      block.columns.forEach((column, index) => {
+        const x = left + index * (block.columnWidth + block.gap);
+        pdf.setDrawColor(205);
+        pdf.setLineWidth(0.5);
+        pdf.rect(x, top, block.columnWidth, block.height);
+        y = top + block.padding;
+        for (const child of column) draw(child, x + block.padding, block.columnWidth - block.padding * 2);
+      });
+      y = top + block.height;
+    } else if (block.rule) {
+      y += 3;
+      pdf.setDrawColor(205);
+      pdf.setLineWidth(0.5);
+      if (y < bottom) pdf.line(left, y, left + available, y);
+    } else {
+      const leading = block.size * leadingRatio;
+      for (let i = 0; i < block.lines.length; i++) {
+        if (y + leading > bottom) {
+          pdf.addPage();
+          y = margin;
+        }
+        let x = left + (block.bullet ? 13 : 0);
+        if (block.bullet && i === 0) {
+          pdf.setFont("times", "normal");
+          pdf.setFontSize(block.size);
+          pdf.setTextColor(0);
+          pdf.text("•", left, y + block.size);
+        }
+        for (const run of block.lines[i]) {
+          pdf.setFont("times", run.bold ? "bold" : "normal");
+          pdf.setFontSize(block.size);
+          if (run.markColor || run.mark) {
+            pdf.setFillColor(...(run.markColor || [255, 240, 166]));
+            pdf.rect(x, y + 1, run.width, block.size + 2, "F");
+          }
+          if (run.href) pdf.setTextColor(0, 0, 180);
+          else pdf.setTextColor(run.color ?? block.color ?? 0);
+          pdf.text(run.text, x, y + block.size);
+          if (run.href) pdf.link(x, y, run.width, leading, { url: run.href });
+          x += run.width;
+        }
+        y += leading;
+      }
+    }
+    y += block.after;
+  }
   for (const laidOut of laidOutGroups) {
     const height = laidOut.reduce((sum, block) => sum + blockHeight(block), 0);
     if (y > margin && y + height > bottom && height <= bottom - margin) {
       pdf.addPage();
       y = margin;
     }
-    for (const block of laidOut) {
-      if (block.rule) {
-        y += 3;
-        pdf.setDrawColor(205);
-        pdf.setLineWidth(0.5);
-        if (y < bottom) pdf.line(margin, y, margin + width, y);
-      } else {
-        const leading = block.size * leadingRatio;
-        for (let i = 0; i < block.lines.length; i++) {
-          if (y + leading > bottom) {
-            pdf.addPage();
-            y = margin;
-          }
-          let x = margin + (block.bullet ? 13 : 0);
-          if (block.bullet && i === 0) {
-            pdf.setFont("times", "normal");
-            pdf.setFontSize(block.size);
-            pdf.setTextColor(0);
-            pdf.text("•", margin, y + block.size);
-          }
-          for (const run of block.lines[i]) {
-            pdf.setFont("times", run.bold ? "bold" : "normal");
-            pdf.setFontSize(block.size);
-            if (run.mark) {
-              pdf.setFillColor(255, 240, 166);
-              pdf.rect(x, y + 1, run.width, block.size + 2, "F");
-            }
-            if (run.href) pdf.setTextColor(0, 0, 180);
-            else pdf.setTextColor(run.color ?? block.color ?? 0);
-            pdf.text(run.text, x, y + block.size);
-            if (run.href) pdf.link(x, y, run.width, leading, { url: run.href });
-            x += run.width;
-          }
-          y += leading;
-        }
-      }
-      y += block.after;
-    }
+    for (const block of laidOut) draw(block);
   }
   for (
     let page = 1;

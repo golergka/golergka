@@ -1,0 +1,37 @@
+{
+  "diskscope": {
+    "startYear": 2026,
+    "endYear": 2026,
+    "description": "A disk-usage analyzer with a shared Rust core, command-line tools and a [native macOS interface](native)."
+  },
+  "command-guard": {
+    "startYear": 2026,
+    "endYear": 2026,
+    "description": "[Configurable guardrails](safety) for [Claude Code](autonomous-development) and [coding agents](agents,autonomous-development), with [project-specific command and file rules](developer-tools)."
+  },
+  "coloph-migrations": {
+    "startYear": 2026,
+    "endYear": 2026,
+    "description": "A [PostgreSQL migration CLI](postgres,backend,developer-tools) with [inspectable schema state, immutable migrations and compatibility checks](safety)."
+  },
+  "clx": {
+    "startYear": 2026,
+    "endYear": 2026,
+    "description": "An experiment in turning APIs into [discoverable, composable CLIs](developer-tools) that [agents can use through the shell](agents,agent-harness)."
+  },
+  "pg-tx": {
+    "startYear": 2021,
+    "endYear": 2021,
+    "description": "A [Node.js library](backend,developer-tools) for [nested PostgreSQL transactions](postgres), built after tracing a subtle production bug in common transaction advice."
+  },
+  "gcf-typescript-template": {
+    "startYear": 2019,
+    "endYear": 2022,
+    "description": "A minimal [TypeScript](typescript) [starter template](developer-tools) for [Google Cloud Functions](backend,devops), from before straightforward TypeScript support."
+  },
+  "hn-comment-bot": {
+    "startYear": 2020,
+    "endYear": 2025,
+    "description": "A [Telegram bot](backend) that notifies Hacker News users about replies to their comments; currently offline, with a revival planned."
+  }
+}

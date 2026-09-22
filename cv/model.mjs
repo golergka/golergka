@@ -294,3 +294,17 @@ export function highlightRanges(point, selected, labels, aliases, graph) {
     return merged;
   }, []);
 }
+
+// Project dates are placement metadata only; they never appear in the UI or PDF.
+export function projectSlots(data, selected, graph) {
+  const slots = new Map();
+  const work = data.work.map((item, index) => ({ item, index }))
+    .filter(({ item }) => !data.cvStart || item.start >= data.cvStart);
+  for (const project of data.projects || []) {
+    if (!matchesTags(project.tags, selected, data.topicAliases, graph) || !work.length) continue;
+    const anchor = work.filter(({ item }) => Number(item.start.slice(0, 4)) >= project.startYear).at(-1) || work[0];
+    if (!slots.has(anchor.index)) slots.set(anchor.index, []);
+    slots.get(anchor.index).push(project);
+  }
+  return slots;
+}

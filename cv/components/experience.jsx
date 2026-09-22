@@ -3,12 +3,14 @@ import {
   matchSources,
   matchesTags,
   partitionWork,
+  projectSlots,
   workGroupAnchors,
   workPoints,
   workTags,
 } from "../model.mjs";
 import { Highlight } from "./topics.jsx";
 
+const projectColumns = 2;
 function DateLabel({ value }) {
   return value === "present" ? (
     "present"
@@ -40,7 +42,6 @@ function Experience({ item, index, data, context, compact }) {
     (point) => point.order < 2 || (selected.size && point.score),
   );
   const remaining = points.filter((point) => !preview.includes(point));
-  const links = item.links || [];
   const pointList = (items) => (
     <ul class="cv-points">
       {items.map((point) => (
@@ -107,16 +108,6 @@ function Experience({ item, index, data, context, compact }) {
           {pointList(remaining)}
         </details>
       )}
-      {links.length > 0 && (
-        <p class="cv-evidence">
-          {links.map((link, i) => (
-            <span key={link.url}>
-              {i > 0 && " · "}
-              <a href={link.url}>{link.label}</a>
-            </span>
-          ))}
-        </p>
-      )}
     </article>
   );
 }
@@ -166,7 +157,7 @@ function ExperienceGroup({ members, config, id, data, context, compact }) {
       <p class="cv-role-meta">
         {years[0]}
         {years[0] !== years.at(-1) && `–${years.at(-1)}`} · {members.length}{" "}
-        experiences
+        {members.length === 1 ? "experience" : "experiences"}
       </p>
       <p class="cv-summary">
         {summaryThemes.map((theme) => (
@@ -200,6 +191,8 @@ function ExperienceGroup({ members, config, id, data, context, compact }) {
 export function Work({ data, context, compact = false }) {
   const { individual, grouped, recentGrouped } = partitionWork(data, context.selected);
   const anchors = workGroupAnchors(data);
+  const slots = context.projectLayout
+    ? projectSlots(data, context.selected, context.graph) : new Map();
   const timeline = individual.map((entry) => ({
     index: entry.index,
     node: (
@@ -212,23 +205,41 @@ export function Work({ data, context, compact = false }) {
       />
     ),
   }));
-  for (const [members, config, id, index] of [
+  for (const [members, config, id, anchor] of [
     [recentGrouped, data.recentWork, "recent-work", anchors.recent],
     [grouped, data.earlierWork, "earlier-work", anchors.earlier],
   ]) {
-    if (members.length)
+    // Split collapsed experience at project boundaries, retaining chronological placement.
+    const chunks = [];
+    for (const member of members) {
+      const previous = chunks.at(-1)?.at(-1);
+      if (!previous || [...slots.keys()].some((index) => index >= previous.index && index < member.index)) chunks.push([]);
+      chunks.at(-1).push(member);
+    }
+    for (const [chunkIndex, chunk] of chunks.entries()) {
+      const chunkId = chunkIndex ? `${id}-${chunkIndex}` : id;
       timeline.push({
-        index,
-        node: (
-          <ExperienceGroup
-            key={id}
-            {...{ members, config, id, data, context, compact }}
-          />
-        ),
+        index: chunkIndex ? chunk[0].index : anchor,
+        node: <ExperienceGroup key={chunkId} members={chunk} config={config}
+          id={chunkId} data={data} context={context} compact={compact} />,
       });
+    }
+  }
+  for (const [index, projects] of slots) {
+    timeline.push({
+      index: index + 0.5,
+      node: <aside key={`projects-${index}`} class="cv-project-insert" aria-label="Related projects">
+        <div class="cv-project-notes" data-project-columns={projectColumns} style={{ "--cv-project-columns": projectColumns }}>
+          {projects.map((project) => <p class="cv-project-note" key={project.id}>
+            <a href={project.url}>{project.name}</a>
+            <span class="cv-project-description"><Highlight point={{ text: project.description, tags: project.tags, emphases: project.emphases }} context={context} /></span>
+          </p>)}
+        </div>
+      </aside>,
+    });
   }
   return (
-    <div id="cv-app" class="cv-app">
+    <div id="cv-app" class={`cv-app${context.projectLayout ? ` cv-projects-${context.projectLayout}` : ""}`}>
       {timeline.sort((a, b) => a.index - b.index).map(({ node }) => node)}
     </div>
   );

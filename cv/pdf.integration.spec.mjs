@@ -39,6 +39,9 @@ test("selectors retain every configured tag and stack on narrow screens", async 
   await expect(page.locator("[data-select-tag]")).toHaveCount(
     loadContent().filters.length,
   );
+  expect(await page.locator("[data-select-tag]").evaluateAll((nodes) =>
+    nodes.map((node) => node.dataset.selectTag).sort(),
+  )).toEqual(loadContent().filters.map(({ id }) => id).sort());
 
   const experienceTags = page.getByRole("group", { name: "Experience tags" });
   const faqTags = page.getByRole("group", { name: "FAQ tags" });
