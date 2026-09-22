@@ -186,10 +186,20 @@ export function App({ data, exportSelection, exportProjectLayout, exportColors, 
   function toggle(tag, node, addOnly = false) {
     if (!ready || !labels.has(tag)) return;
     const next = new Set(selected),
-      activating = !next.has(tag);
+      activating = !next.has(tag),
+      wasHighlighted =
+        node?.matches(".cv-topic-mark") ||
+        node?.querySelector(".cv-topic-mark");
     if (next.has(tag) && !addOnly) next.delete(tag);
     else next.add(tag);
-    changeSelection(next, node, activating ? tag : null);
+    // A descendant can already be visibly highlighted through its parent.
+    // Selecting it changes the explicit selection, but should not jump the
+    // reader to a portion that was already highlighted.
+    changeSelection(
+      next,
+      node,
+      activating && !wasHighlighted ? tag : null,
+    );
   }
   const context = {
     selected,

@@ -4,6 +4,13 @@ Edit `experiences/*.md` for individual roles and `groups/*.md` for multi-role
 summaries. The numbered filenames define the timeline order. `config.mjs` contains
 only selector definitions and topic relationships. All CV code and styles live here.
 
+Group summaries use an outer Markdown link to associate a phrase with experiences,
+and ordinary nested Markdown links to associate words with topics:
+
+```markdown
+[[Full-stack development](frontend,backend) for startups.](Jam.dev | PopSQL)
+```
+
 Each experience starts with YAML metadata between `---` lines, followed by its
 summary and an `## Experience` list. Keep dates as quoted year or year-month
 strings, or `present`.

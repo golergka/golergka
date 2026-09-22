@@ -114,15 +114,28 @@ function section(source, heading) {
 
 function parseThemes(source, allowed, file) {
   if (!source) return [];
-  const parts = source.split(/^### (.+)$/m);
-  if (parts[0].trim()) throw new Error(`${file}: expected a theme heading`);
   const themes = [];
-  for (let index = 1; index < parts.length; index += 2) {
-    const organizations = parts[index].split("|").map((name) => name.trim());
-    const text = parts[index + 1]?.trim();
-    if (!text || organizations.some((name) => !name))
-      throw new Error(`${file}: invalid theme`);
-    themes.push({ organizations, ...parseTopicText(text, allowed) });
+  for (let index = 0; index < source.length;) {
+    while (/\s/.test(source[index])) index++;
+    if (index === source.length) break;
+    if (source[index] !== "[")
+      throw new Error(`${file}: themes must use experience links, not headings`);
+    const end = matchingDelimiter(source, index, "[", "]");
+    if (end < 0 || source[end + 1] !== "(")
+      throw new Error(`${file}: invalid experience link`);
+    const close = matchingDelimiter(source, end + 1, "(", ")");
+    if (close < 0) throw new Error(`${file}: unclosed experience link`);
+    const organizations = source
+      .slice(end + 2, close)
+      .split("|")
+      .map((name) => name.trim());
+    if (organizations.some((name) => !name))
+      throw new Error(`${file}: invalid experience link`);
+    themes.push({
+      organizations,
+      ...parseTopicText(source.slice(index + 1, end), allowed),
+    });
+    index = close + 1;
   }
   return themes;
 }

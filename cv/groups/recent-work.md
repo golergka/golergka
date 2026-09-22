@@ -2,20 +2,12 @@
 
 ## Title themes
 
-### Jam.dev | PopSQL | Deep Channel
+[Full-stack](Jam.dev | PopSQL | Deep Channel)
 
-Full-stack
+[AI](Hotline (Gestalt Systems) | Coloph | International clients)
 
-### Hotline (Gestalt Systems) | Coloph | International clients
-
-AI
-
-### FastCup.net
-
-Backend
+[Backend](FastCup.net)
 
 ## Summary themes
 
-### Jam.dev | PopSQL | Deep Channel
-
-[Full-stack development](frontend,backend,product) for American startups, remotely. Delivered features and maintenance across [frontend, services, and background applications](frontend,backend).
+[[Full-stack development](frontend,backend,product) for American startups, remotely. Delivered features and maintenance across [frontend, services, and background applications](frontend,backend).](Jam.dev | PopSQL | Deep Channel)

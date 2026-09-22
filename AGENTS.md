@@ -1,6 +1,6 @@
 Be concise.
 
-- NEVER open, run, launch, or automate Google Chrome. This is a hard constraint; use terminal-only checks unless the user explicitly authorizes another browser.
+- NEVER open, run, launch, or automate Google Chrome. This is a hard constraint. For browser verification, always use the Codex in-app browser; never use Playwright or another external browser.
 - Follow the requested scope exactly. Preserve unrelated behavior.
 - Inspect user-visible output, including generated files, visually and structurally. Tests alone are not verification.
 - Keep tests only when they protect meaningful behavior.
