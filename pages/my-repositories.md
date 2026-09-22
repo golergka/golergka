@@ -207,7 +207,7 @@ I haven't used Vim in quite a while now. I still think that mode-based text edit
 
 **Unity**, **C#**, **Game development**
 
-Test assignment back from when I was primarily a Unity developer. I've learned that [using `ScriptableObject`](https://github.com/golergka/simpleSlotGame/blob/814b3b8537830514327dc9f8123971f5d828a307fd/Assets/Scripts/Machine/Machine.cs#L5-L22) is one of the best ways to manage game designer editable data not related to any particular scene or game object.
+Test assignment back from when I was primarily a Unity developer. I've learned that [using `ScriptableObject`](https://github.com/golergka/simpleSlotGame/blob/814b6eaf2a44c546c571c3965d46037f70fd94ce/Assets/Scripts/Machine/Machine.cs#L5-L22) is one of the best ways to manage game designer editable data not related to any particular scene or game object.
 
 ## [Jelly button test assignment](https://github.com/golergka/JellyButtonTest) (2014)
 
